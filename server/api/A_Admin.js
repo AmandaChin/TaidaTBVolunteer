@@ -1,8 +1,13 @@
+const models = require('../util/db_manager')
 const express = require('express')
 const router = express.Router()
-const $sql = require('../dao/sqlmap')
-const conn = require('../util/connect')
+const mysql = require('mysql')
+const $sql = require('../dao/A_Admin')
 
+// 连接数据库
+const conn = mysql.createConnection(models.mysql)
+
+conn.connect()
 const jsonWrite = function(res, ret) {
   if (typeof ret === 'undefined') {
     res.json({
