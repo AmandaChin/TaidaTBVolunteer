@@ -1,30 +1,36 @@
 <template>
   <div class="app-container">
     <!-- $t is vue-i18n global function to translate lang -->
+ <!--   
     <el-input style='width:300px;' :placeholder="$t('zip.placeholder')" prefix-icon="el-icon-document" v-model="filename"></el-input>
     <el-button style='margin-bottom:20px;' type="primary" icon="document" @click="handleDownload" :loading="downloadLoading">{{$t('zip.export')}} zip</el-button>
+    -->
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
-      <el-table-column align="center" label='ID' width="95">
+      <el-table-column align="center" label='序号' width="95">
         <template slot-scope="scope">
           {{scope.$index}}
         </template>
       </el-table-column>
-      <el-table-column label="Title">
+      <el-table-column label="标题">
         <template slot-scope="scope">
           {{scope.row.title}}
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="95" align="center">
+      <el-table-column label="发布人" width="95" align="center">
         <template slot-scope="scope">
           <el-tag>{{scope.row.author}}</el-tag>
         </template>
       </el-table-column>
+     
+     <!--
       <el-table-column label="Readings" width="115" align="center">
         <template slot-scope="scope">
           {{scope.row.pageviews}}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="Date" width="220">
+      -->
+
+      <el-table-column align="center" label="发布日期" width="220">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
           <span>{{scope.row.display_time}}</span>
