@@ -32,6 +32,7 @@ export const constantRouterMap = [
   { path: '/authredirect', component: _import('login/authredirect'), hidden: true },
   { path: '/404', component: _import('errorPage/404'), hidden: true },
   { path: '/401', component: _import('errorPage/401'), hidden: true },
+  /*
   {
     path: '',
     component: Layout,
@@ -43,6 +44,20 @@ export const constantRouterMap = [
       meta: { title: 'dashboard', icon: 'dashboard', noCache: true }
     }]
   },
+  */
+
+  {
+    path:'',
+    component:Layout,
+    redirect:'homepage',
+    children: [{
+      path:'homepage',
+      component: _import('homepage/index'),
+      name: 'homepage',
+      meta: { title:'主页', icon: 'home',noCache:true}
+    }]
+  }
+  /*
   {
     path: '/documentation',
     component: Layout,
@@ -53,7 +68,7 @@ export const constantRouterMap = [
       name: 'documentation',
       meta: { title: 'documentation', icon: 'documentation', noCache: true }
     }]
-  }
+  }*/
 ]
 
 export default new Router({
