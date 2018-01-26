@@ -32,20 +32,8 @@ export const constantRouterMap = [
   { path: '/authredirect', component: _import('login/authredirect'), hidden: true },
   { path: '/404', component: _import('errorPage/404'), hidden: true },
   { path: '/401', component: _import('errorPage/401'), hidden: true },
-  /*
-  {
-    path: '',
-    component: Layout,
-    redirect: 'dashboard',
-    children: [{
-      path: 'dashboard',
-      component: _import('dashboard/index'),
-      name: 'dashboard',
-      meta: { title: 'dashboard', icon: 'dashboard', noCache: true }
-    }]
-  },
-  */
-
+ 
+//空白默认主页
   {
     path:'',
     component:Layout,
@@ -57,18 +45,7 @@ export const constantRouterMap = [
       meta: { title:'主页', icon: 'home',noCache:true}
     }]
   }
-  /*
-  {
-    path: '/documentation',
-    component: Layout,
-    redirect: '/documentation/index',
-    children: [{
-      path: 'index',
-      component: _import('documentation/index'),
-      name: 'documentation',
-      meta: { title: 'documentation', icon: 'documentation', noCache: true }
-    }]
-  }*/
+  
 ]
 
 export default new Router({
@@ -85,9 +62,47 @@ export const asyncRouterMap = [
       path: 'oldman',
       name: 'oldman',
       component:() => import('@/views/program/oldman'),
-      meta: { title:'我是老人',icon:'program'}
+      meta: { title:'我是老人',icon:'people'}
     }]
   },
+
+  {
+      path: '/personal',
+      component: Layout,
+      children: [{
+      path: 'index',
+      name: 'personal',
+      component:() => import('@/views/personal/index'),
+      meta: {title:'个人中心',icon:'personal'}
+    }]
+  },
+
+ /*
+  {
+    path: '',
+    component: Layout,
+    redirect: 'dashboard',
+    children: [{
+      path: 'dashboard',
+      component: _import('dashboard/index'),
+      name: 'dashboard',
+      meta: { title: 'dashboard', icon: 'dashboard', noCache: true }
+    }]
+  },
+  */
+
+  /*
+  {
+    path: '/documentation',
+    component: Layout,
+    redirect: '/documentation/index',
+    children: [{
+      path: 'index',
+      component: _import('documentation/index'),
+      name: 'documentation',
+      meta: { title: 'documentation', icon: 'documentation', noCache: true }
+    }]
+  }*/
 
   {
     path: '/permission',
