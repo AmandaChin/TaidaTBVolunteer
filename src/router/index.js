@@ -57,7 +57,18 @@ export const constantRouterMap = [
       meta: { title:'主页', icon: 'home',noCache:true}
     }]
   }
-  
+  /*
+  {
+    path: '/documentation',
+    component: Layout,
+    redirect: '/documentation/index',
+    children: [{
+      path: 'index',
+      component: _import('documentation/index'),
+      name: 'documentation',
+      meta: { title: 'documentation', icon: 'documentation', noCache: true }
+    }]
+  }*/
 ]
 
 export default new Router({
@@ -88,7 +99,6 @@ export const asyncRouterMap = [
       meta: {title:'个人中心',icon:'personal'}
     }]
   },
- 
 
   {
     path: '/permission',
