@@ -109,8 +109,8 @@
         </el-form-item>
 
         <div class="editor-container">
-          <tinymce :height=400 ref="editor" v-model="postForm.content"></tinymce>
-        </div>
+        <tinymce :height=400 ref="editor" v-model="postForm.content"></tinymce>
+      </div>
 
         <div style="margin-bottom: 20px;">
           <Upload v-model="postForm.image_uri"></Upload>
