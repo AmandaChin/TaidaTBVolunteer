@@ -9,22 +9,7 @@
             <el-button type="info">创建form</el-button>
           </router-link>
 
-          <el-dropdown trigger="click">
-            <el-button plain>{{!postForm.comment_disabled?'正在接收回复':'已屏蔽回复'}}
-              <i class="el-icon-caret-bottom el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu class="no-padding" slot="dropdown">
-              <el-dropdown-item>
-                <el-radio-group style="padding: 10px;" v-model="postForm.comment_disabled">
-                  <el-radio :label="true">接收回复</el-radio>
-                  <el-radio :label="false">屏蔽回复</el-radio>
-                </el-radio-group>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-
-
-          <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm()">立即发布
+          <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm()">立即申请
           </el-button>
           <el-button v-loading="loading" type="warning" @click="draftForm">存为草稿</el-button>
 
@@ -48,7 +33,7 @@
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="4">
-                  <el-form-item label-width="90px" label="服务内容:" class="postInfo-container-item">
+                  <el-form-item label-width="90px" label="服务用户:" class="postInfo-container-item">
                     <el-form-item style="margin-bottom: 20px;" prop="title">
                       <el-input placeholder="最多10个字" style='min-width:100px;' v-model="postForm.service_content" required :maxlength="10">
                       </el-input>
@@ -57,11 +42,11 @@
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="6">
-                  <el-form-item label-width="105px" label="人数:" class="postInfo-container-item">
+                <el-col :span="7">
+                  <el-form-item label-width="140px" label="服务项目:  " class="postInfo-container-item">
                     <el-form-item style="margin-bottom: 20px;" prop="title">
-                      <el-input placeholder="志愿者数" style='min-width:70px;' v-model="postForm.source_number" required :maxlength="3">
-                      </el-input>
+                      <el-select clearable style="width: 105px" class="filter-item" v-model="listQuery_info.importance_info":placeholder="$t('选择项目')">
+                      </el-select>
                       <span v-show="postForm.title.length>=20" class='title-prompt'>app可能会显示不全</span>
                     </el-form-item>
                   </el-form-item>
@@ -74,7 +59,7 @@
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="5">
+                <el-col :span="3">
                   <el-form-item style="margin-bottom: 20px;" label-width="60px" label="—" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
                     </el-date-picker>
@@ -99,7 +84,7 @@
                 </el-col>
 
                 <el-col :span="3">
-                  <el-form-item label-width="220px" label="需转移给志愿者勋章数量：" class="postInfo-container-item">
+                  <el-form-item label-width="140px" label="申请勋章数：" class="postInfo-container-item">
                     <el-tag style='margin-top:0px;display:block; width: 100px;height: 38px;margin-left: 0px' type="info">{{$t(listQuery_info.coinamount)}}</el-tag>
                   </el-form-item>
                 </el-col>
@@ -121,9 +106,63 @@
           <tinymce :height=400 ref="editor" v-model="postForm.content"></tinymce>
         </div>
 
-        <div style="margin-bottom: 20px;">
-          <Upload v-model="postForm.image_uri"></Upload>
-        </div>
+        <el-row>
+          <el-col>
+            <div class="filter-container">
+              <el-row>
+                <el-col :span="13">
+                  <el-form-item style="margin-bottom: 5px;" label-width="90px" label="上传合照:">
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="1">
+                  <el-form-item style="margin-bottom: 5px;" label-width="90px" label="上传证明:">
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col>
+            <div class="filter-container">
+              <el-row>
+                <el-col :span="13">
+                  <Upload4 clearable style="width: 1100px" v-model="postForm.image_uri"></Upload4>
+                </el-col>
+
+                <el-col :span="1">
+                  <Upload3 clearable style="width: 1100px" v-model="postForm.pdf_uri"></Upload3>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col>
+            <div class="filter-container">
+              <el-row>
+                <el-col :span="13">
+                  <el-form-item style="margin-bottom: 5px;" label-width="200px" label="我保证上述信息的真实性">
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col>
+                  <el-form-item style="margin-bottom: 10px;" label-width="90px" label="电子签名:">
+                    <el-input type="textarea" class="article-textarea" :rows="1" autosize placeholder="请输入真实姓名" v-model="postForm.content_short">
+                    </el-input>
+                    <span class="word-counter" v-show="contentShortLength">{{contentShortLength}}字</span>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+        </el-row>
+
       </div>
     </el-form>
 
@@ -132,7 +171,8 @@
 
 <script>
   import Tinymce from '@/components/Tinymce'
-  import Upload from '@/components/Upload/singleImage5'
+  import Upload4 from '@/components/Upload/singleImage4'
+  import Upload3 from '@/components/Upload/singleImage3'
   import MDinput from '@/components/MDinput'
   import Multiselect from 'vue-multiselect'// 使用的一个多选框组件，element-ui的select不能满足所有需求
   import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
@@ -148,7 +188,8 @@
     content: '', // 文章内容
     content_short: '', // 文章摘要
     source_uri: '', // 文章外链
-    image_uri: '', // 文章图片
+    image_uri: '', // 上传图片
+    pdf_uri: '', //上传证明
     source_number: '', // 文章外部作者
     display_time: undefined, // 前台展示时间
     id: undefined,
@@ -158,7 +199,7 @@
 
   export default {
     name: 'articleDetail',
-    components: { Tinymce, MDinput, Upload, Multiselect, Sticky, complexTable },
+    components: { Tinymce, MDinput, Upload4, Upload3, Multiselect, Sticky, complexTable },
     props: {
       isEdit: {
         type: Boolean,

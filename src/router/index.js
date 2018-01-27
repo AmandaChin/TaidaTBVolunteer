@@ -32,7 +32,7 @@ export const constantRouterMap = [
   { path: '/authredirect', component: _import('login/authredirect'), hidden: true },
   { path: '/404', component: _import('errorPage/404'), hidden: true },
   { path: '/401', component: _import('errorPage/401'), hidden: true },
-  
+
 //空白默认主页
   {
     path:'',
@@ -45,7 +45,7 @@ export const constantRouterMap = [
       meta: { title:'首页', icon: 'home',noCache:true}
     }]
   }
-  
+
 ]
 
 export default new Router({
@@ -57,14 +57,19 @@ export default new Router({
 export const asyncRouterMap = [
   {
     path: '/program',
+    name: 'program',
     component: Layout,
-    children: [{
-      path: 'oldman',
-      name: 'oldman',
-      component:() => import('@/views/program/oldman'),
-      meta: { title:'我是老人',icon:'people'}
-    }]
+    redirect: 'volunteers',
+    meta: {
+      title: '当前操作',
+      icon: 'operation'
+    },
+    children: [
+      { path: 'volunteers', component: _import('program/volunteers'), name: 'volunteers', meta: { title: '申请勋章' }},
+      { path: 'oldman', component: _import('program/oldman'), name: 'oldman', meta: { title: '发布需求' }}
+    ]
   },
+
 
   {
       path: '/personal',
@@ -99,7 +104,7 @@ export const asyncRouterMap = [
       meta: { title: '模板主页', icon: 'dashboard', noCache: true }
     }]
   },
- 
+
   {
     path: '/documentation',
     component: Layout,
