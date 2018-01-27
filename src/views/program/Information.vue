@@ -38,7 +38,7 @@
       <div class="createPost-main-container">
         <el-row>
           <el-col :span="21">
-            <el-form-item style="margin-bottom: 40px;" prop="title">
+            <el-form-item style="margin-bottom:40px;" prop="title">
               <MDinput name="name" v-model="postForm.title" required :maxlength="100">
                 标题
               </MDinput>
@@ -47,38 +47,60 @@
 
             <div class="postInfo-container">
               <el-row>
-
-
-                <el-col :span="6">
+                <el-col :span="4">
                   <el-form-item label-width="90px" label="服务内容:" class="postInfo-container-item">
-                    <el-form-item style="margin-bottom: 40px;" prop="title">
-                      <el-input placeholder="最多10个字" style='min-width:150px;' v-model="postForm.service_content" required :maxlength="10">
+                    <el-form-item style="margin-bottom: 20px;" prop="title">
+                      <el-input placeholder="最多10个字" style='min-width:100px;' v-model="postForm.service_content" required :maxlength="10">
                       </el-input>
-                      <span v-show="postForm.title.length>=26" class='title-prompt'>app可能会显示不全</span>
+                      <span v-show="postForm.title.length>=20" class='title-prompt'>app可能会显示不全</span>
                     </el-form-item>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="6">
-                  <el-tooltip class="item" effect="dark" content="人数" placement="top">
-                    <el-form-item label-width="50px" label="人数:" class="postInfo-container-item">
-                      <el-input placeholder="所需志愿者人数（数字）" style='min-width:150px;' v-model="postForm.source_number" required :maxlength="100">
+                  <el-form-item label-width="105px" label="人数:" class="postInfo-container-item">
+                    <el-form-item style="margin-bottom: 20px;" prop="title">
+                      <el-input placeholder="志愿者数" style='min-width:70px;' v-model="postForm.source_number" required :maxlength="3">
                       </el-input>
+                      <span v-show="postForm.title.length>=20" class='title-prompt'>app可能会显示不全</span>
                     </el-form-item>
-                  </el-tooltip>
+                  </el-form-item>
                 </el-col>
 
-                <el-col :span="6">
-                  <el-form-item label-width="80px" label="服务时段:" class="postInfo-container-item">
+                <el-col :span="9">
+                  <el-form-item style="margin-bottom: 20px;" label-width="80px" label=" 服务时段:" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="5">
-                  <el-form-item label-width="80px" label="---" class="postInfo-container-item">
+                  <el-form-item style="margin-bottom: 20px;" label-width="50px" label="——" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
                     </el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col>
+            <div class="filter-container">
+              <el-row>
+                <el-col :span="4">
+                  <el-form-item label-width="90px" label="服务时长:" class="postInfo-container-item">
+                    <el-select clearable style="width: 100px" class="filter-item" v-model="listQuery_info.importance_info":placeholder="$t('小时')">
+                      <el-option v-for="item in importanceOptions_info" :key="item" :label="item" :value="item" >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="3">
+                  <el-form-item label-width="220px" label="需转移给志愿者勋章数量：" class="postInfo-container-item">
+                    <el-tag style='margin-top:0px;display:block; width: 100px;height: 38px;margin-left: 0px' type="info">{{$t(listQuery_info.coinamount)}}</el-tag>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -118,6 +140,7 @@
   import { validateURL } from '@/utils/validate'
   import { fetchArticle } from '@/api/article'
   import { userSearch } from '@/api/remoteSearch'
+  import complexTable from '../example/table/complexTable'
 
   const defaultForm = {
     status: 'draft',
@@ -135,7 +158,7 @@
 
   export default {
     name: 'articleDetail',
-    components: { Tinymce, MDinput, Upload, Multiselect, Sticky },
+    components: { Tinymce, MDinput, Upload, Multiselect, Sticky, complexTable },
     props: {
       isEdit: {
         type: Boolean,
@@ -179,6 +202,16 @@
           { key: 'b-platform', name: 'b-platform' },
           { key: 'c-platform', name: 'c-platform' }
         ],
+        importanceOptions_info: [1, 1.5, 2, 2.5, 3, 3.5, 4],
+        listQuery_info: {
+          page: 1,
+          limit: 20,
+          importance_info: undefined,
+          coinamount: undefined,
+          title: undefined,
+          type: undefined,
+          sort: '+id'
+        },
         rules: {
           image_uri: [{ validator: validateRequire }],
           title: [{ validator: validateRequire }],
