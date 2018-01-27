@@ -73,7 +73,7 @@ export const asyncRouterMap = [
       path: 'index',
       name: 'personal',
       component:() => import('@/views/personal/index'),
-      meta: {title:'个人中心',icon:'personal'}
+      meta: {title:'个人信息',icon:'personal'}
     }]
   },
 
