@@ -45,10 +45,15 @@
           </el-col>
           </el-form-item>
 
-
-          <el-form-item label="更改头像">
-            
-          </el-form-item>
+          <el-row>
+              <el-col span="2">
+              <el-form-item label="更改头像"></el-form-item>
+              </el-col>
+              <el-col span="13">
+                  <Photo clearable style="width: 1100px" v-model="personalInfo.image_uri" ></Photo>
+              </el-col>
+          </el-row>
+          
 
           
       </el-form>
@@ -56,15 +61,46 @@
 </template>
 
 <script >
+import Photo from '@/components/Upload/singleImage'
+ import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
+
 export default {
   name: 'personal',
+  components: {Photo},
   data() {
+      const validateRequire = (rule, value, callback) => {
+        if (value === '') {
+          this.$message({
+            message: rule.field + '为必传项',
+            type: 'error'
+          })
+          callback(null)
+        } else {
+          callback()
+        }
+      }
+      const validateSourceUri = (rule, value, callback) => {
+        if (value) {
+          if (validateURL(value)) {
+            callback()
+          } else {
+            this.$message({
+              message: '外链url填写不正确',
+              type: 'error'
+            })
+            callback(null)
+          }
+        } else {
+          callback()
+        }
+      }
     return {
       personalInfo: {
           name: 'admin',
           gender: '男',
           birthday: '1990/01/28',
-          phoneNo: '13012345678'
+          phoneNo: '13012345678',
+          image_uri: '' 
           //region: [1, 1, 1]
       },
       cityInfo :[
