@@ -46,11 +46,11 @@
           </el-form-item>
 
           <el-row>
-              <el-col span="2">
+              <el-col span="3">
               <el-form-item label="更改头像"></el-form-item>
               </el-col>
-              <el-col span="13">
-                  <Photo clearable style="width: 1100px" v-model="personalInfo.image_uri" ></Photo>
+              <el-col span="9">
+                  <Photo  style="width:800px" v-model="personalInfo.image_uri" ></Photo>
               </el-col>
           </el-row>
           
