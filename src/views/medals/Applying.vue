@@ -1,12 +1,19 @@
 <template>
   <el-table
     :data="applyingmedals"
-    style="width: 100%"
+    style="width: 100%;margin-left: 20px"
+
     :row-class-name="tableRowClassName">
     <el-table-column
       label="勋章币">
       <template scope="scope">
-        <img :src="scope.row.head_pic" width="40" height="40" class="head_pic"/>
+        <img  :src="Applying_image" style="width: 35px;height: 45px">
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="交易数目">
+      <template scope="scope">
+        <span style="font-size: 18px;margin-left:10px">{{"*" + scope.row.medals}}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -47,7 +54,9 @@
 </style>
 
 <script>
-    export default {
+  import applying_image from '@/assets/medals_images/applying_image.gif'
+
+  export default {
       methods: {
         tableRowClassName({row, rowIndex}) {
           if (rowIndex === 0) {
@@ -60,14 +69,15 @@
       },
       data(){
           return{
+            Applying_image: applying_image,
             applyingmedals: [{
-              medals:'',
+              medals:'5',
               users:'张三',
               applyingtime:'2018-01-05',
               gettingtime:'2018-01-10',
             },
               {
-                medals:'',
+                medals:'10',
                 users:'张三',
                 applyingtime:'2018-01-05',
                 gettingtime:'2018-01-10',
