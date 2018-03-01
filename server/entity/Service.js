@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true
     },
     CreateTime: {
-      type: DataTypes.TIMESTAMP,
+      type: DataTypes.TIME,
       allowNull: true,
       primaryKey: false
     },
