@@ -70,6 +70,21 @@ export const asyncRouterMap = [
     ]
   },
 
+  {
+    path: '/medals',
+    name: 'medals',
+    component: Layout,
+    redirect: 'applying',
+    meta: {
+      title: '勋章信息',
+      icon: 'operation'
+    },
+    children: [
+      { path: 'applying', component: _import('medals/Applying'), name: 'applying', meta: { title: '申请中' }},
+      { path: 'got', component: _import('medals/Have Got'), name: 'got', meta: { title: '已获得' }},
+      { path: 'withdrawn', component: _import('medals/Have Withdrawn'), name: 'withdrawn', meta: { title: '已撤回' }}
+    ]
+  },
 
   {
       path: '/personal',
