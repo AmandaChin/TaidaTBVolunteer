@@ -1,6 +1,6 @@
 <template>
   <el-table
-    :data="tableData5"
+    :data="noticeData"
     style="width: 100%">
     <el-table-column type="expand">
       <template slot-scope="props">
@@ -47,7 +47,7 @@
   export default {
     data() {
       return {
-        tableData5: [{
+        noticeData: [{
           title: '关于系统使用方法的通知',
           author: '佚名',
           content: '区块链是分布式数据存储、点对点传输、共识机制、加密算法等计算机技术的新型应用模式。所谓共识机制是区块链系统中实现不同节点之间建立信任、获取权益的数学算法',
