@@ -1,33 +1,30 @@
-// const ordinaryUser = require('../util/ormSequelize').OrdinaryUser
-// const otherUser = require('../util/ormSequelize').OtherUser
-// const allUser = require('../util/ormSequelize').AllUser
-//
-// function ordinaryUserLogin(Account, Password) {
-//   allUser.findAndCountAll({
-//     where: {
-//       Account: Account,
-//       Password: Password
-//     }
-//   })
-// }
+const application = require('../util/ormSequelize').Application
+const service = require('../util/ormSequelize').Service
 
-// function managerLogin(id, password, ErrorHandler) {
-//   manager.findAndCountAll({
-//     where: {
-//       "id":id
-//     }
-//   }).then(
-//     function (result) {
-//       if(result.count == 0){
-//         return ErrorHandler(new Error("id not exists"));
-//       }
-//       else {
-//         if(result.rows[0].dataValues.password == password) {
-//           return ErrorHandler(new Error("password mismatch"));
-//         }
-//       }
-//     }
-//   )
-// }
+/**
+ * 根据志愿者的ID查询他所申请的服务记录
+ * @param UserId：志愿者ID
+ * @param returnList：服务记录，也就是数据库Service表中的n条记录
+ */
+function volunteerApplicate(UserId, returnList) {
+  application.findAndCountAll({
+    where: {
+      UserId: UserId
+    }
+  }).then(function(result) {
+    var list = []
+    for (var i = 0; i < result.count; i++) {
+      var serviceId = result.row(i).dataValues.ServiceID
+      service.findAndCountAll({
+        where: {
+          ServiceID: serviceId
+        }
+      }).then(function(result1) {
+        list.push(result1.row(0))
+      })
+    }
+    return returnList(list)
+  })
+}
 
-exports.ordinaryUserLogin = ordinaryUserLogin
+exports.volunteerApplicate = volunteerApplicate
