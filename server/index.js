@@ -1,4 +1,4 @@
-// node 后端服务器
+// 后端服务器入口文件
 
 const userApi = require('./api/user')
 const bodyParser = require('body-parser')
