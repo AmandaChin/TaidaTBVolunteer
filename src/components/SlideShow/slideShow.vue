@@ -79,7 +79,7 @@ img {
     position: relative;
     width: 1000px;
     height: 400px;
-    margin: 15px 15px 30px 40px;
+    margin: 15px 15px 15px 15px;
     overflow: hidden;
   }
   .slide-img {

@@ -1,13 +1,18 @@
-<<template>
+<template>
+<div class="homepage-container">
   <slide-show :slides="slides" :inv="slideSpeed"></slide-show>
+ <panel-group @handleSetLineChartData="handleSetLineChartData"></panel-group>
+</div>
+
 </template>
 
 <script>
 import slideShow from '../../components/SlideShow/slideShow'
-
+import PanelGroup from  './PanelGroup'
 export default {
   components:{
-      slideShow
+      slideShow,
+      PanelGroup
   },
   data(){
       return {
@@ -37,3 +42,11 @@ export default {
   }
 }
 </script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+.homepage-container{
+    padding: 32px;
+    background-color: rgb(100, 255, 255);
+}
+</style>
+
