@@ -67,26 +67,26 @@
 
   export default {
     methods: {
-      tableRowClassName({row, rowIndex}) {
+      tableRowClassName({ row, rowIndex }) {
         if (rowIndex === 0) {
-          return 'warning-row';
+          return 'warning-row'
         } else if (rowIndex === 1) {
-          return 'success-row';
+          return 'success-row'
         }
-        return '';
+        return ''
       },
 
-      getChainDetail(text,event){
+      getChainDetail(text, event) {
         clip(text, event)
       },
       showAlert() {
-        this.$alert('这是一段内容楼','交易记录', {
+        this.$alert('这是一段内容楼', '交易记录', {
           confirmButtonText: '确定'
         })
       }
     },
-    data(){
-      return{
+    data() {
+      return {
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
         Applying_image: applying_image,
         gridData: [{
@@ -108,17 +108,17 @@
         }],
         dialogTableVisible: false,
         applyingmedals: [{
-          medals:'5',
-          users:'张三',
-          applyingtime:'2018-01-05',
-          gettingtime:'2018-01-10',
+          medals: '5',
+          users: '张三',
+          applyingtime: '2018-01-05',
+          gettingtime: '2018-01-10'
         },
-          {
-            medals:'10',
-            users:'张三',
-            applyingtime:'2018-01-05',
-            gettingtime:'2018-01-10',
-          }
+        {
+          medals: '10',
+          users: '张三',
+          applyingtime: '2018-01-05',
+          gettingtime: '2018-01-10'
+        }
         ]
       }
     }
