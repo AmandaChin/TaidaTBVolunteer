@@ -28,24 +28,9 @@
       </template>
     </el-table-column>
     <el-table-column
-      label="获得时间"
-      prop="gettingtime">
-      <template scope="scope">
-        <span style="color: darkgray">{{scope.row.gettingtime}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
       label="更  多">
       <template scope="scope">
-        <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="dialogTableVisible = true">交易链</el-button>
-
-        <el-dialog title="交易历史" :visible.sync="dialogTableVisible">
-          <el-table :data="gridData">
-            <el-table-column property="date" label="日期" width="150"></el-table-column>
-            <el-table-column property="from" label="勋章来源" width="200"></el-table-column>
-            <el-table-column property="to" label="勋章去向"></el-table-column>
-          </el-table>
-        </el-dialog>
+        <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="dialogTableVisible = true">修改材料</el-button>
       </template>
     </el-table-column>
   </el-table>

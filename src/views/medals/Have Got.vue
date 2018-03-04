@@ -1,13 +1,13 @@
 <template>
   <el-table
-    :data="applyingmedals"
+    :data="gettingmedals"
     style="width: 100%;margin-left: 20px"
 
     :row-class-name="tableRowClassName">
     <el-table-column
       label="勋章币">
       <template scope="scope">
-        <img  :src="Applying_image" style="width: 35px;height: 45px">
+        <img  :src="Getting_image" style="width: 35px;height: 45px">
       </template>
     </el-table-column>
     <el-table-column
@@ -61,10 +61,25 @@
   }
 </style>
 
-<script>
-  import applying_image from '@/assets/medals_images/applying.gif'
+<script src="https://cdn.jsdelivr.net/vue/latest/vue.js">
+  import getting_image from '@/assets/medals_images/getting.gif'
   import clip from '@/utils/clipboard'
-
+  import Vue from 'vue'
+  import VueResource from 'vue-resource'
+  //引入函数
+  new Vue({
+    el: '#app',
+    ready: function() {
+      this.$http.get('test.json', function(data) {
+        this.$set('json', data);
+      }).error(function(data, status, request) {
+        console.log('fail' + status + "," + request);
+      })
+    },
+    data: {
+    }
+  })
+  Vue.use(VueResource)
   export default {
     methods: {
       tableRowClassName({row, rowIndex}) {
@@ -88,7 +103,7 @@
     data(){
       return{
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
-        Applying_image: applying_image,
+        Getting_image: getting_image,
         gridData: [{
           date: '2016-05-02',
           from: '王小虎',
@@ -107,7 +122,7 @@
           to: '上海市普陀区金沙江路 1518 弄'
         }],
         dialogTableVisible: false,
-        applyingmedals: [{
+        gettingmedals: [{
           medals:'5',
           users:'张三',
           applyingtime:'2018-01-05',
