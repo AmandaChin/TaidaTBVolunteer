@@ -64,23 +64,6 @@
 <script>
   import getting_image from '@/assets/medals_images/getting.gif'
   import clip from '@/utils/clipboard'
-  import Vue from 'vue'
-  import VueResource from 'vue-resource'
-  //引入函数
-  new Vue({
-    el: '#app',
-    ready: function() {
-      this.$http.get('test.json', function(data) {
-        this.$set('json', data);
-      }).error(function(data, status, request) {
-        console.log('fail' + status + "," + request);
-      })
-    },
-    data: {
-    }
-  })
-  Vue.use(VueResource)
-
   export default {
     methods: {
       tableRowClassName({row, rowIndex}) {
