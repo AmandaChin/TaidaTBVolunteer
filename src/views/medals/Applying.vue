@@ -60,7 +60,6 @@
           }
           return '';
         },
-
         getChainDetail(text,event){
           clip(text, event)
         },

@@ -61,7 +61,7 @@
   }
 </style>
 
-<script src="https://cdn.jsdelivr.net/vue/latest/vue.js">
+<script>
   import getting_image from '@/assets/medals_images/getting.gif'
   import clip from '@/utils/clipboard'
   import Vue from 'vue'
@@ -80,6 +80,7 @@
     }
   })
   Vue.use(VueResource)
+
   export default {
     methods: {
       tableRowClassName({row, rowIndex}) {
@@ -90,7 +91,6 @@
         }
         return '';
       },
-
       getChainDetail(text,event){
         clip(text, event)
       },

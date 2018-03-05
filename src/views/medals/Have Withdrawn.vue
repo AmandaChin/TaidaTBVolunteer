@@ -55,19 +55,17 @@
 
 <script>
   import withdrawn_image from '@/assets/medals_images/withdrawn.gif'
-  import clip from '@/utils/clipboard'
 
   export default {
     methods: {
-      tableRowClassName({ row, rowIndex }) {
+      tableRowClassName({row, rowIndex}) {
         if (rowIndex === 0) {
-          return 'warning-row'
+          return 'warning-row';
         } else if (rowIndex === 1) {
-          return 'success-row'
+          return 'success-row';
         }
-        return ''
+        return '';
       },
-
       open() {
         this.$alert('联系电话：123456768', '联系我们', {
           confirmButtonText: '确定',
