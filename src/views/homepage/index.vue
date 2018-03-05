@@ -46,7 +46,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .homepage-container{
     padding: 32px;
-    background-color: rgb(100, 255, 255);
+    background-color:	#ffffff;
 }
 </style>
 

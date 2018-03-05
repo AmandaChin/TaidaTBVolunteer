@@ -103,7 +103,7 @@ export const asyncRouterMap = [
       children: [{
       path: 'index',
       name: 'notice',
-      component:() => import('@/views/notice/index'),
+      component:() => import('@/views/notice/index2'),
       meta: {title:'通知',icon:'message'}
     }]
   },
