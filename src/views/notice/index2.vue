@@ -10,7 +10,7 @@
         <el-dialog
         title="通知详情"
         :visible.sync="dialogVisible"
-        width="30%">
+        width="50%">
         <el-form >
           <el-form-item label="标题">
             <span>{{ scope.row.title }}</span>

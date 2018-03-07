@@ -62,7 +62,7 @@ export const asyncRouterMap = [
     redirect: 'volunteers',
     meta: {
       title: '当前操作',
-      icon: 'operation'
+      icon: 'component'
     },
     children: [
       { path: 'volunteers', component: _import('program/volunteers'), name: 'volunteers', meta: { title: '申请勋章' }},
@@ -77,7 +77,7 @@ export const asyncRouterMap = [
     redirect: 'applying',
     meta: {
       title: '勋章信息',
-      icon: 'operation'
+      icon: 'medal'
     },
     children: [
       { path: 'applying', component: _import('medals/Applying'), name: 'applying', meta: { title: '申请中' }},
@@ -108,6 +108,7 @@ export const asyncRouterMap = [
     }]
   },
 
+/*
   {
     path: '/dashboard',
     component: Layout,
@@ -313,6 +314,6 @@ export const asyncRouterMap = [
     component: Layout,
     children: [{ path: 'index', component: _import('i18n-demo/index'), name: 'i18n', meta: { title: 'i18n', icon: 'international' }}]
   },
-
+*/
   { path: '*', redirect: '/404', hidden: true }
 ]
