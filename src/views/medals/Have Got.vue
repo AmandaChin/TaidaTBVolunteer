@@ -105,16 +105,12 @@
           to: '李四'
         }, {
           date: '2016-05-04',
-          from: '王小虎',
-          to: '李四'
+          from: '王一',
+          to: '李二'
         }, {
           date: '2016-05-01',
-          from: '王小虎',
-          to: '李四'
-        }, {
-          date: '2016-05-03',
-          from: '王小虎',
-          to: '李四'
+          from: '王二',
+          to: '李三'
         }],
         dialogTableVisible: false,
         gettingmedals: [{
