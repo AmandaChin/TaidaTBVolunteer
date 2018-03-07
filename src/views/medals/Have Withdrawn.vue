@@ -58,6 +58,17 @@
 
   export default {
     methods: {
+      mounted: function () {
+        // GET /someUrl
+        this.$http.get('http://localhost:8088/test').then(response => {
+          console.log(response.withdrawnmedals);
+          // get body data
+          // this.someData = response.body;
+
+        }, response => {
+          console.log("error");
+        });
+      },
       tableRowClassName({row, rowIndex}) {
         if (rowIndex === 0) {
           return 'warning-row';
@@ -79,19 +90,19 @@
         gridData: [{
           date: '2016-05-02',
           from: '王小虎',
-          to: '上海市普陀区金沙江路 1518 弄'
+          to: '李四'
         }, {
           date: '2016-05-04',
           from: '王小虎',
-          to: '上海市普陀区金沙江路 1518 弄'
+          to: '李四'
         }, {
           date: '2016-05-01',
           from: '王小虎',
-          to: '上海市普陀区金沙江路 1518 弄'
+          to: '李四'
         }, {
           date: '2016-05-03',
           from: '王小虎',
-          to: '上海市普陀区金沙江路 1518 弄'
+          to: '李四'
         }],
         dialogTableVisible: false,
         withdrawnmedals: [{

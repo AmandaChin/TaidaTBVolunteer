@@ -49,9 +49,19 @@
 <script>
   import applying_image from '@/assets/medals_images/applying.gif'
   import clip from '@/utils/clipboard'
-
   export default {
       methods: {
+        mounted: function () {
+          // GET /someUrl
+          this.$http.get('http://localhost:8088/test').then(response => {
+            console.log(response.applyingmedals);
+            // get body data
+            // this.someData = response.body;
+
+          }, response => {
+            console.log("error");
+          });
+        },
         tableRowClassName({row, rowIndex}) {
           if (rowIndex === 0) {
             return 'warning-row';
@@ -64,7 +74,7 @@
           clip(text, event)
         },
         showAlert() {
-          this.$alert('这是一段内容楼','交易记录', {
+          this.$alert('这是一段内容','交易记录', {
             confirmButtonText: '确定'
             })
         }
@@ -76,19 +86,19 @@
             gridData: [{
               date: '2016-05-02',
               from: '王小虎',
-              to: '上海市普陀区金沙江路 1518 弄'
+              to: '李四'
             }, {
               date: '2016-05-04',
               from: '王小虎',
-              to: '上海市普陀区金沙江路 1518 弄'
+              to: '李四'
             }, {
               date: '2016-05-01',
               from: '王小虎',
-              to: '上海市普陀区金沙江路 1518 弄'
+              to: '李四'
             }, {
               date: '2016-05-03',
               from: '王小虎',
-              to: '上海市普陀区金沙江路 1518 弄'
+              to: '李四'
             }],
             dialogTableVisible: false,
             applyingmedals: [{

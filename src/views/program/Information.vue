@@ -155,7 +155,6 @@
     platforms: ['a-platform'],
     comment_disabled: false
   }
-
   export default {
     name: 'articleDetail',
     components: { Tinymce, MDinput, Upload, Multiselect, Sticky, complexTable },
@@ -163,6 +162,18 @@
       isEdit: {
         type: Boolean,
         default: false
+      }
+    },
+    methods:{
+      submit: function() {
+        var formData = JSON.stringify(this.postForm); // 这里才是你的表单数据
+        this.$http.post('http://localhost:8088/post', formData).then((response) => {
+          // success callback
+          console.log(response.data);
+        }, (response) => {
+          console.log("error");
+          // error callback
+        });
       }
     },
     data() {

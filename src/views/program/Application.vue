@@ -12,7 +12,6 @@
           <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm()">立即申请
           </el-button>
           <el-button v-loading="loading" type="warning" @click="draftForm">存为草稿</el-button>
-
         </template>
         <template v-else>
           <el-tag>发送异常错误,刷新页面,或者联系程序员</el-tag>
@@ -83,11 +82,6 @@
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="3">
-                  <el-form-item label-width="140px" label="申请勋章数：" class="postInfo-container-item">
-                    <el-tag style='margin-top:0px;display:block; width: 100px;height: 38px;margin-left: 0px' type="info">{{$t(listQuery_info.coinamount)}}</el-tag>
-                  </el-form-item>
-                </el-col>
               </el-row>
             </div>
           </el-col>
@@ -204,6 +198,19 @@
       isEdit: {
         type: Boolean,
         default: false
+      }
+    },
+    methods:{
+      submit: function() {
+        var formData = JSON.stringify(this.postForm); // 这里才是你的表单数据
+
+        this.$http.post('http://localhost:8088/post', formData).then((response) => {
+          // success callback
+          console.log(response.data);
+        }, (response) => {
+          console.log("error");
+          // error callback
+        });
       }
     },
     data() {
