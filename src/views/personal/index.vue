@@ -41,7 +41,7 @@
 
           <el-form-item label="身份证号">
           <el-col :span="9">
-          <el-input v-model="personalInfo.phoneNo"></el-input>
+          <el-input v-model="personalInfo.IDNumber"></el-input>
           </el-col>
           </el-form-item>
 
@@ -100,6 +100,7 @@ export default {
           gender: '男',
           birthday: '1990/01/28',
           phoneNo: '13012345678',
+          IDNumber:'123421196708138944',
           image_uri: '' 
           //region: [1, 1, 1]
       },
