@@ -58,16 +58,32 @@
 
   export default {
     methods: {
-      mounted: function () {
+      mounted: function(UserId, Account, Type) {
         // GET /someUrl
-        this.$http.get('http://localhost:8088/test').then(response => {
-          console.log(response.withdrawnmedals);
-          // get body data
-          // this.someData = response.body;
-
-        }, response => {
-          console.log("error");
-        });
+        var transcription = this
+        this.$http.get({
+          /**
+           * 这个地方应该写的是通过勋章状态为got的函数的url访问这个账户内的勋章币
+           * 并且这个地方用type为2表示withdrawn的勋章 这些勋章应该链上查询
+           */
+          url:'',
+          data: {
+            UserId: this.UserId,
+            Account: this.Account,
+            Type: 2 }
+        }).then(function(res) {
+          transcription = []
+          for (var i = 0, len = res.data.result.length; i < len; i++) {
+            var trascription_data = res.data.result[i]
+            transcription.list.push(trascription_data)
+            this.withdrawnmedals.push(transcription)
+          }
+          this.withdrawnmedals = transcription
+          this.withdrawnmedals = res.body
+          /**
+           * 这三个处理方式不知道哪一个是对的 需要测试
+           */
+        })
       },
       tableRowClassName({row, rowIndex}) {
         if (rowIndex === 0) {
@@ -87,23 +103,6 @@
       return {
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
         Withdrawn_image: withdrawn_image,
-        gridData: [{
-          date: '2016-05-02',
-          from: '王小虎',
-          to: '李四'
-        }, {
-          date: '2016-05-04',
-          from: '王小虎',
-          to: '李四'
-        }, {
-          date: '2016-05-01',
-          from: '王小虎',
-          to: '李四'
-        }, {
-          date: '2016-05-03',
-          from: '王小虎',
-          to: '李四'
-        }],
         dialogTableVisible: false,
         withdrawnmedals: [{
           medals: '5',

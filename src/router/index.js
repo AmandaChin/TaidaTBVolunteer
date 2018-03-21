@@ -33,7 +33,6 @@ export const constantRouterMap = [
   { path: '/404', component: _import('errorPage/404'), hidden: true },
   { path: '/401', component: _import('errorPage/401'), hidden: true },
 
-//空白默认主页
   {
     path:'',
     component:Layout,
@@ -65,14 +64,10 @@ export const asyncRouterMap = [
       icon: 'operation'
     },
     children: [
+      { path: 'volunteers', component: _import('program/volunteers'), name: 'volunteers', meta: { title: '发布需求' }},
       { path: 'oldman', component: _import('program/oldman'), name: 'oldman', meta: { title: '发布需求' }},
       { path: 'UploadedDemand', component: _import('program/UploadedDemand'), name: 'UploadedDemand', meta: { title: '历史需求' }},
-      { path: 'HistoryService',
-        component: _import('program/HistoryService'),
-        name: 'HistoryService', meta: { title: '历史服务', icon: 'operation' },
-        children: [
-          { path: 'volunteers', component: _import('program/volunteers'), name: 'volunteers', meta: { title: '申请勋章' }}]
-      }
+      { path: 'HistoryService', component: _import('program/HistoryService'), name: 'HistoryService', meta: { title: '历史服务' }}
     ]
   },
   {
@@ -111,8 +106,9 @@ export const asyncRouterMap = [
       component:() => import('@/views/notice/index2'),
       meta: {title:'通知',icon:'message'}
     }]
-  },
-
+  }
+  /**
+   *
   {
     path: '/dashboard',
     component: Layout,
@@ -320,4 +316,5 @@ export const asyncRouterMap = [
   },
 
   { path: '*', redirect: '/404', hidden: true }
+   */
 ]

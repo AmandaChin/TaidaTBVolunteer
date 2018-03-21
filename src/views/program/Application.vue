@@ -174,7 +174,7 @@
   import { validateURL } from '@/utils/validate'
   import { fetchArticle } from '@/api/article'
   import { userSearch } from '@/api/remoteSearch'
-  import complexTable from '../example/table/complexTable'
+  import complexTable from './../example/table/complexTable'
 
   const defaultForm = {
     status: 'draft',
@@ -206,11 +206,11 @@
 
         this.$http.post('http://localhost:8088/post', formData).then((response) => {
           // success callback
-          console.log(response.data);
+          console.log(response.data)
         }, (response) => {
-          console.log("error");
+          console.log("error")
           // error callback
-        });
+        })
       }
     },
     data() {

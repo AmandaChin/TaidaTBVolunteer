@@ -51,16 +51,32 @@
   import clip from '@/utils/clipboard'
   export default {
       methods: {
-        mounted: function () {
+        mounted: function(UserId, Account, Type) {
           // GET /someUrl
-          this.$http.get('http://localhost:8088/test').then(response => {
-            console.log(response.applyingmedals);
-            // get body data
-            // this.someData = response.body;
-
-          }, response => {
-            console.log("error");
-          });
+          var transcription = this
+          this.$http.get({
+            /**
+             * 这个地方应该写的是通过勋章状态为got的函数的url访问这个账户内的勋章币
+             * 并且这个地方用type为0表示applying的勋章 这些勋章应该链上查询
+             */
+            url:'',
+            data: {
+              UserId: this.UserId,
+              Account: this.Account,
+              Type: 0 }
+          }).then(function(res) {
+            transcription = []
+            for (var i = 0, len = res.data.result.length; i < len; i++) {
+              var trascription_data = res.data.result[i]
+              transcription.list.push(trascription_data)
+              this.applyingmedals.push(transcription)
+            }
+            this.applyingmedals = transcription
+            this.applyingmedals = res.body
+            /**
+             * 这三个处理方式不知道哪一个是对的 需要测试
+             */
+          })
         },
         tableRowClassName({row, rowIndex}) {
           if (rowIndex === 0) {
@@ -83,19 +99,6 @@
           return{
             inputData: 'https://github.com/PanJiaChen/vue-element-admin',
             Applying_image: applying_image,
-            gridData: [{
-              date: '2016-05-02',
-              from: '王小虎',
-              to: '李四'
-            }, {
-              date: '2016-05-04',
-              from: '王一',
-              to: '李二'
-            }, {
-              date: '2016-05-01',
-              from: '王二',
-              to: '李三'
-            }],
             dialogTableVisible: false,
             applyingmedals: [{
               medals:'5',

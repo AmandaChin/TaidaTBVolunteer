@@ -53,16 +53,34 @@
   import clip from '@/utils/clipboard'
   export default {
     methods: {
-      mounted: function () {
+      mounted: function(UserId, Account, Type) {
         // GET /someUrl
-        this.$http.get('http://localhost:8088/test').then(response => {
-          console.log(response.demands);
-          // get body data
-          // this.someData = response.body;
-
-        }, response => {
-          console.log("error");
-        });
+        var history_demand = this
+        this.$http.get({
+          /**
+           * 这个地方应该写的是通过勋章状态为got的函数的url访问这个账户内的勋章币
+           * 并且这个地方用type为0表示已经发布的需求
+           */
+          url: '',
+          data: {
+            UserId: this.UserId,
+            Account: this.Account,
+            Type: 0
+          }
+        }).then(function(res) {
+          history_demand = []
+          for (var i = 0, len = res.data.result.length; i < len; i++) {
+            var demand_detail = res.data.result[i]
+            history_demand.list.push(demand_detail)
+            this.service.push(history_demand)
+          }
+          this.service = history_demand
+          this.service = res.body
+          /**
+           * 这三个处理方式不知道哪一个是对的 需要测试
+           * 另外注意 这里边已经把ServiceId传进来了 后边是要用到的
+           */
+        })
       },
       tableRowClassName({row, rowIndex}) {
         if (rowIndex === 0) {
@@ -89,7 +107,8 @@
           postingtime:'2018-01-05',
           servicecontent:'擦窗',
           populationrequest:'3人',
-          servicetime:'3小时'
+          servicetime:'3小时',
+          serviceId:''
         }]
       }
     }

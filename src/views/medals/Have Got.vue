@@ -37,8 +37,7 @@
     <el-table-column
       label="更  多">
       <template scope="scope">
-        <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="dialogTableVisible = true">交易链</el-button>
-
+        <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="getchain(scope.$index, scope.row)">交易链</el-button>
         <el-dialog title="交易历史" :visible.sync="dialogTableVisible">
           <el-table :data="gridData">
             <el-table-column property="date" label="日期" width="150"></el-table-column>
@@ -67,24 +66,79 @@
 
   export default {
     methods: {
-      mounted: function () {
+      mounted: function(UserId, Account, Type) {
         // GET /someUrl
-        this.$http.get('http://localhost:8088/test').then(response => {
-          console.log(response.gettingmedals);
-          // get body data
-          // this.someData = response.body;
-
-        }, response => {
-          console.log("error");
-        });
+        var transcription = this
+        this.$http.get({
+          /**
+           * 这个地方应该写的是通过勋章状态为got的函数的url访问这个账户内的勋章币
+           * 并且这个地方用type为1表示got的勋章 这些勋章应该链上查询
+           */
+          url:'',
+          data: {
+            UserId: UserId,
+            Account: Account,
+            Type: 1 }
+        }).then(function(res) {
+          transcription = []
+          /**
+           * 这个地方返回的内容更应该还包括serviceID 这样才能做交易链查询
+           * 交易链链上的信息应该放在数据库中
+           */
+          for (var i = 0, len = res.data.result.length; i < len; i++) {
+            var transcription_data = res.data.result[i]
+            transcription.list.push(transcription_data)
+            this.gettingmedals.push(transcription_data)
+          }
+          this.gettingmedals = transcription
+          this.gettingmedals = res.body
+          /**
+           * 这三个处理方式不知道哪一个是对的 需要测试
+           */
+        })
       },
-      tableRowClassName({row, rowIndex}) {
+      tableRowClassName({ row, rowIndex }) {
         if (rowIndex === 0) {
-          return 'warning-row';
+          return 'warning-row'
         } else if (rowIndex === 1) {
-          return 'success-row';
+          return 'success-row'
         }
-        return '';
+        return ''
+      },
+      /**
+       * 这个函数里边发送ServiceId 还有 UserId 得到返回值 并显示
+       * 注意 这里的返回值是数据库里边来的 是简单数据 不是区块链显示台
+       * 遗留问题 怎么获取这个ServiceID 其实应该是从位置连接到数据上然后获取
+       * @param UserId
+       * @param ServiceId
+       */
+      getchain({ index, row }) {
+        this.dialogTableVisible = true
+        var serviceId = 0
+        serviceId = this.gettingmedals.indexOf(index)
+        this.getDetail(this.UserId, serviceId)
+        /**
+         * 在这个函数中尝试通过点击位置所在的行获得对应的index 以及serviceId
+         */
+      },
+      getDetail(UserId, ServiceId) {
+        var chain = this
+        this.$http.get({
+          url:'',
+          data: {
+            UserId: UserId,
+            ServiceId: ServiceId
+          }
+        }).then(function(res) {
+          chain = []
+          for (var j = 0, len = res.data.result.length; j < len; j++) {
+            var chain_data = res.data.result[j]
+            chain.list.push(chain_data)
+            this.gridData.push(chain_data)
+          }
+          this.gridData = chain
+          this.gridData = res.body
+        })
       },
       getChainDetail(text,event){
         clip(text, event)
@@ -95,7 +149,7 @@
         })
       }
     },
-    data(){
+    data() {
       return{
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
         Getting_image: getting_image,
@@ -118,12 +172,14 @@
           users:'张三',
           applyingtime:'2018-01-05',
           gettingtime:'2018-01-10',
+          serviceId: 'hahaha'
         },
           {
             medals:'10',
             users:'张三',
             applyingtime:'2018-01-05',
             gettingtime:'2018-01-10',
+            serviceId: 'hehehe'
           }
         ]
       }

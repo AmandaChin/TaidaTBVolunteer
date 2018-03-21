@@ -26,7 +26,7 @@
 
           <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm()">立即发布
           </el-button>
-          <el-button v-loading="loading" type="warning" @click="draftForm">存为草稿</el-button>
+          <el-button v-loading="loading" type="warning" @click="draftForm()">存为草稿</el-button>
 
         </template>
         <template v-else>
@@ -69,14 +69,14 @@
 
                 <el-col :span="8">
                   <el-form-item style="margin-bottom: 20px;" label-width="90px" label=" 服务时段:" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
+                    <el-date-picker v-model="postForm.start_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="5">
                   <el-form-item style="margin-bottom: 20px;" label-width="60px" label="—" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
+                    <el-date-picker v-model="postForm.end_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -91,7 +91,7 @@
               <el-row>
                 <el-col :span="4">
                   <el-form-item label-width="90px" label="服务时长:" class="postInfo-container-item">
-                    <el-select clearable style="width: 100px" class="filter-item" v-model="listQuery_info.importance_info":placeholder="$t('小时')">
+                    <el-select clearable style="width: 100px" class="filter-item" v-model="postForm.duration":placeholder="$t('小时')">
                       <el-option v-for="item in importanceOptions_info" :key="item" :label="item" :value="item" >
                       </el-option>
                     </el-select>
@@ -100,7 +100,7 @@
 
                 <el-col :span="3">
                   <el-form-item label-width="220px" label="需转移给志愿者勋章数量：" class="postInfo-container-item">
-                    <el-tag style='margin-top:0px;display:block; width: 100px;height: 38px;margin-left: 0px' type="info">{{$t(listQuery_info.coinamount)}}</el-tag>
+                    <el-tag style='margin-top:0px;display:block; width: 100px;height: 38px;margin-left: 0px' type="info">{{$t(postForm.coinamount)}}</el-tag>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -141,6 +141,7 @@
   import { fetchArticle } from '@/api/article'
   import { userSearch } from '@/api/remoteSearch'
   import complexTable from '../example/table/complexTable'
+  import data from "../svg-icons/generateIconsView";
 
   const defaultForm = {
     status: 'draft',
@@ -150,9 +151,12 @@
     source_uri: '', // 文章外链
     image_uri: '', // 文章图片
     source_number: '', // 文章外部作者
-    display_time: undefined, // 前台展示时间
+    start_time: undefined,
+    end_time: undefined,
     id: undefined,
     platforms: ['a-platform'],
+    duration: undefined,
+    coinamount: undefined,
     comment_disabled: false
   }
   export default {
@@ -165,15 +169,19 @@
       }
     },
     methods:{
+      /**
+       * 这个位置应该改一下http地址就可以了
+       * 此处需要serviceID在数据库中是多少
+       */
       submit: function() {
-        var formData = JSON.stringify(this.postForm); // 这里才是你的表单数据
-        this.$http.post('http://localhost:8088/post', formData).then((response) => {
+        var formData = JSON.stringify(this.postForm) // 这里才是你的表单数据
+        this.$http.post('http://localhost:3000/api/demandPost', formData).then((response) => {
           // success callback
-          console.log(response.data);
+          console.log(response.data)
         }, (response) => {
-          console.log("error");
+          console.log("error")
           // error callback
-        });
+        })
       }
     },
     data() {
@@ -214,15 +222,6 @@
           { key: 'c-platform', name: 'c-platform' }
         ],
         importanceOptions_info: [1, 1.5, 2, 2.5, 3, 3.5, 4],
-        listQuery_info: {
-          page: 1,
-          limit: 20,
-          importance_info: undefined,
-          coinamount: undefined,
-          title: undefined,
-          type: undefined,
-          sort: '+id'
-        },
         rules: {
           image_uri: [{ validator: validateRequire }],
           title: [{ validator: validateRequire }],
@@ -266,6 +265,15 @@
               duration: 2000
             })
             this.postForm.status = 'published'
+            this.postForm.submit()
+            /**
+             * 这个地方需要写路由地址 检测一下是否传参成功
+             *this.$http.post('/someUrl', { title: this.postForm.title, service_content: this.postForm.service_content, start_time: this.postForm.start_time, end_time: this.postForm.end_time, duration: this.postForm.duration, content_short: this.postForm.content_short, content: this.postForm.content}).then(successCallback, errorCallback);
+            */
+             /**
+             * 论坛填写的内容提交了
+             * @type {boolean}
+             */
             this.loading = false
           } else {
             console.log('error submit!!')
@@ -288,6 +296,10 @@
           duration: 100
         })
         this.postForm.status = 'draft'
+        this.postForm.submit()
+        /**
+         * 这个地方应该注意 应该让数据库那边加上FORM的属性
+         */
       },
       getRemoteUserList(query) {
         userSearch(query).then(response => {
