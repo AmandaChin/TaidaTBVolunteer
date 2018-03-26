@@ -145,30 +145,37 @@
     coinamount: undefined,
     comment_disabled: false
   }
-  const sendData={
-    UserId: this.UserId,
-    content: this.postForm.service_content,
-    start_time: this.postForm.start_time,
-    end_time: this.postForm.end_time,
-    duration: this.postForm.duration,
-    remark: this.postForm.content
+  const sendData = {
+    UserId: '',
+    content: '',
+    start_time: '',
+    end_time: '',
+    duration: '',
+    remark: ''
   }
   export default {
     name: 'articleDetail',
-    components: { Tinymce, MDinput, Upload, Multiselect, Sticky, complexTable },
+    components: {Tinymce, MDinput, Upload, Multiselect, Sticky, complexTable},
     props: {
       isEdit: {
         type: Boolean,
         default: false
       }
     },
-    methods:{
+    methods: {
       /**
        * 这个位置应该改一下http地址就可以了
        * 此处需要serviceID在数据库中是多少
        */
       submit: function() {
-        var JSONobject = JSON.stringify(this.sendData)
+        var data = sendData
+        data.UserId = this.UserId
+        data.content = this.postForm.service_content
+        data.start_time = this.postForm.start_time
+        data.end_time = this.postForm.end_time
+        data.duration = this.postForm.duration
+        data.remark = this.postForm.remark
+        var JSONobject = JSON.stringify(data)
         this.$http.post('http://localhost:3000/api/demandPost', JSONobject).then((response) => {
           // success callback
           console.log(response.data)
@@ -176,133 +183,133 @@
           console.log("error")
           // error callback
         })
-      }
-    },
-    data() {
-      const validateRequire = (rule, value, callback) => {
-        if (value === '') {
-          this.$message({
-            message: rule.field + '为必传项',
-            type: 'error'
-          })
-          callback(null)
-        } else {
-          callback()
-        }
-      }
-      const validateSourceUri = (rule, value, callback) => {
-        if (value) {
-          if (validateURL(value)) {
-            callback()
-          } else {
+      },
+      data() {
+        const validateRequire = (rule, value, callback) => {
+          if (value === '') {
             this.$message({
-              message: '外链url填写不正确',
+              message: rule.field + '为必传项',
               type: 'error'
             })
             callback(null)
-          }
-        } else {
-          callback()
-        }
-      }
-      return {
-        postForm: Object.assign({}, defaultForm),
-        fetchSuccess: true,
-        loading: false,
-        userLIstOptions: [],
-        platformsOptions: [
-          { key: 'a-platform', name: 'a-platform' },
-          { key: 'b-platform', name: 'b-platform' },
-          { key: 'c-platform', name: 'c-platform' }
-        ],
-        importanceOptions_info: [1, 1.5, 2, 2.5, 3, 3.5, 4],
-        rules: {
-          image_uri: [{ validator: validateRequire }],
-          title: [{ validator: validateRequire }],
-          service_content: [{ validator: validateRequire }],
-          content: [{ validator: validateRequire }],
-          source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
-        }
-      }
-    },
-    computed: {
-      contentShortLength() {
-        return this.postForm.content_short.length
-      }
-    },
-    created() {
-      if (this.isEdit) {
-        this.fetchData()
-      } else {
-        this.postForm = Object.assign({}, defaultForm)
-      }
-    },
-    methods: {
-      fetchData() {
-        fetchArticle().then(response => {
-          this.postForm = response.data
-        }).catch(err => {
-          this.fetchSuccess = false
-          console.log(err)
-        })
-      },
-      submitForm() {
-        this.postForm.display_time = parseInt(this.display_time / 1000)
-        console.log(this.postForm)
-        this.$refs.postForm.validate(valid => {
-          if (valid) {
-            this.loading = true
-            this.$notify({
-              title: '成功',
-              message: '发布文章成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.postForm.status = 'published'
-            this.postForm.submit()
-            /**
-             * 这个地方需要写路由地址 检测一下是否传参成功
-             *this.$http.post('/someUrl', { title: this.postForm.title, service_content: this.postForm.service_content, start_time: this.postForm.start_time, end_time: this.postForm.end_time, duration: this.postForm.duration, content_short: this.postForm.content_short, content: this.postForm.content}).then(successCallback, errorCallback);
-            */
-             /**
-             * 论坛填写的内容提交了
-             * @type {boolean}
-             */
-            this.loading = false
           } else {
-            console.log('error submit!!')
-            return false
+            callback()
           }
-        })
-      },
-      draftForm() {
-        if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
-          this.$message({
-            message: '请填写必要的标题和内容',
-            type: 'warning'
-          })
-          return
         }
-        this.$message({
-          message: '保存成功',
-          type: 'success',
-          showClose: true,
-          duration: 100
-        })
-        this.postForm.status = 'draft'
-        this.postForm.submit()
-        /**
-         * 这个地方应该注意 应该让数据库那边加上FORM的属性
-         */
+        const validateSourceUri = (rule, value, callback) => {
+          if (value) {
+            if (validateURL(value)) {
+              callback()
+            } else {
+              this.$message({
+                message: '外链url填写不正确',
+                type: 'error'
+              })
+              callback(null)
+            }
+          } else {
+            callback()
+          }
+        }
+        return {
+          postForm: Object.assign({}, defaultForm),
+          fetchSuccess: true,
+          loading: false,
+          userLIstOptions: [],
+          platformsOptions: [
+            {key: 'a-platform', name: 'a-platform'},
+            {key: 'b-platform', name: 'b-platform'},
+            {key: 'c-platform', name: 'c-platform'}
+          ],
+          importanceOptions_info: [1, 1.5, 2, 2.5, 3, 3.5, 4],
+          rules: {
+            image_uri: [{validator: validateRequire}],
+            title: [{validator: validateRequire}],
+            service_content: [{validator: validateRequire}],
+            content: [{validator: validateRequire}],
+            source_uri: [{validator: validateSourceUri, trigger: 'blur'}]
+          }
+        }
       },
-      getRemoteUserList(query) {
-        userSearch(query).then(response => {
-          if (!response.data.items) return
-          console.log(response)
-          this.userLIstOptions = response.data.items.map(v => ({
-            key: v.name
-          }))
-        })
+      computed: {
+        contentShortLength() {
+          return this.postForm.content_short.length
+        }
+      },
+      created() {
+        if (this.isEdit) {
+          this.fetchData()
+        } else {
+          this.postForm = Object.assign({}, defaultForm)
+        }
+      },
+      methods: {
+        fetchData() {
+          fetchArticle().then(response => {
+            this.postForm = response.data
+          }).catch(err => {
+            this.fetchSuccess = false
+            console.log(err)
+          })
+        },
+        submitForm() {
+          this.postForm.display_time = parseInt(this.display_time / 1000)
+          console.log(this.postForm)
+          this.$refs.postForm.validate(valid => {
+            if (valid) {
+              this.loading = true
+              this.$notify({
+                title: '成功',
+                message: '发布文章成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.postForm.status = 'published'
+              this.postForm.submit()
+              /**
+               * 这个地方需要写路由地址 检测一下是否传参成功
+               *this.$http.post('/someUrl', { title: this.postForm.title, service_content: this.postForm.service_content, start_time: this.postForm.start_time, end_time: this.postForm.end_time, duration: this.postForm.duration, content_short: this.postForm.content_short, content: this.postForm.content}).then(successCallback, errorCallback);
+               */
+              /**
+               * 论坛填写的内容提交了
+               * @type {boolean}
+               */
+              this.loading = false
+            } else {
+              console.log('error submit!!')
+              return false
+            }
+          })
+        },
+        draftForm() {
+          if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
+            this.$message({
+              message: '请填写必要的标题和内容',
+              type: 'warning'
+            })
+            return
+          }
+          this.$message({
+            message: '保存成功',
+            type: 'success',
+            showClose: true,
+            duration: 100
+          })
+          this.postForm.status = 'draft'
+          this.postForm.submit()
+          /**
+           * 这个地方应该注意 应该让数据库那边加上FORM的属性
+           */
+        },
+        getRemoteUserList(query) {
+          userSearch(query).then(response => {
+            if (!response.data.items) return
+            console.log(response)
+            this.userLIstOptions = response.data.items.map(v => ({
+              key: v.name
+            }))
+          })
+        }
       }
     }
   }

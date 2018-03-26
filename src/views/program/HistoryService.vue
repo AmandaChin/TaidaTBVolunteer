@@ -72,23 +72,16 @@
       mounted: function(UserId, Account, Type) {
         // GET /someUrl
         var history_service = this
-        this.$http.post({ url:'', data: { UserId:this.UserId } })
-          /*
+        this.$http.post({ nurl: '', data: { UserId: this.UserId }})
+        /*
           这个地方发送了用户信息 需要等待解析
           */
-          history_service = []
-          for (var i = 0, len = res.data.result.length; i < len; i++) {
-            var service_detail = res.data.result[i]
-            history_service.list.push(service_detail)
-            this.service.push(history_service)
-          }
-          this.service = history_service
-          this.service = res.body
-          /**
-           * 这三个处理方式不知道哪一个是对的 需要测试
-           * 另外注意 这里边已经把ServiceId传进来了 后边是要用到的
-           */
-        })
+        history_service = []
+        this.service = history_service
+        /**
+         * 这三个处理方式不知道哪一个是对的 需要测试
+         * 另外注意 这里边已经把ServiceId传进来了 后边是要用到的
+         */
       },
       tableRowClassName(row, rowIndex) {
         if (rowIndex === 0) {
