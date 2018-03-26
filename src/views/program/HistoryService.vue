@@ -70,6 +70,8 @@
            }
 });
          */
+        this.$router.replace({ path: '/volunteers' })
+        /*
         this.$router.push('/volunteers')
         var serviceId = 0
         serviceId = this.service.indexOf(index)

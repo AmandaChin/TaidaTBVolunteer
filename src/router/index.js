@@ -8,6 +8,10 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '../views/layout/Layout'
+import volunteers from '../views/volunteers/volunteers'
+import HistoryService from '../views/program/HistoryService'
+import oldman from '../views/program/oldman'
+import UploadedDemand from '../views/program/UploadedDemand'
 
 /** note: submenu only apppear when children.length>=1
  *   detail see  https://panjiachen.github.io/vue-element-admin-site/#/router-and-nav?id=sidebar
@@ -25,8 +29,8 @@ import Layout from '../views/layout/Layout'
     title: 'title'               the name show in submenu and breadcrumb (recommend set)
     icon: 'svg-name'             the icon show in the sidebar,
     noCache: true                if fasle ,the page will no be cached(default is false)
-  }
- **/
+  }**/
+
 export const constantRouterMap = [
   { path: '/login', component: _import('login/index'), hidden: true },
   { path: '/authredirect', component: _import('login/authredirect'), hidden: true },
@@ -44,7 +48,6 @@ export const constantRouterMap = [
       meta: { title:'首页', icon: 'home',noCache:true}
     }]
   }
-
 ]
 
 export default new Router({
@@ -58,16 +61,30 @@ export const asyncRouterMap = [
     path: '/program',
     name: 'program',
     component: Layout,
-    redirect: 'volunteers',
+    redirect: oldman,
     meta: {
       title: '我的操作',
       icon: 'operation'
     },
     children: [
-      { path: 'volunteers', component: _import('program/volunteers'), name: 'volunteers', meta: { title: '发布需求' }},
-      { path: 'oldman', component: _import('program/oldman'), name: 'oldman', meta: { title: '发布需求' }},
-      { path: 'UploadedDemand', component: _import('program/UploadedDemand'), name: 'UploadedDemand', meta: { title: '历史需求' }},
-      { path: 'HistoryService', component: _import('program/HistoryService'), name: 'HistoryService', meta: { title: '历史服务' }}
+      {
+        path: 'oldman',
+        component: oldman,
+        name: 'oldman',
+        meta: { title: '发布需求' }
+      },
+      {
+        path: 'UploadedDemand',
+        component: UploadedDemand,
+        name: 'UploadedDemand',
+        meta: { title: '历史需求' }
+      },
+      {
+        path: 'HistoryService',
+        component: HistoryService,
+        name: 'HistoryService',
+        meta: { title: '历史服务' },
+      }
     ]
   },
   {
@@ -84,6 +101,12 @@ export const asyncRouterMap = [
       { path: 'got', component: _import('medals/Have Got'), name: 'got', meta: { title: '已获得' }},
       { path: 'withdrawn', component: _import('medals/Have Withdrawn'), name: 'withdrawn', meta: { title: '已撤回' }}
     ]
+  },
+
+  {
+    path: '/volunteers',
+    component: volunteers,
+    name: 'haha'
   },
 
   {

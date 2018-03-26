@@ -9,20 +9,6 @@
             <el-button type="info">创建form</el-button>
           </router-link>
 
-          <el-dropdown trigger="click">
-            <el-button plain>{{!postForm.comment_disabled?'正在接收回复':'已屏蔽回复'}}
-              <i class="el-icon-caret-bottom el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu class="no-padding" slot="dropdown">
-              <el-dropdown-item>
-                <el-radio-group style="padding: 10px;" v-model="postForm.comment_disabled">
-                  <el-radio :label="true">接收回复</el-radio>
-                  <el-radio :label="false">屏蔽回复</el-radio>
-                </el-radio-group>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-
 
           <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm()">立即发布
           </el-button>
