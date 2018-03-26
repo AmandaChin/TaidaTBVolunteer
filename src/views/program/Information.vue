@@ -145,6 +145,14 @@
     coinamount: undefined,
     comment_disabled: false
   }
+  const sendData={
+    UserId: this.UserId,
+    content: this.postForm.service_content,
+    start_time: this.postForm.start_time,
+    end_time: this.postForm.end_time,
+    duration: this.postForm.duration,
+    remark: this.postForm.content
+  }
   export default {
     name: 'articleDetail',
     components: { Tinymce, MDinput, Upload, Multiselect, Sticky, complexTable },
@@ -160,8 +168,8 @@
        * 此处需要serviceID在数据库中是多少
        */
       submit: function() {
-        var formData = JSON.stringify(this.postForm) // 这里才是你的表单数据
-        this.$http.post('http://localhost:3000/api/demandPost', formData).then((response) => {
+        var JSONobject = JSON.stringify(this.sendData)
+        this.$http.post('http://localhost:3000/api/demandPost', JSONobject).then((response) => {
           // success callback
           console.log(response.data)
         }, (response) => {

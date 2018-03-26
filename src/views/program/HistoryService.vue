@@ -58,18 +58,6 @@
        * 读取当前service 对应的数据 自动填写到后边
        */
       func: function(index, row) {
-        /**
-         * this.$http.post('v1/user/select-stage', {stage: stage})
-         .then(({data: {code, content}}) => {
-            if (code === 0) {
-                // 对象
-                this.$router.push({path: '/home'});
-            }else if(code === 10){
-                // 带查询参数，变成/login?stage=stage
-                this.$router.push({path: '/login', query:{stage: stage}});
-           }
-});
-         */
         this.$router.replace({ path: '/volunteers' })
         /*
         this.$router.push('/volunteers')
@@ -84,18 +72,10 @@
       mounted: function(UserId, Account, Type) {
         // GET /someUrl
         var history_service = this
-        this.$http.get({
-          /**
-           * 这个地方应该写的是通过勋章状态为got的函数的url访问这个账户内的勋章币
-           * 并且这个地方用type为1表示已经进行过的服务 也就是已经响应过的需求
-           */
-          url: '',
-          data: {
-            UserId: this.UserId,
-            Account: this.Account,
-            Type: 1
-          }
-        }).then(function(res) {
+        this.$http.post({ url:'', data: { UserId:this.UserId } })
+          /*
+          这个地方发送了用户信息 需要等待解析
+          */
           history_service = []
           for (var i = 0, len = res.data.result.length; i < len; i++) {
             var service_detail = res.data.result[i]
