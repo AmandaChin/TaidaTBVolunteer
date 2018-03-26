@@ -6,23 +6,23 @@
 
     <el-table-column label="标题">
       <template slot-scope="scope">
-        <el-button type="text" @click="dialogVisible = true">{{scope.row.title}}</el-button>
+        <el-button type="text" @click="dialogVisible = true">{{scope.row.Title}}</el-button>
         <el-dialog
         title="通知详情"
         :visible.sync="dialogVisible"
         width="50%">
         <el-form >
           <el-form-item label="标题">
-            <span>{{ scope.row.title }}</span>
+            <span>{{ scope.row.Title }}</span>
           </el-form-item>
           <el-form-item label="发布人">
-            <span>{{ scope.row.author }}</span>
+            <span>{{ scope.row.UserName }}</span>
           </el-form-item>
           <el-form-item label="发布日期">
-            <span>{{ scope.row.date }}</span>
+            <span>{{ scope.row.ReleaseTime }}</span>
           </el-form-item>
           <el-form-item label="内容">
-            <span>{{ scope.row.content }}</span>
+            <span>{{ scope.row.Content }}</span>
           </el-form-item>
           </el-form>
         </el-dialog>
@@ -33,14 +33,14 @@
       label="日期">
       <template slot-scope="scope">
         <i class="el-icon-time"></i>
-        <span style="margin-left: 10px">{{ scope.row.date }}</span>
+        <span style="margin-left: 10px">{{ scope.row.ReleaseTime }}</span>
       </template>
     </el-table-column>
     <el-table-column
       label="作者">
       <template slot-scope="scope">
         <div slot="reference" class="name-wrapper">
-            <el-tag size="medium">{{ scope.row.author }}</el-tag>
+            <el-tag size="medium">{{ scope.row.UserName }}</el-tag>
           </div>
       </template>
     </el-table-column>
@@ -50,41 +50,27 @@
 </template>
 
 <script>
+import axios from 'axios';
   export default {
     data() {
       return {
         dialogVisible: false,
-        noticeData: [{
-          title: '关于系统使用方法的通知1',
-          author: '佚名',
-          content: '区块链是分布式数据存储、点对点传输、共识机制、加密算法等计算机技术的新型应用模式。所谓共识机制是区块链系统中实现不同节点之间建立信任、获取权益的数学算法',
-          date: '2018年1月30日'
-        },
-        {
-          title: '关于系统使用方法的通知2',
-          author: '佚名',
-          content: '区块链是分布式数据存储、点对点传输、共识机制、加密算法等计算机技术的新型应用模式。所谓共识机制是区块链系统中实现不同节点之间建立信任、获取权益的数学算法',
-          date: '2018年1月30日'
-        },
-        {
-          title: '关于系统使用方法的通知3',
-          author: '佚名',
-          content: '区块链是分布式数据存储、点对点传输、共识机制、加密算法等计算机技术的新型应用模式。所谓共识机制是区块链系统中实现不同节点之间建立信任、获取权益的数学算法',
-          date: '2018年1月30日'
-        },
-        {
-          title: '关于系统使用方法的通知4',
-          author: '佚名',
-          content: '区块链是分布式数据存储、点对点传输、共识机制、加密算法等计算机技术的新型应用模式。所谓共识机制是区块链系统中实现不同节点之间建立信任、获取权益的数学算法',
-          date: '2018年1月30日'
-        },
-        {
-          title: '关于系统使用方法的通知5',
-          author: '佚名',
-          content: '区块链是分布式数据存储、点对点传输、共识机制、加密算法等计算机技术的新型应用模式。所谓共识机制是区块链系统中实现不同节点之间建立信任、获取权益的数学算法',
-          date: '2018年1月30日'
-        }]
+        noticeData: []
       }
+    },
+    mounted() {
+        axios.get('http://localhost:3000/api/noticeOperation',
+        {
+          dataType:'jsonp',
+          crossDomain:true
+        }).then(
+          (res)=>{
+            this.noticeData=res.data.list;
+            console.log(res);
+          }
+        ).catch((err)=>{
+          console.log(err);
+        })
     },
     methods: {
       handleEdit(index, row) {

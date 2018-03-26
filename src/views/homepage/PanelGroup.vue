@@ -1,12 +1,36 @@
 <template>
   <el-row class="panel-group" :gutter="40">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class='card-panel' @click="handleSetLineChartData('newVisitis')">
-        <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="peoples" class-name="card-panel-icon" />
+      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
+        <div class="card-panel-icon-wrapper icon-shoppingCard">
+          <svg-icon icon-class="xunzhang" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">加入志愿者</div>
+          <div class="card-panel-text">勋章信息</div>
+          <div class="card-description">做一个心地善良的人</div>
+        </div>
+      </div>
+    </el-col>
+
+  <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel" @click="handleSetLineChartData('purchases')">
+        <div class="card-panel-icon-wrapper icon-money">
+          <svg-icon icon-class="heart" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">发布需求</div>
+          <div class="card-description">做一个心地善良的人</div>
+        </div>
+      </div>
+    </el-col>
+
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class='card-panel' @click="handleSetLineChartData('newVisitis')">
+        <div class="card-panel-icon-wrapper icon-people">
+          <svg-icon icon-class="message" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">查看通知</div>
           <div class="card-description">做一个心地善良的人</div>
         </div>
       </div>
@@ -22,28 +46,8 @@
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('purchases')">
-        <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="heart" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">发布需求</div>
-          <div class="card-description">做一个心地善良的人</div>
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
-        <div class="card-panel-icon-wrapper icon-shoppingCard">
-          <svg-icon icon-class="xunzhang" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">勋章信息</div>
-          <div class="card-description">做一个心地善良的人</div>
-        </div>
-      </div>
-    </el-col>
+   
+    
   </el-row>
 </template>
 
@@ -85,7 +89,7 @@ export default {
         background: #36a3f7;
       }
       .icon-money {
-        background: #f4516c;
+        background: #36a3f7;
       }
       .icon-shoppingCard {
         background: #34bfa3
@@ -98,7 +102,7 @@ export default {
       color: #36a3f7;
     }
     .icon-money {
-      color: #f4516c;
+      color: #36a3f7;
     }
     .icon-shoppingCard {
       color: #34bfa3

@@ -18,6 +18,9 @@ import './mock' // simulation data
 
 import * as filters from './filters' // global filters
 
+import axios from 'axios'
+Vue.prototype.$http = axios
+
 Vue.use(router)
 
 Vue.use(Element, {
@@ -36,6 +39,7 @@ new Vue({
   el: '#app',
   router,
   store,
+  axios,
   i18n,
   template: '<App/>',
   components: { App }
