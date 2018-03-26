@@ -9,20 +9,6 @@
             <el-button type="info">创建form</el-button>
           </router-link>
 
-          <el-dropdown trigger="click">
-            <el-button plain>{{!postForm.comment_disabled?'正在接收回复':'已屏蔽回复'}}
-              <i class="el-icon-caret-bottom el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu class="no-padding" slot="dropdown">
-              <el-dropdown-item>
-                <el-radio-group style="padding: 10px;" v-model="postForm.comment_disabled">
-                  <el-radio :label="true">接收回复</el-radio>
-                  <el-radio :label="false">屏蔽回复</el-radio>
-                </el-radio-group>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-
 
           <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm()">立即发布
           </el-button>
@@ -159,6 +145,14 @@
     coinamount: undefined,
     comment_disabled: false
   }
+  const sendData={
+    UserId: this.UserId,
+    content: this.postForm.service_content,
+    start_time: this.postForm.start_time,
+    end_time: this.postForm.end_time,
+    duration: this.postForm.duration,
+    remark: this.postForm.content
+  }
   export default {
     name: 'articleDetail',
     components: { Tinymce, MDinput, Upload, Multiselect, Sticky, complexTable },
@@ -174,8 +168,8 @@
        * 此处需要serviceID在数据库中是多少
        */
       submit: function() {
-        var formData = JSON.stringify(this.postForm) // 这里才是你的表单数据
-        this.$http.post('http://localhost:3000/api/demandPost', formData).then((response) => {
+        var JSONobject = JSON.stringify(this.sendData)
+        this.$http.post('http://localhost:3000/api/demandPost', JSONobject).then((response) => {
           // success callback
           console.log(response.data)
         }, (response) => {

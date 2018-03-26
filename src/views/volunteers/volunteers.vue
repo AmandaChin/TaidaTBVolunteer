@@ -2,7 +2,7 @@
   <Application></Application>
 </template>
 <script>
-  import Application from './Application'
+  import Application from '../program/Application'
 
   export default {
     name: 'createForm',
