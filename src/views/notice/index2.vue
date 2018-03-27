@@ -59,7 +59,7 @@ import axios from 'axios';
       }
     },
     mounted() {
-        axios.get('http://localhost:3000/api/noticeOperation',
+        axios.post('http://localhost:3000/api/noticeOperation',
         {
           dataType:'jsonp',
           crossDomain:true
