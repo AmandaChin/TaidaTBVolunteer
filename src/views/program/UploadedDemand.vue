@@ -7,27 +7,27 @@
     <el-table-column
       label="发布时间">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.postingtime}}</span>
+        <span style="color: darkgray">{{scope.row.CreateTime}}</span>
       </template>
     </el-table-column>
     <el-table-column
       label="服务内容">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.servicecontent}}</span>
+        <span style="color: darkgray">{{scope.row.Content}}</span>
       </template>
     </el-table-column>
     <el-table-column
-      label="需求人数"
-      prop="users">
-      <template scope="scope">
-        <span style="color: darkgray">{{scope.row.populationrequest}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="服务时长"
+      label="起始时间"
       prop="applyingtime">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.servicetime}}</span>
+        <span style="color: darkgray">{{scope.row.DemandStartTime}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="终止时间"
+      prop="applyingtime">
+      <template scope="scope">
+        <span style="color: darkgray">{{scope.row.DemandEndTime}}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -89,17 +89,11 @@
         })
       }
     },
-    data(){
-      return{
+    data() {
+      return {
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
         dialogTableVisible: false,
-        demands: [{
-          postingtime:'2018-01-05',
-          servicecontent:'擦窗',
-          populationrequest:'3人',
-          servicetime:'3小时',
-          serviceId:''
-        }]
+        demands: []
       }
     }
   }

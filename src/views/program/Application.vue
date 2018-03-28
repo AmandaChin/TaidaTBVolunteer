@@ -1,5 +1,6 @@
 <template>
   <div class="createPost-container">
+    {{CreateTime}}
     <el-form class="form-container" :model="postForm" :rules="rules" ref="postForm">
 
       <sticky :className="'sub-navbar '+postForm.status">
@@ -165,6 +166,10 @@
     props: {
       isEdit: {
         type: Boolean,
+        default: false
+      },
+      CreateTime: {
+        type: undefined,
         default: false
       }
     },
