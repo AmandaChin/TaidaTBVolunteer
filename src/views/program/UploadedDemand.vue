@@ -33,7 +33,7 @@
     <el-table-column
       label="更多操作">
       <template scope="scope">
-        <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="dialogTableVisible = true">修改需求</el-button>
+        <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="change">修改需求</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -51,35 +51,25 @@
 
 <script>
   import clip from '@/utils/clipboard'
+  import axios from 'axios'
   export default {
     methods: {
-      mounted: function(UserId, Account, Type) {
+      change: function(index, row) {
+        this.$router.replace({ path: '/Information' })
+      },
+      mounted: function(UserId) {
         // GET /someUrl
-        var history_demand = this
-        this.$http.get({
-          /**
-           * 这个地方应该写的是通过勋章状态为got的函数的url访问这个账户内的勋章币
-           * 并且这个地方用type为0表示已经发布的需求
-           */
-          url: '',
-          data: {
-            UserId: this.UserId,
-            Account: this.Account,
-            Type: 0
+        axios.post('http://localhost:3000/api/getDemandByUserID',
+          {
+            dataType: 'jsonp',
+            crossDomain: true
+          }).then(
+          (res) => {
+            this.demand = res.data.list
+            console.log(res)
           }
-        }).then(function(res) {
-          history_demand = []
-          for (var i = 0, len = res.data.result.length; i < len; i++) {
-            var demand_detail = res.data.result[i]
-            history_demand.list.push(demand_detail)
-            this.service.push(history_demand)
-          }
-          this.service = history_demand
-          this.service = res.body
-          /**
-           * 这三个处理方式不知道哪一个是对的 需要测试
-           * 另外注意 这里边已经把ServiceId传进来了 后边是要用到的
-           */
+        ).catch((err) => {
+          console.log(err)
         })
       },
       tableRowClassName({row, rowIndex}) {

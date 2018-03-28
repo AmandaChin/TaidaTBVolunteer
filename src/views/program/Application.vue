@@ -9,9 +9,8 @@
             <el-button type="info">创建form</el-button>
           </router-link>
 
-          <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm()">立即申请
+          <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submit">立即申请
           </el-button>
-          <el-button v-loading="loading" type="warning" @click="draftForm">存为草稿</el-button>
         </template>
         <template v-else>
           <el-tag>发送异常错误,刷新页面,或者联系程序员</el-tag>
@@ -22,19 +21,23 @@
       <div class="createPost-main-container">
         <el-row>
           <el-col :span="21">
-            <el-form-item style="margin-bottom:40px;" prop="title">
-              <MDinput name="name" v-model="postForm.title" required :maxlength="100">
-                标题
-              </MDinput>
-              <span v-show="postForm.title.length>=26" class='title-prompt'>app可能会显示不全</span>
-            </el-form-item>
 
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="4">
                   <el-form-item label-width="90px" label="服务用户:" class="postInfo-container-item">
                     <el-form-item style="margin-bottom: 20px;" prop="title">
-                      <el-input placeholder="最多10个字" style='min-width:100px;' v-model="postForm.service_content" required :maxlength="10">
+                      <el-input placeholder="10字以内" style='min-width:100px;' v-model="postForm.user" required :maxlength="10">
+                      </el-input>
+                      <span v-show="postForm.title.length>=20" class='title-prompt'>app可能会显示不全</span>
+                    </el-form-item>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="5">
+                  <el-form-item label-width="110px" label="服务内容:  " class="postInfo-container-item">
+                    <el-form-item style="margin-bottom: 20px;" prop="title">
+                      <el-input placeholder="10字以内" style='min-width:100px;' v-model="postForm.service_content" required :maxlength="10">
                       </el-input>
                       <span v-show="postForm.title.length>=20" class='title-prompt'>app可能会显示不全</span>
                     </el-form-item>
@@ -42,39 +45,21 @@
                 </el-col>
 
                 <el-col :span="7">
-                  <el-form-item label-width="140px" label="服务项目:  " class="postInfo-container-item">
-                    <el-form-item style="margin-bottom: 20px;" prop="title">
-                      <el-select clearable style="width: 105px" class="filter-item" v-model="listQuery_info.importance_info":placeholder="$t('选择项目')">
-                      </el-select>
-                      <span v-show="postForm.title.length>=20" class='title-prompt'>app可能会显示不全</span>
-                    </el-form-item>
-                  </el-form-item>
-                </el-col>
-
-                <el-col :span="8">
                   <el-form-item style="margin-bottom: 20px;" label-width="90px" label=" 服务时段:" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
+                    <el-date-picker v-model="postForm.start_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="3">
-                  <el-form-item style="margin-bottom: 20px;" label-width="60px" label="—" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
+                <el-col :span="6">
+                  <el-form-item style="margin-bottom: 20px;" label-width="50px" label="—" class="postInfo-container-item">
+                    <el-date-picker v-model="postForm.end_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
-              </el-row>
-            </div>
-          </el-col>
-        </el-row>
 
-        <el-row>
-          <el-col>
-            <div class="filter-container">
-              <el-row>
-                <el-col :span="4">
-                  <el-form-item label-width="90px" label="服务时长:" class="postInfo-container-item">
+                <el-col :span="1">
+                  <el-form-item label-width="100px" label="服务时长:" class="postInfo-container-item">
                     <el-select clearable style="width: 100px" class="filter-item" v-model="listQuery_info.importance_info":placeholder="$t('小时')">
                       <el-option v-for="item in importanceOptions_info" :key="item" :label="item" :value="item" >
                       </el-option>
@@ -87,11 +72,6 @@
           </el-col>
         </el-row>
 
-        <el-form-item style="margin-bottom: 10px;" label-width="45px" label="摘要:">
-          <el-input type="textarea" class="article-textarea" :rows="1" autosize placeholder="请输入内容" v-model="postForm.content_short">
-          </el-input>
-          <span class="word-counter" v-show="contentShortLength">{{contentShortLength}}字</span>
-        </el-form-item>
 
         <el-form-item style="margin-bottom: 10px;" label-width="45px" label="详情:">
         </el-form-item>
@@ -134,29 +114,6 @@
           </el-col>
         </el-row>
 
-        <el-row>
-          <el-col>
-            <div class="filter-container">
-              <el-row>
-                <el-col :span="13">
-                  <el-form-item style="margin-bottom: 5px;" label-width="200px" label="我保证上述信息的真实性">
-                  </el-form-item>
-                </el-col>
-              </el-row>
-
-              <el-row>
-                <el-col>
-                  <el-form-item style="margin-bottom: 10px;" label-width="90px" label="电子签名:">
-                    <el-input type="textarea" class="article-textarea" :rows="1" autosize placeholder="请输入真实姓名" v-model="postForm.content_short">
-                    </el-input>
-                    <span class="word-counter" v-show="contentShortLength">{{contentShortLength}}字</span>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </div>
-          </el-col>
-        </el-row>
-
       </div>
     </el-form>
 
@@ -191,6 +148,17 @@
     comment_disabled: false
   }
 
+  const sendData = {
+    UserId: '',
+    content: '',
+    start_time: undefined,
+    end_time: undefined,
+    duration: undefined,
+    remark: '',
+    material1: undefined,
+    material2: undefined
+  }
+
   export default {
     name: 'articleDetail',
     components: { Tinymce, MDinput, Upload4, Upload3, Multiselect, Sticky, complexTable },
@@ -200,14 +168,22 @@
         default: false
       }
     },
-    methods:{
+    methods: {
       submit: function() {
-        var formData = JSON.stringify(this.postForm); // 这里才是你的表单数据
-
-        this.$http.post('http://localhost:8088/post', formData).then((response) => {
+        var data_send = sendData
+        data_send.UserId = this.UserId
+        data_send.content = this.postForm.service_content
+        data_send.start_time = this.postForm.start_time
+        data_send.end_time = this.postForm.end_time
+        data_send.duration = this.item
+        data_send.remark = this.postForm.remark
+        data_send.material1 = this.postForm.image_uri
+        data_send.material2 = this.postForm.pdf_uri
+        var JSONobject = JSON.stringify(data_send)
+        this.$http.post('http://localhost:3000/api/applicate', JSONobject).then((res) => {
           // success callback
-          console.log(response.data)
-        }, (response) => {
+          console.log(res.data)
+        }, (res) => {
           console.log("error")
           // error callback
         })

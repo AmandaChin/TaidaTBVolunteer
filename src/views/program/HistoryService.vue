@@ -51,6 +51,7 @@
 
 <script>
   import clip from '@/utils/clipboard'
+  import axios from 'axios'
   export default {
     methods: {
       /**
@@ -69,19 +70,20 @@
          * 这个地方还需要一个能调用申请勋章界面的参数
          */
       },
-      mounted: function(UserId, Account, Type) {
+      mounted: function(UserId) {
         // GET /someUrl
-        var history_service = this
-        this.$http.post({ nurl: '', data: { UserId: this.UserId }})
-        /*
-          这个地方发送了用户信息 需要等待解析
-          */
-        history_service = []
-        this.service = history_service
-        /**
-         * 这三个处理方式不知道哪一个是对的 需要测试
-         * 另外注意 这里边已经把ServiceId传进来了 后边是要用到的
-         */
+        axios.post('http://localhost:3000/api/getServicedList',
+          {
+            dataType: 'jsonp',
+            crossDomain: true
+          }).then(
+          (res) => {
+            this.service = res.data.list
+            console.log(res)
+          }
+        ).catch((err) => {
+          console.log(err)
+        })
       },
       tableRowClassName(row, rowIndex) {
         if (rowIndex === 0) {
