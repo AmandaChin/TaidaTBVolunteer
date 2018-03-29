@@ -1,6 +1,5 @@
 <template>
   <div class="createPost-container">
-    {{CreateTime}}
     <el-form class="form-container" :model="postForm" :rules="rules" ref="postForm">
 
       <sticky :className="'sub-navbar '+postForm.status">
@@ -47,8 +46,7 @@
 
                 <el-col :span="7">
                   <el-form-item style="margin-bottom: 20px;" label-width="90px" label=" 服务时段:" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.start_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
-                    </el-date-picker>
+                    <span style="color: darkgray">{{this.StartTime}}</span>
                   </el-form-item>
                 </el-col>
 
@@ -166,10 +164,6 @@
     props: {
       isEdit: {
         type: Boolean,
-        default: false
-      },
-      CreateTime: {
-        type: undefined,
         default: false
       }
     },

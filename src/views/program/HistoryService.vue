@@ -1,45 +1,44 @@
 <template>
-  <div>
-    <my-createtime v-bind:CreateTime="CreateTime"></my-createtime>
-    <el-table
-      :data="service"
-      style="width: 100%;margin-left: 20px"
+  <el-table
+    :data="service"
+    style="width: 100%;margin-left: 20px"
 
-      :row-class-name="tableRowClassName">
-      <el-table-column
-        label="申请日期">
-        <template scope="scope">
-          <span style="color: darkgray">{{scope.row.CreateTime}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="服务内容">
-        <template scope="scope">
-          <span style="color: darkgray">{{scope.row.Content}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="开始时间"
-        prop="users">
-        <template scope="scope">
-          <span style="color: darkgray">{{scope.row.RealStartTime}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="结束时间"
-        prop="applyingtime">
-        <template scope="scope">
-          <span style="color: darkgray">{{scope.row.RealEndTime}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="更多操作">
-        <template scope="scope">
-          <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="func(scope.$index, scope.row)">申请勋章</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+    :row-class-name="tableRowClassName">
+    <el-table-column
+      label="申请日期">
+      <template scope="scope">
+        <span style="color: darkgray">{{scope.row.CreateTime}}</span>
+        <my-time :CreateTime="CreateTime"></my-time>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="服务内容">
+      <template scope="scope">
+        <span style="color: darkgray">{{scope.row.Content}}</span>
+
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="开始时间"
+      prop="users">
+      <template scope="scope">
+        <span style="color: darkgray">{{scope.row.RealStartTime}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="结束时间"
+      prop="applyingtime">
+      <template scope="scope">
+        <span style="color: darkgray">{{scope.row.RealEndTime}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="更多操作">
+      <template scope="scope">
+        <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="func(scope.$index, scope.row)">申请勋章</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <style scoped>
@@ -56,9 +55,23 @@
   import clip from '@/utils/clipboard'
   import axios from 'axios'
   import Application from './Application'
+
   export default {
     components: {
-      Application,
+      Application
+    },
+    data() {
+      return {
+        inputData: 'https://github.com/PanJiaChen/vue-element-admin',
+        dialogTableVisible: false,
+        UserName: undefined,
+        Content: undefined,
+        StartTime: undefined,
+        EndTime: undefined,
+        Duration: undefined,
+        Remark: undefined,
+        service: []
+      }
     },
     methods: {
       /**
@@ -77,7 +90,7 @@
          * 这个地方还需要一个能调用申请勋章界面的参数
          */
       },
-      mounted: function(UserId) {
+      mounted(){
         // GET /someUrl
         axios.post('http://localhost:3000/api/getServicedList',
           {
@@ -107,18 +120,6 @@
         this.$alert('这是一段内容','交易记录', {
           confirmButtonText: '确定'
         })
-      }
-    },
-    data(){
-      return{
-        inputData: 'https://github.com/PanJiaChen/vue-element-admin',
-        dialogTableVisible: false,
-        service: [{
-          CreateTime:'2018-01-05',
-          Content:'擦窗',
-          RealStartTime:'2018-01-06 18:30',
-          RealEndTime:'2018-01-06 21:30'
-        }]
       }
     }
   }
