@@ -12,6 +12,7 @@ import volunteers from '../views/volunteers/volunteers'
 import HistoryService from '../views/program/HistoryService'
 import oldman from '../views/program/oldman'
 import UploadedDemand from '../views/program/UploadedDemand'
+import Information from '../views/program/Information'
 
 /** note: submenu only apppear when children.length>=1
  *   detail see  https://panjiachen.github.io/vue-element-admin-site/#/router-and-nav?id=sidebar
@@ -83,7 +84,7 @@ export const asyncRouterMap = [
         path: 'HistoryService',
         component: HistoryService,
         name: 'HistoryService',
-        meta: { title: '历史服务' },
+        meta: { title: '历史服务' }
       }
     ]
   },
@@ -98,8 +99,7 @@ export const asyncRouterMap = [
     },
     children: [
       { path: 'applying', component: _import('medals/Applying'), name: 'applying', meta: { title: '申请中' }},
-      { path: 'got', component: _import('medals/Have Got'), name: 'got', meta: { title: '已获得' }},
-      { path: 'withdrawn', component: _import('medals/Have Withdrawn'), name: 'withdrawn', meta: { title: '已撤回' }}
+      { path: 'got', component: _import('medals/Have Got'), name: 'got', meta: { title: '已获得' }}
     ]
   },
 
@@ -110,9 +110,15 @@ export const asyncRouterMap = [
   },
 
   {
-      path: '/personal',
-      component: Layout,
-      children: [{
+    path: '/Information',
+    component: Information,
+    name: 'Info'
+  },
+
+  {
+    path: '/personal',
+    component: Layout,
+    children: [{
       path: 'index',
       name: 'personal',
       component:() => import('@/views/personal/index'),
@@ -121,9 +127,9 @@ export const asyncRouterMap = [
   },
 
   {
-      path: '/notice',
-      component: Layout,
-      children: [{
+    path: '/notice',
+    component: Layout,
+    children: [{
       path: 'index',
       name: 'notice',
       component:() => import('@/views/notice/index2'),

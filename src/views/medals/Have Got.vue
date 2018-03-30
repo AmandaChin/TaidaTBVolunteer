@@ -63,38 +63,23 @@
 <script>
   import getting_image from '@/assets/medals_images/getting.gif'
   import clip from '@/utils/clipboard'
+  import axios from 'axios'
 
   export default {
     methods: {
-      mounted: function(UserId, Account, Type) {
+      mounted: function(UserId) {
         // GET /someUrl
-        var transcription = this
-        this.$http.get({
-          /**
-           * 这个地方应该写的是通过勋章状态为got的函数的url访问这个账户内的勋章币
-           * 并且这个地方用type为1表示got的勋章 这些勋章应该链上查询
-           */
-          url:'',
-          data: {
-            UserId: UserId,
-            Account: Account,
-            Type: 1 }
-        }).then(function(res) {
-          transcription = []
-          /**
-           * 这个地方返回的内容更应该还包括serviceID 这样才能做交易链查询
-           * 交易链链上的信息应该放在数据库中
-           */
-          for (var i = 0, len = res.data.result.length; i < len; i++) {
-            var transcription_data = res.data.result[i]
-            transcription.list.push(transcription_data)
-            this.gettingmedals.push(transcription_data)
+        axios.post('http://localhost:3000/api/applicated',
+          {
+            dataType: 'jsonp',
+            crossDomain: true
+          }).then(
+          (res) => {
+            this.applyingmedals = res.data.list
+            console.log(res)
           }
-          this.gettingmedals = transcription
-          this.gettingmedals = res.body
-          /**
-           * 这三个处理方式不知道哪一个是对的 需要测试
-           */
+        ).catch((err) => {
+          console.log(err)
         })
       },
       tableRowClassName({ row, rowIndex }) {

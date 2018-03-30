@@ -49,72 +49,62 @@
 <script>
   import applying_image from '@/assets/medals_images/applying.gif'
   import clip from '@/utils/clipboard'
+  import axios from 'axios'
   export default {
-      methods: {
-        mounted: function(UserId, Account, Type) {
-          // GET /someUrl
-          var transcription = this
-          this.$http.get({
-            /**
-             * 这个地方应该写的是通过勋章状态为got的函数的url访问这个账户内的勋章币
-             * 并且这个地方用type为0表示applying的勋章 这些勋章应该链上查询
-             */
-            url:'',
-            data: {
-              UserId: this.UserId,
-              Account: this.Account,
-              Type: 0 }
-          }).then(function(res) {
-            transcription = []
-            for (var i = 0, len = res.data.result.length; i < len; i++) {
-              var trascription_data = res.data.result[i]
-              transcription.list.push(trascription_data)
-              this.applyingmedals.push(transcription)
-            }
-            this.applyingmedals = transcription
-            this.applyingmedals = res.body
-            /**
-             * 这三个处理方式不知道哪一个是对的 需要测试
-             */
-          })
-        },
-        tableRowClassName({row, rowIndex}) {
-          if (rowIndex === 0) {
-            return 'warning-row';
-          } else if (rowIndex === 1) {
-            return 'success-row';
+    methods: {
+      mounted: function(UserId) {
+        // GET /someUrl
+        axios.post('http://localhost:3000/api/applicating',
+          {
+            dataType: 'jsonp',
+            crossDomain: true
+          }).then(
+          (res) => {
+            this.applyingmedals = res.data.list
+            console.log(res)
           }
-          return '';
-        },
-        getChainDetail(text,event){
-          clip(text, event)
-        },
-        showAlert() {
-          this.$alert('这是一段内容','交易记录', {
-            confirmButtonText: '确定'
-            })
-        }
+        ).catch((err) => {
+          console.log(err)
+        })
       },
-      data(){
-          return{
-            inputData: 'https://github.com/PanJiaChen/vue-element-admin',
-            Applying_image: applying_image,
-            dialogTableVisible: false,
-            applyingmedals: [{
-              medals:'5',
-              users:'张三',
-              applyingtime:'2018-01-05',
-              gettingtime:'2018-01-10',
-            },
-              {
-                medals:'10',
-                users:'张三',
-                applyingtime:'2018-01-05',
-                gettingtime:'2018-01-10',
-              }
-            ]
+      tableRowClassName({row, rowIndex}) {
+        if (rowIndex === 0) {
+          return 'warning-row';
+        } else if (rowIndex === 1) {
+          return 'success-row';
+        }
+        return '';
+      },
+      getChainDetail(text,event){
+        clip(text, event)
+      },
+      showAlert() {
+        this.$alert('这是一段内容','交易记录', {
+          confirmButtonText: '确定'
+        })
+      }
+    },
+    data() {
+      return {
+        inputData: 'https://github.com/PanJiaChen/vue-element-admin',
+        Applying_image: applying_image,
+        dialogTableVisible: false,
+        applyingmedals: [
+          {
+            medals: '5',
+            users: '张三',
+            applyingtime: '2018-01-05',
+            gettingtime: '2018-01-10'
+          },
+          {
+            medals: '10',
+            users: '张三',
+            applyingtime: '2018-01-05',
+            gettingtime: '2018-01-10'
           }
+        ]
       }
     }
+  }
 </script>
 

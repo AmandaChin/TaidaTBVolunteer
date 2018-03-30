@@ -7,27 +7,29 @@
     <el-table-column
       label="申请日期">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.applydate}}</span>
+        <span style="color: darkgray">{{scope.row.CreateTime}}</span>
+        <my-time :CreateTime="CreateTime"></my-time>
       </template>
     </el-table-column>
     <el-table-column
       label="服务内容">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.servicecontent}}</span>
+        <span style="color: darkgray">{{scope.row.Content}}</span>
+
       </template>
     </el-table-column>
     <el-table-column
       label="开始时间"
       prop="users">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.servicestarttime}}</span>
+        <span style="color: darkgray">{{scope.row.RealStartTime}}</span>
       </template>
     </el-table-column>
     <el-table-column
       label="结束时间"
       prop="applyingtime">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.serviceendtime}}</span>
+        <span style="color: darkgray">{{scope.row.RealEndTime}}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -51,7 +53,26 @@
 
 <script>
   import clip from '@/utils/clipboard'
+  import axios from 'axios'
+  import Application from './Application'
+
   export default {
+    components: {
+      Application
+    },
+    data() {
+      return {
+        inputData: 'https://github.com/PanJiaChen/vue-element-admin',
+        dialogTableVisible: false,
+        UserName: undefined,
+        Content: undefined,
+        StartTime: undefined,
+        EndTime: undefined,
+        Duration: undefined,
+        Remark: undefined,
+        service: []
+      }
+    },
     methods: {
       /**
        * 现在可以直接申请勋章了 但是应该传递给申请勋章页面一些信息 在这一步
@@ -69,19 +90,20 @@
          * 这个地方还需要一个能调用申请勋章界面的参数
          */
       },
-      mounted: function(UserId, Account, Type) {
+      mounted(){
         // GET /someUrl
-        var history_service = this
-        this.$http.post({ nurl: '', data: { UserId: this.UserId }})
-        /*
-          这个地方发送了用户信息 需要等待解析
-          */
-        history_service = []
-        this.service = history_service
-        /**
-         * 这三个处理方式不知道哪一个是对的 需要测试
-         * 另外注意 这里边已经把ServiceId传进来了 后边是要用到的
-         */
+        axios.post('http://localhost:3000/api/getServicedList',
+          {
+            dataType: 'jsonp',
+            crossDomain: true
+          }).then(
+          (res) => {
+            this.service = res.data.list
+            console.log(res)
+          }
+        ).catch((err) => {
+          console.log(err)
+        })
       },
       tableRowClassName(row, rowIndex) {
         if (rowIndex === 0) {
@@ -98,19 +120,6 @@
         this.$alert('这是一段内容','交易记录', {
           confirmButtonText: '确定'
         })
-      }
-    },
-    data(){
-      return{
-        inputData: 'https://github.com/PanJiaChen/vue-element-admin',
-        dialogTableVisible: false,
-        service: [{
-          applydate:'2018-01-05',
-          servicecontent:'擦窗',
-          servicestarttime:'2018-01-06 18:30',
-          serviceendtime:'2018-01-06 21:30',
-          serviceId: ''
-        }]
       }
     }
   }
