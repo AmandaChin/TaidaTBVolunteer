@@ -3719,11 +3719,10 @@ export default {
       personalInfo: {
         //   UserName: '张丽丽',
          //  Gender: '女',
-        //   //birthday: '1990-01-28',
         //   Phone: '13012345678',
         //   Email:'zhanglili@qq.com',
         //   IDNumber:'123421196708138944',
-        // // image_uri: '' ,
+        
         //   region: [2, 2, 19]
       }
 
@@ -3731,26 +3730,20 @@ export default {
   },
 
     mounted() {
+         var that=this;
         axios.post('http://localhost:3000/api/getUserInfo',
         {         
           UserId:3
         }).then(
           (res)=>{
             //   console.log(res.data);
-            //   console.log(res.data.info.rows);
-            var info=res.data.info.rows[0]
-              
-
-            this.personalInfo.Name=info.Name;
-            this.personalInfo.Gender=info.Gender;
-            this.personalInfo.Phone=info.Phone;
-            this.personalInfo.Email=info.Email;
-            this.personalInfo.IDNumber=info.IDNumber;
-            // this.personalInfo.region[0]=info.Province;
-            // this.personalInfo.region[1]= info.City;
-            // this.personalInfo.region[2]=info.District;
-            console.log(info);
+            //   console.log(res.data.info.rows);          
+            var info=res.data.info;
+            that.personalInfo=info;
+            
+            console.log(info);       
             // console.log(res.data);
+            // handle.$forceUpdate();
           }
         ).catch((err)=>{
           console.log(err);
