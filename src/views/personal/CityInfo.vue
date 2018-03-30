@@ -1,41 +1,7 @@
 <template>
-  <div class="personal">
-    <h1 >修改账户基本信息</h1>
-      <el-form ref="form" :model="personalInfo" label-width="120px">
-          
-          <el-form-item label="姓名">
-            <el-col :span="9">
-          <el-input v-model="personalInfo.Name"></el-input>
-          </el-col>
-          </el-form-item>
-          
-          <el-form-item label="性别">
-            <el-radio-group v-model="personalInfo.Gender" @change="sexChangeHandler">
-              <el-radio label="m">男</el-radio>
-              <el-radio label="w">女</el-radio>
-            </el-radio-group>
-         </el-form-item>
-
-          <!--<el-form-item label="出生日期">
-          <el-col :span="9">
-            <el-date-picker type="date" placeholder="选择您的出生日期" v-model="personalInfo.birthday" style="width: 100%;">
-            </el-date-picker>
-          </el-col>       
-        </el-form-item>-->
-
-          <el-form-item label="手机号">
-          <el-col :span="9">
-          <el-input v-model="personalInfo.Phone"></el-input>
-          </el-col>
-          </el-form-item>
-
-          <el-form-item label="注册邮箱">
-          <el-col :span="9">
-          <el-input v-model="personalInfo.Email"></el-input>
-          </el-col>
-          </el-form-item>
-
-          <el-form-item label="所在地区">
+<div class="city-info">
+<el-form ref="form" :model="personalInfo" label-width="120px">
+  <el-form-item label="所在地区">
           <el-cascader 
            expand-trigger="hover"
            placeholder="选择您所在地区"
@@ -44,67 +10,15 @@
            @change="handleChange">
           </el-cascader>
           </el-form-item>
-
-          <el-form-item label="身份证号">
-          <el-col :span="9">
-          <el-input v-model="personalInfo.IDNumber"></el-input>
-          </el-col>
-          </el-form-item>
-           
-          <!--<el-row>
-              <el-col span="3">
-              <el-form-item label="更改头像"></el-form-item>
-              </el-col>
-              <el-col span="9">
-                  <Photo  style="width:800px" v-model="personalInfo.image_uri" ></Photo>
-              </el-col>
-          </el-row>-->
-          
-          <el-button type="primary" style="width:20%;margin-left:100px;" :loading="loading" @click.native.prevent="handleLogin">修改</el-button>
-          
-      </el-form>
-  </div>
+</el-form>
+</div>
 </template>
 
-<script >
-import Photo from '@/components/Upload/singleImage'
- import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
-import CityInfo from './CityInfo'
-import axios from 'axios';
+<script>
 export default {
-  name: 'personal',
-  components: {Photo},
-  data() {
-      const validateRequire = (rule, value, callback) => {
-        if (value === '') {
-          this.$message({
-            message: rule.field + '为必传项',
-            type: 'error'
-          })
-          callback(null)
-        } else {
-          callback()
-        }
-      }
-      const validateSourceUri = (rule, value, callback) => {
-        if (value) {
-          if (validateURL(value)) {
-            callback()
-          } else {
-            this.$message({
-              message: '外链url填写不正确',
-              type: 'error'
-            })
-            callback(null)
-          }
-        } else {
-          callback()
-        }
-      }
-    return {     
-      loading: false,
-      cityInfo :
-      [
+  data(){
+      return {
+       cityInfo :[
           {value: 1, label: '北京', children: [
               {value: 1, label: '北京市', children: [
                   {value: 1, label: '东城区'},
@@ -3715,83 +3629,9 @@ export default {
           {value: 34, label: '台湾', children: [
               {value: 345, label: '台湾', children: []}
           ]}
-    ],
-      personalInfo: {
-        //   UserName: '张丽丽',
-         //  Gender: '女',
-        //   //birthday: '1990-01-28',
-        //   Phone: '13012345678',
-        //   Email:'zhanglili@qq.com',
-        //   IDNumber:'123421196708138944',
-        // // image_uri: '' ,
-        //   region: [2, 2, 19]
-      }
-
-    }
-  },
-
-    mounted() {
-        axios.post('http://localhost:3000/api/getUserInfo',
-        {         
-          UserId:3
-        }).then(
-          (res)=>{
-            //   console.log(res.data);
-            //   console.log(res.data.info.rows);
-            var info=res.data.info.rows[0]
-              
-
-            this.personalInfo.Name=info.Name;
-            this.personalInfo.Gender=info.Gender;
-            this.personalInfo.Phone=info.Phone;
-            this.personalInfo.Email=info.Email;
-            this.personalInfo.IDNumber=info.IDNumber;
-            // this.personalInfo.region[0]=info.Province;
-            // this.personalInfo.region[1]= info.City;
-            // this.personalInfo.region[2]=info.District;
-            console.log(info);
-            // console.log(res.data);
-          }
-        ).catch((err)=>{
-          console.log(err);
-        })
-    },
-
-  methods: {
-      handleChange(value) {
-        // this.personalInfo.region[0]=value[0];
-        // this.personalInfo.region[1]=value[1];
-        // this.personalInfo.region[2]=value[2];
-        console.log(value);
-      },
-      handleLogin(){
-        axios.post('http://localhost:3000/api/changeUserInformation',
-        {
-            UserID:3,
-            Gender:this.personalInfo.Gender,
-            Name:this.personalInfo.Name,
-            IDNumber:this.personalInfo.IDNumber,
-            Email:this.personalInfo.Email,
-            Phone:this.personalInfo.Phone
-        }).then(
-            function(res){
-                var num=response.data.num;
-                console.log('修改函数返回值：'+num)
-            },
-            this.$message('修改成功')
-        )
-
-      },
-      sexChangeHandler(value){
-          this.personalInfo.Gender=value;
-          console.log('改变之后的值：'+value)
-      }
-    }
+         ] 
+  }
+}
 }
 </script>
 
-<style scoped>
-h1 {
-  font-weight:100;
-}
-</style>

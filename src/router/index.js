@@ -67,7 +67,7 @@ export const asyncRouterMap = [
     redirect: oldman,
     meta: {
       title: '我的操作',
-      icon: 'operation'
+      icon: 'component'
     },
     children: [
       {
@@ -97,7 +97,7 @@ export const asyncRouterMap = [
     redirect: 'applying',
     meta: {
       title: '勋章信息',
-      icon: 'operation'
+      icon: 'medal'
     },
     children: [
       { path: 'applying', component: _import('medals/Applying'), name: 'applying', meta: { title: '申请中' }},
@@ -150,6 +150,18 @@ export const asyncRouterMap = [
       meta: {title:'通知',icon:'message'}
     }]
   }
+
+  // {
+  //   path: '/icon',
+  //   component: Layout,
+  //   children: [{
+  //     path: 'index',
+  //     component: _import('svg-icons/index'),
+  //     name: 'icons',
+  //     meta: { title: 'icons', icon: 'icon', noCache: true }
+  //   }]
+  // }
+
   /**
    *
   {
@@ -190,17 +202,6 @@ export const asyncRouterMap = [
         icon: 'lock',
         roles: ['admin'] // or you can only set roles in sub nav
       }
-    }]
-  },
-
-  {
-    path: '/icon',
-    component: Layout,
-    children: [{
-      path: 'index',
-      component: _import('svg-icons/index'),
-      name: 'icons',
-      meta: { title: 'icons', icon: 'icon', noCache: true }
     }]
   },
 
