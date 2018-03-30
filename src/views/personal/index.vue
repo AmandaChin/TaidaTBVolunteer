@@ -10,9 +10,9 @@
           </el-form-item>
           
           <el-form-item label="性别">
-            <el-radio-group v-model="personalInfo.Gender">
-              <el-radio label="男"></el-radio>
-              <el-radio label="女"></el-radio>
+            <el-radio-group v-model="personalInfo.Gender" @change="sexChangeHandler">
+              <el-radio label="m">男</el-radio>
+              <el-radio label="w">女</el-radio>
             </el-radio-group>
          </el-form-item>
 
@@ -3718,7 +3718,7 @@ export default {
     ],
       personalInfo: {
         //   UserName: '张丽丽',
-        //   Gender: '女',
+         //  Gender: '女',
         //   //birthday: '1990-01-28',
         //   Phone: '13012345678',
         //   Email:'zhanglili@qq.com',
@@ -3730,7 +3730,7 @@ export default {
     }
   },
 
-mounted() {
+    mounted() {
         axios.post('http://localhost:3000/api/getUserInfo',
         {         
           UserId:3
@@ -3739,15 +3739,17 @@ mounted() {
             //   console.log(res.data);
             //   console.log(res.data.info.rows);
             var info=res.data.info.rows[0]
-              console.log(info);
+              
 
             this.personalInfo.Name=info.Name;
             this.personalInfo.Gender=info.Gender;
             this.personalInfo.Phone=info.Phone;
             this.personalInfo.Email=info.Email;
             this.personalInfo.IDNumber=info.IDNumber;
-            // this.personalInfo.region=[info.Province, info.City,info.District];
-
+            // this.personalInfo.region[0]=info.Province;
+            // this.personalInfo.region[1]= info.City;
+            // this.personalInfo.region[2]=info.District;
+            console.log(info);
             // console.log(res.data);
           }
         ).catch((err)=>{
@@ -3757,10 +3759,32 @@ mounted() {
 
   methods: {
       handleChange(value) {
+        // this.personalInfo.region[0]=value[0];
+        // this.personalInfo.region[1]=value[1];
+        // this.personalInfo.region[2]=value[2];
         console.log(value);
       },
       handleLogin(){
+        axios.post('http://localhost:3000/api/changeUserInformation',
+        {
+            UserID:3,
+            Gender:this.personalInfo.Gender,
+            Name:this.personalInfo.Name,
+            IDNumber:this.personalInfo.IDNumber,
+            Email:this.personalInfo.Email,
+            Phone:this.personalInfo.Phone
+        }).then(
+            function(res){
+                var num=response.data.num;
+                console.log('修改函数返回值：'+num)
+            },
+            this.$message('修改成功')
+        )
 
+      },
+      sexChangeHandler(value){
+          this.personalInfo.Gender=value;
+          console.log('改变之后的值：'+value)
       }
     }
 }
