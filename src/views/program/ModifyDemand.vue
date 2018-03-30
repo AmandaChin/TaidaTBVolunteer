@@ -9,7 +9,7 @@
             <el-button type="info">创建form</el-button>
           </router-link>
 
-          <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submit()">立即发布
+          <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submit()">立即申请
           </el-button>
         </template>
         <template v-else>
@@ -24,30 +24,30 @@
 
             <div class="postInfo-container">
               <el-row>
-                <el-col :span="4">
-                  <el-form-item label-width="90px" label="服务内容:" class="postInfo-container-item">
-                    <el-input placeholder="10字以内" style='min-width:100px;' v-model="postForm.service_content" required :maxlength="10">
+                <el-col :span="5">
+                  <el-form-item label-width="110px" label="服务内容:" class="postInfo-container-item">
+                    <el-input placeholder="10字以内" style='min-width:50px;' v-model="Content" required :maxlength="10">
                     </el-input>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="8">
-                  <el-form-item style="margin-bottom: 10px;" label-width="130px" label=" 服务时段:" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.start_time" type="datetime" value-format= "yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
+                  <el-form-item style="margin-bottom: 10px; margin-left: 30px" label-width="90px" label=" 服务时段:" class="postInfo-container-item">
+                    <el-date-picker v-model="StartTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="5">
-                  <el-form-item style="margin-bottom: 10px;" label-width="100px" label="—" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.end_time" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
+                <el-col :span="7">
+                  <el-form-item style="margin-bottom: 10px; " label-width="20px" label="—" class="postInfo-container-item">
+                    <el-date-picker style="margin-left: 20px" v-model="EndTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="4">
-                  <el-form-item label-width="225px" label="服务时长:" class="postInfo-container-item">
-                    <el-select clearable style="width: 100px" class="filter-item" v-model="postForm.duration":placeholder="$t('小时')">
+                <el-col :span="1">
+                  <el-form-item label-width="100px" label="服务时长:" class="postInfo-container-item">
+                    <el-select clearable style="width: 100px" class="filter-item" v-model="Duration":placeholder="$t('小时')">
                       <el-option v-for="item in importanceOptions_info" :key="item" :label="item" :value="item" >
                       </el-option>
                     </el-select>
@@ -64,7 +64,7 @@
         </el-form-item>
 
         <div class="editor-container">
-          <tinymce :height=400 ref="editor" v-model="postForm.content"></tinymce>
+          <tinymce :height=400 ref="editor" v-model="Remark">{{ this.Remark }}</tinymce>
         </div>
 
       </div>
@@ -86,10 +86,12 @@
   import { userSearch } from '@/api/remoteSearch'
   import complexTable from './../example/table/complexTable'
   import axios from 'axios'
+  import { formatDate } from '@/methods/methods.js'
 
   const defaultForm = {
     status: 'draft',
     title: '', // 文章题目
+    content: '', // 文章内容
     content_short: '', // 文章摘要
     source_uri: '', // 文章外链
     image_uri: '', // 上传图片
@@ -97,12 +99,17 @@
     source_number: '', // 文章外部作者
     display_time: undefined, // 前台展示时间
     id: undefined,
-    duration: undefined,
     platforms: ['a-platform'],
     comment_disabled: false
   }
 
   export default {
+    filters: {
+      formatDate(time) {
+        var date = new Date(time)
+        return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+      }
+    },
     name: 'articleDetail',
     components: { Tinymce, MDinput, Upload4, Upload3, Multiselect, Sticky, complexTable },
     props: {
@@ -142,8 +149,12 @@
         postForm: Object.assign({}, defaultForm),
         fetchSuccess: true,
         loading: false,
-        sendstarttime: '',
-        sendendtime: '',
+        Content: '',
+        ServiceId: '',
+        StartTime: undefined,
+        EndTime: undefined,
+        Duration: '',
+        Remark: '',
         userLIstOptions: [],
         platformsOptions: [
           { key: 'a-platform', name: 'a-platform' },
@@ -162,12 +173,21 @@
         },
         rules: {
           image_uri: [{ validator: validateRequire }],
-          title: [{ validator: validateRequire }],
           service_content: [{ validator: validateRequire }],
           content: [{ validator: validateRequire }],
           source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
         }
       }
+    },
+    mounted: function() {
+      this.Content = this.$route.params.content
+      this.StartTime = this.$route.params.startTime
+      this.ServiceId = this.$route.params.serviceid
+      console.log(this.StartTime)
+      console.log(this.EndTime)
+      this.EndTime = this.$route.params.endTime
+      this.Duration = this.$route.params.duration
+      this.Remark = this.$route.params.remark
     },
     computed: {
       contentShortLength() {
@@ -184,21 +204,23 @@
     methods: {
       submit: function() {
         var params = new URLSearchParams()
-        params.append('UserId', '8')
-        params.append('Content', this.postForm.service_content)
-        params.append('DemandStartTime', this.postForm.start_time)
-        params.append('DemandEndTime', this.postForm.end_time)
-        params.append('Duration', this.postForm.duration)
-        params.append('Remark', this.postForm.content)
-        axios.post('http://localhost:3000/api/postNewRequirement', params).then(
+        params.append('UserID', '8')
+        params.append('ServiceID', this.ServiceId)
+        params.append('Duration', this.Duration)
+        params.append('content', this.Content)
+        params.append('DemandStartTime', this.StartTime)
+        console.log(this.StartTime)
+        params.append('DemandEndTime', this.EndTime)
+        params.append('Remark', this.Remark)
+        axios.post('http://localhost:3000/api/updateDemand', params).then(
           (res) => {
+            this.service = res.data.list
             console.log(res)
           }
         ).catch((err) => {
           console.log(err)
         })
       },
-
       fetchData() {
         fetchArticle().then(response => {
           this.postForm = response.data

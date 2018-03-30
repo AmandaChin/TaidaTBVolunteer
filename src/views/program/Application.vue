@@ -9,13 +9,12 @@
             <el-button type="info">创建form</el-button>
           </router-link>
 
-          <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submit">立即申请
+          <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submit()">立即申请
           </el-button>
         </template>
         <template v-else>
           <el-tag>发送异常错误,刷新页面,或者联系程序员</el-tag>
         </template>
-
       </sticky>
 
       <div class="createPost-main-container">
@@ -23,13 +22,11 @@
           <el-col :span="21">
 
             <div class="postInfo-container">
-              <el-row>
+              <el-row style="margin-left: 100px">
                 <el-col :span="4">
-                  <el-form-item label-width="90px" label="服务用户:" class="postInfo-container-item">
+                  <el-form-item label-width="75px" label="服务用户:" class="postInfo-container-item">
                     <el-form-item style="margin-bottom: 20px;" prop="title">
-                      <el-input placeholder="10字以内" style='min-width:100px;' v-model="postForm.user" required :maxlength="10">
-                      </el-input>
-                      <span v-show="postForm.title.length>=20" class='title-prompt'>app可能会显示不全</span>
+                      <span style="color: darkgray"  v-cloak >{{ this.Name }}</span>
                     </el-form-item>
                   </el-form-item>
                 </el-col>
@@ -37,32 +34,34 @@
                 <el-col :span="5">
                   <el-form-item label-width="110px" label="服务内容:  " class="postInfo-container-item">
                     <el-form-item style="margin-bottom: 20px;" prop="title">
-                      <el-input placeholder="10字以内" style='min-width:100px;' v-model="postForm.service_content" required :maxlength="10">
-                      </el-input>
-                      <span v-show="postForm.title.length>=20" class='title-prompt'>app可能会显示不全</span>
+                      <span style="color: darkgray"  v-cloak >{{ this.Content }}</span>
+                    </el-form-item>
+                  </el-form-item>
+
+                </el-col>
+
+
+                <el-col :span="6">
+                  <el-form-item style="margin-bottom: 20px;" label-width="90px" label=" 服务时段:" class="postInfo-container-item">
+                    <el-form-item style="margin-bottom: 20px;margin-left: 20px" prop="title">
+                      <span style="color: darkgray"  v-cloak >{{ this.StartTime|formatDate }}</span>
                     </el-form-item>
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="7">
-                  <el-form-item style="margin-bottom: 20px;" label-width="90px" label=" 服务时段:" class="postInfo-container-item">
-                    <span style="color: darkgray">{{this.StartTime}}</span>
-                  </el-form-item>
-                </el-col>
-
-                <el-col :span="6">
-                  <el-form-item style="margin-bottom: 20px;" label-width="50px" label="—" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.end_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
-                    </el-date-picker>
+                <el-col :span="4">
+                  <el-form-item style="margin-bottom: 20px;" label-width="20px" label="—" class="postInfo-container-item">
+                    <el-form-item style="margin-bottom: 20px; margin-left: 25px" prop="title">
+                      <span style="color: darkgray"  v-cloak >{{ this.EndTime|formatDate }}</span>
+                    </el-form-item>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="1">
                   <el-form-item label-width="100px" label="服务时长:" class="postInfo-container-item">
-                    <el-select clearable style="width: 100px" class="filter-item" v-model="listQuery_info.importance_info":placeholder="$t('小时')">
-                      <el-option v-for="item in importanceOptions_info" :key="item" :label="item" :value="item" >
-                      </el-option>
-                    </el-select>
+                    <el-form-item style="margin-bottom: 20px;" prop="title">
+                      <span style="color: darkgray"  v-cloak >{{ this.Duration }}</span>
+                    </el-form-item>
                   </el-form-item>
                 </el-col>
 
@@ -131,6 +130,8 @@
   import { fetchArticle } from '@/api/article'
   import { userSearch } from '@/api/remoteSearch'
   import complexTable from './../example/table/complexTable'
+  import { formatDate } from '@/methods/methods.js'
+  import axios from 'axios'
 
   const defaultForm = {
     status: 'draft',
@@ -146,19 +147,13 @@
     platforms: ['a-platform'],
     comment_disabled: false
   }
-
-  const sendData = {
-    UserId: '',
-    content: '',
-    start_time: undefined,
-    end_time: undefined,
-    duration: undefined,
-    remark: '',
-    material1: undefined,
-    material2: undefined
-  }
-
   export default {
+    filters: {
+      formatDate(time) {
+        var date = new Date(time)
+        return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+      }
+    },
     name: 'articleDetail',
     components: { Tinymce, MDinput, Upload4, Upload3, Multiselect, Sticky, complexTable },
     props: {
@@ -167,39 +162,7 @@
         default: false
       }
     },
-    methods: {
-      submit: function() {
-        var data_send = sendData
-        data_send.UserId = this.UserId
-        data_send.content = this.postForm.service_content
-        data_send.start_time = this.postForm.start_time
-        data_send.end_time = this.postForm.end_time
-        data_send.duration = this.item
-        data_send.remark = this.postForm.remark
-        data_send.material1 = this.postForm.image_uri
-        data_send.material2 = this.postForm.pdf_uri
-        var JSONobject = JSON.stringify(data_send)
-        this.$http.post('http://localhost:3000/api/applicate', JSONobject).then((res) => {
-          // success callback
-          console.log(res.data)
-        }, (res) => {
-          console.log("error")
-          // error callback
-        })
-      }
-    },
     data() {
-      const validateRequire = (rule, value, callback) => {
-        if (value === '') {
-          this.$message({
-            message: rule.field + '为必传项',
-            type: 'error'
-          })
-          callback(null)
-        } else {
-          callback()
-        }
-      }
       const validateSourceUri = (rule, value, callback) => {
         if (value) {
           if (validateURL(value)) {
@@ -219,6 +182,12 @@
         postForm: Object.assign({}, defaultForm),
         fetchSuccess: true,
         loading: false,
+        Content: '',
+        Name: '',
+        StartTime: '',
+        EndTime: '',
+        Duration: '',
+        ServiceId: '',
         userLIstOptions: [],
         platformsOptions: [
           { key: 'a-platform', name: 'a-platform' },
@@ -236,13 +205,17 @@
           sort: '+id'
         },
         rules: {
-          image_uri: [{ validator: validateRequire }],
-          title: [{ validator: validateRequire }],
-          service_content: [{ validator: validateRequire }],
-          content: [{ validator: validateRequire }],
           source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
         }
       }
+    },
+    mounted: function() {
+      this.ServiceId = this.$route.params.serviceId
+      this.Content = this.$route.params.content
+      this.Name = this.$route.params.name
+      this.StartTime = this.$route.params.startTime
+      this.EndTime = this.$route.params.endTime
+      this.Duration = this.$route.params.duration
     },
     computed: {
       contentShortLength() {
@@ -257,6 +230,24 @@
       }
     },
     methods: {
+      submit: function() {
+        var params = new URLSearchParams()
+        params.append('UserID', '7')
+        params.append('ServiceID', this.ServiceId)
+        params.append('Material1', '')
+        params.append('Material2', '')
+        params.append('Material3', '')
+        params.append('RealStartTime', this.StartTime)
+        params.append('RealEndTime', this.EndTime)
+        console.log(this.StartTime)
+        axios.post('http://localhost:3000/api/applicate', params).then(
+          (res) => {
+            console.log(res)
+          }
+        ).catch((err) => {
+          console.log(err)
+        })
+      },
       fetchData() {
         fetchArticle().then(response => {
           this.postForm = response.data

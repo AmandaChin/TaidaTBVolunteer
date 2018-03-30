@@ -13,6 +13,8 @@ import HistoryService from '../views/program/HistoryService'
 import oldman from '../views/program/oldman'
 import UploadedDemand from '../views/program/UploadedDemand'
 import Information from '../views/program/Information'
+import ModifyDemand from '../views/program/ModifyDemand'
+import Application from '../views/program/Application'
 
 /** note: submenu only apppear when children.length>=1
  *   detail see  https://panjiachen.github.io/vue-element-admin-site/#/router-and-nav?id=sidebar
@@ -107,6 +109,18 @@ export const asyncRouterMap = [
     path: '/volunteers',
     component: volunteers,
     name: 'haha'
+  },
+
+  {
+    path: '/ModifyDemand',
+    component: ModifyDemand,
+    name: 'modify'
+  },
+
+  {
+    path: '/Application',
+    component: Application,
+    name: 'application'
   },
 
   {
