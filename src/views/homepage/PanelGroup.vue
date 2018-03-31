@@ -1,7 +1,7 @@
 <template>
   <el-row class="panel-group" :gutter="40">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
+      <div class="card-panel" @click="JumpApplyingMedals">
         <div class="card-panel-icon-wrapper icon-shoppingCard">
           <svg-icon icon-class="xunzhang" class-name="card-panel-icon" />
         </div>
@@ -13,7 +13,7 @@
     </el-col>
 
   <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('purchases')">
+      <div class="card-panel" @click="JumpApplication">
         <div class="card-panel-icon-wrapper icon-money">
           <svg-icon icon-class="heart" class-name="card-panel-icon" />
         </div>
@@ -25,7 +25,7 @@
     </el-col>
 
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class='card-panel' @click="handleSetLineChartData('newVisitis')">
+      <div class='card-panel' @click="JumpNoticeList">
         <div class="card-panel-icon-wrapper icon-people">
           <svg-icon icon-class="message" class-name="card-panel-icon" />
         </div>
@@ -35,6 +35,7 @@
         </div>
       </div>
     </el-col>
+
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('messages')">
         <div class="card-panel-icon-wrapper icon-message">
@@ -57,6 +58,15 @@ export default {
   methods: {
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
+    },
+    JumpApplication:function(){
+      this.$router.push({ name: 'oldman'})
+    },
+    JumpApplyingMedals:function(){
+      this.$router.push({ name: 'applying'})
+    },
+    JumpNoticeList:function(){
+      this.$router.push({ name: 'notice'})
     }
   }
 }

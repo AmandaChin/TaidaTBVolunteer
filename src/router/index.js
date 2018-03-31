@@ -15,7 +15,8 @@ import UploadedDemand from '../views/program/UploadedDemand'
 import Information from '../views/program/Information'
 import ModifyDemand from '../views/program/ModifyDemand'
 import Application from '../views/program/Application'
-
+import Applying from '../views/medals/Applying'
+import NoticeList from '../views/notice/index2'
 /** note: submenu only apppear when children.length>=1
  *   detail see  https://panjiachen.github.io/vue-element-admin-site/#/router-and-nav?id=sidebar
  **/
@@ -106,6 +107,28 @@ export const asyncRouterMap = [
   },
 
   {
+    path: '/personal',
+    component: Layout,
+    children: [{
+      path: 'index',
+      name: 'personal',
+      component:_import('personal/index'),
+      meta: {title:'个人信息',icon:'personal'}
+    }]
+  },
+
+  {
+    path: '/notice',
+    component: Layout,
+    children: [{
+      path: 'index',
+      name: 'notice',
+      component: _import('notice/index2'),
+      meta: {title:'通知',icon:'message'}
+    }]
+  },
+
+  {
     path: '/volunteers',
     component: volunteers,
     name: 'haha'
@@ -122,6 +145,11 @@ export const asyncRouterMap = [
     component: Application,
     name: 'application'
   },
+  {
+    path: '/Oldman',
+    component: oldman,
+    name :'oldman'
+  },
 
   {
     path: '/Information',
@@ -130,26 +158,18 @@ export const asyncRouterMap = [
   },
 
   {
-    path: '/personal',
-    component: Layout,
-    children: [{
-      path: 'index',
-      name: 'personal',
-      component:() => import('@/views/personal/index'),
-      meta: {title:'个人信息',icon:'personal'}
-    }]
+    path: '/Applying',
+    component: Applying,
+    name: 'applying'
   },
 
   {
     path: '/notice',
-    component: Layout,
-    children: [{
-      path: 'index',
-      name: 'notice',
-      component:() => import('@/views/notice/index2'),
-      meta: {title:'通知',icon:'message'}
-    }]
+    component: NoticeList,
+    name: 'notice'
   }
+
+  
 
   // {
   //   path: '/icon',
