@@ -5,14 +5,14 @@
           
           <el-form-item label="姓名">
             <el-col :span="9">
-          <el-input v-model="personalInfo.Name"></el-input>
+          <el-input v-model="personalInfo.UserName"></el-input>
           </el-col>
           </el-form-item>
           
           <el-form-item label="性别">
             <el-radio-group v-model="personalInfo.Gender" @change="sexChangeHandler">
-              <el-radio label="m">男</el-radio>
-              <el-radio label="w">女</el-radio>
+              <el-radio label="男">男</el-radio>
+              <el-radio label="女">女</el-radio>
             </el-radio-group>
          </el-form-item>
 
@@ -60,7 +60,7 @@
               </el-col>
           </el-row>-->
           
-          <el-button type="primary" style="width:20%;margin-left:100px;" :loading="loading" @click.native.prevent="handleLogin">修改</el-button>
+          <el-button type="primary" style="width:20%;margin-left:100px;" :loading="loading" @click.native.prevent="handleUpdate">修改</el-button>
           
       </el-form>
   </div>
@@ -3717,33 +3717,38 @@ export default {
           ]}
     ],
       personalInfo: {
-        //   UserName: '张丽丽',
-         //  Gender: '女',
-        //   Phone: '13012345678',
-        //   Email:'zhanglili@qq.com',
-        //   IDNumber:'123421196708138944',
+          UserName: '',
+          Gender: '',
+          Phone: '',
+          Email:'',
+          IDNumber:'123421196708138944',       
+          region: []
         
-        //   region: [2, 2, 19]
       }
 
     }
   },
 
     mounted() {
+        // console.log(this.personalInfo.region)
          var that=this;
         axios.post('http://localhost:3000/api/getUserInfo',
         {         
           UserId:3
         }).then(
           (res)=>{
-            //   console.log(res.data);
-            //   console.log(res.data.info.rows);          
-            var info=res.data.info;
-            that.personalInfo=info;
             
-            console.log(info);       
-            // console.log(res.data);
-            // handle.$forceUpdate();
+            console.log(res.data);  
+            that.personalInfo.UserName=res.data.UserName;
+            that.personalInfo.Gender=res.data.Gender;
+            that.personalInfo.Phone=res.data.Phone;
+            that.personalInfo.Email=res.data.Email;
+            that.personalInfo.IDNumber=res.data.IDNumber;
+            var arr=new Array();
+            arr.push(res.data.Province);
+            arr.push(res.data.City);
+            arr.push(res.data.District);
+            that.personalInfo.region=arr;
           }
         ).catch((err)=>{
           console.log(err);
@@ -3752,20 +3757,24 @@ export default {
 
   methods: {
       handleChange(value) {
-        // this.personalInfo.region[0]=value[0];
-        // this.personalInfo.region[1]=value[1];
-        // this.personalInfo.region[2]=value[2];
-        console.log(value);
+        this.personalInfo.region[0]=value[0];
+        this.personalInfo.region[1]=value[1];
+        this.personalInfo.region[2]=value[2];
+        
+        console.log( this.personalInfo.region);
       },
-      handleLogin(){
+      handleUpdate(){
         axios.post('http://localhost:3000/api/changeUserInformation',
         {
             UserID:3,
             Gender:this.personalInfo.Gender,
-            Name:this.personalInfo.Name,
+            UserName:this.personalInfo.UserName,
             IDNumber:this.personalInfo.IDNumber,
             Email:this.personalInfo.Email,
-            Phone:this.personalInfo.Phone
+            Phone:this.personalInfo.Phone,
+            Province:this.personalInfo.region[0],
+            City:this.personalInfo.region[1],
+            District:this.personalInfo.region[2]
         }).then(
             function(res){
                 var num=response.data.num;
