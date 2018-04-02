@@ -54,7 +54,7 @@
 import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
-
+import axios from 'axios'
 export default {
   components: { LangSelect, SocialSign },
   name: 'login',
@@ -76,7 +76,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '1111111'
+        password: '123456'
       },
       // loginRules: {
       //   username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -96,36 +96,28 @@ export default {
       }
     },
     handleLogin() {
+      // this.loading = true
       //  axios.post(
       //       'http://localhost:3000/api/allUserLogin',
       //       {
       //         Account: this.loginForm.username,
       //         Password: this.loginForm.password
-      //       }
-      //     ).then(function(response){
-      //       console.log(response);
-      //       var num=response.data.num;
-      //       if(num==0){
-      //         跳转这里不会写，写不对。
-      //         this.$router.push({ path: '/' })
-      //         }).catch(() => {
-      //           //this.loading = false
-      //         })
-             
-      //       }else
-      //       {
-      //         // $.validator.messages({
-      //         //   message: '网络未连接',
-      //         //   type: 'error'
-      //         // });
-      //         console.log(response.data);
-      //       }
-      //     })
+      //       }).then(
+      //         function(res){
+      //           var num=res.data.num;
+      //           console.log('登录返回值：'+num)
+      //         },
+      //         
+      //         this.$message('登录成功'),
+              
+      //       )
+      //       console.log('出来执行')
+      // this.loading =false
+      // this.$router.push({ path: '/' })
 
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          // this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
             this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
             this.loading = false
             this.$router.push({ path: '/' })

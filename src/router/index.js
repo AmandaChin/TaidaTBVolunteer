@@ -17,6 +17,7 @@ import ModifyDemand from '../views/program/ModifyDemand'
 import Application from '../views/program/Application'
 import Applying from '../views/medals/Applying'
 import NoticeList from '../views/notice/index2'
+import Homepage from '../views/homepage/index'
 /** note: submenu only apppear when children.length>=1
  *   detail see  https://panjiachen.github.io/vue-element-admin-site/#/router-and-nav?id=sidebar
  **/
@@ -61,6 +62,17 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
+  {
+    path: '/search',
+    component: Layout,
+    children: [{
+      path: 'index',
+      name: 'search',
+      component: _import('search/index'),
+      meta: {title:'搜索',icon: 'search'}
+    }]
+  },
+  
   {
     path: '/program',
     name: 'program',
@@ -127,7 +139,7 @@ export const asyncRouterMap = [
       meta: {title:'通知',icon:'message'}
     }]
   },
-
+ 
   {
     path: '/volunteers',
     component: volunteers,
@@ -163,27 +175,18 @@ export const asyncRouterMap = [
     name: 'applying'
   },
 
+
   {
-    path: '/notice',
-    component: NoticeList,
-    name: 'notice'
+    path: '/icon',
+    component: Layout,
+    children: [{
+      path: 'index',
+      component: _import('svg-icons/index'),
+      name: 'icons',
+      meta: { title: 'icons', icon: 'icon', noCache: true }
+    }]
   }
-
-  
-
-  // {
-  //   path: '/icon',
-  //   component: Layout,
-  //   children: [{
-  //     path: 'index',
-  //     component: _import('svg-icons/index'),
-  //     name: 'icons',
-  //     meta: { title: 'icons', icon: 'icon', noCache: true }
-  //   }]
-  // }
-
-  /**
-   *
+/*
   {
     path: '/dashboard',
     component: Layout,
@@ -380,5 +383,6 @@ export const asyncRouterMap = [
   },
 
   { path: '*', redirect: '/404', hidden: true }
-   */
+*/
+
 ]

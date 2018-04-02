@@ -1,5 +1,19 @@
 <template>
   <el-row class="panel-group" :gutter="40">
+
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel" @click="JumpSearch">
+        <div class="card-panel-icon-wrapper icon-message">
+          <svg-icon icon-class="search_color" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">搜索功能</div>
+          <div class="card-description">做一个心地善良的人</div>
+        </div>
+      </div>
+    </el-col>
+
+
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="JumpApplyingMedals">
         <div class="card-panel-icon-wrapper icon-shoppingCard">
@@ -35,19 +49,6 @@
         </div>
       </div>
     </el-col>
-
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('messages')">
-        <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="wakuang" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">挖矿功能</div>
-          <div class="card-description">做一个心地善良的人</div>
-        </div>
-      </div>
-    </el-col>
-   
     
   </el-row>
 </template>
@@ -56,9 +57,7 @@
 
 export default {
   methods: {
-    handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', type)
-    },
+    
     JumpApplication:function(){
       this.$router.push({ name: 'oldman'})
     },
@@ -67,6 +66,9 @@ export default {
     },
     JumpNoticeList:function(){
       this.$router.push({ name: 'notice'})
+    },
+    JumpSearch:function(){
+      this.$router.push({ name: 'search'})
     }
   }
 }
