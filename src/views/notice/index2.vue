@@ -6,26 +6,7 @@
 
     <el-table-column label="标题">
       <template slot-scope="scope">
-        <el-button type="text" @click="dialogVisible = true">{{scope.row.Title}}</el-button>
-        <el-dialog
-        title="通知详情"
-        :visible.sync="dialogVisible"
-        width="50%">
-        <el-form >
-          <el-form-item label="标题">
-            <span>{{ scope.row.Title }}</span>
-          </el-form-item>
-          <el-form-item label="发布人">
-            <span>{{ scope.row.UserName }}</span>
-          </el-form-item>
-          <el-form-item label="发布日期">
-            <span>{{ scope.row.ReleaseTime }}</span>
-          </el-form-item>
-          <el-form-item label="内容">
-            <span>{{ scope.row.Content }}</span>
-          </el-form-item>
-          </el-form>
-        </el-dialog>
+        <el-button type="text" @click="handleShowDialog(scope.row)">{{scope.row.Title}}</el-button>       
       </template>
     </el-table-column>
 
@@ -46,6 +27,26 @@
     </el-table-column>
 
   </el-table>
+
+  <el-dialog
+        title="通知详情"
+        :visible.sync="dialogVisible"
+        width="50%">
+        <el-form :model="temp">
+          <el-form-item label="标题">
+            <span>{{ temp.Title }}</span>
+          </el-form-item>
+          <el-form-item label="发布人">
+            <span>{{ temp.UserName }}</span>
+          </el-form-item>
+          <el-form-item label="发布日期">
+            <span>{{ temp.ReleaseTime }}</span>
+          </el-form-item>
+          <el-form-item label="内容">
+            <span>{{ temp.Content }}</span>
+          </el-form-item>
+          </el-form>
+        </el-dialog>
   </div>
 </template>
 
@@ -53,7 +54,15 @@
 import axios from 'axios'
   export default {
     data() {
+      
       return {
+        temp: { 
+        Title:undefined,
+        NoticeID: undefined,
+        Content:undefined,
+        ReleaseTime:undefined,
+        UserName:undefined
+      },
         dialogVisible: false,
         noticeData: []
       }
@@ -78,6 +87,11 @@ import axios from 'axios'
       },
       handleDelete(index, row) {
         console.log(index, row);
+      },
+
+      handleShowDialog(row){
+      this.temp = Object.assign({}, row) // copy obj
+      this.dialogVisible = true
       }
     }
   }

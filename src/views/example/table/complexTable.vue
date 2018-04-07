@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column width="150px" align="center" :label="$t('table.date')">
         <template slot-scope="scope">
-          <span>{{scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
+          <span>{{scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column min-width="150px" :label="$t('table.title')">

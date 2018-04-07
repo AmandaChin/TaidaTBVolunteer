@@ -3777,7 +3777,7 @@ export default {
             District:this.personalInfo.region[2]
         }).then(
             function(res){
-                var num=response.data.num;
+                var num=res.data.num;
                 console.log('修改函数返回值：'+num)
             },
             this.$message('修改成功')
