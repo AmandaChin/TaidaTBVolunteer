@@ -130,7 +130,7 @@ export default {
         page: 1,
         limit: 20,
         duration: undefined,
-        content: undefined,
+        content: '',
         type: 4,
         startTime: undefined
       },
@@ -195,24 +195,67 @@ export default {
       this.listQuery.page = 1
       // this.getList()
       this.listLoading=true
-      
-            var content=this.listQuery.content;
-            var duration=this.listQuery.duration;
-            var startTime=this.listQuery.startTime;
-            var type=this.listQuery.type
+            var duration
+            var startTime
+         
+            if (this.listQuery.duration==undefined)
+            {
+              console.log("undefined duration")
+              duration=0
+            }else{
+              console.log(" duration")
+              duration=this.listQuery.duration
+            }
 
-          //  axios.post('http://localhost:3000/api/getSearchDemand',
-          // { userId : 7,
-          //   content: content,
-          //   duration: duration,
-          //   startTime: startTime,
-          //   type: type
-          // })      
-          console.log(content)
+            if (this.listQuery.startTime==undefined)
+            {
+              console.log("undefined startTime")
+              startTime="1980-03-15 15:35:04"
+            }else{
+              console.log(" startTime")
+              startTime=this.listQuery.startTime
+            }
+           
+            if(duration==0){
+
+              console.log("enter no duration")
+              axios.post('http://localhost:3000/api/getDemandByConditionNoDuration',
+                { UserID : 7,
+                  Content: this.listQuery.content,
+                  DemandStartTime: startTime,
+                  type: this.listQuery.type
+                }).then(
+                  (res)=>{
+                  this.list=res.data.list.rows;
+                  console.log(res); 
+                  this.listLoading = false
+                }
+                ).catch((err)=>{
+                console.log(err);
+              })    
+            }else{
+              console.log("enter")
+              axios.post('http://localhost:3000/api/getDemandByCondition',
+              { UserID : 7,
+                Content: this.listQuery.content,
+                Duration: duration,
+                DemandStartTime: startTime,
+                  type: this.listQuery.type
+              }).then(
+                (res)=>{
+                this.list=res.data.list.rows;
+                console.log(res);
+                this.listLoading = false
+              }
+              ).catch((err)=>{
+              console.log(err);
+              })    
+            }
+
           console.log(duration)
           console.log(startTime)
-          console.log(type)
-          
+         
+          // this.listLoading = false
     },
 
     //志愿者申请
