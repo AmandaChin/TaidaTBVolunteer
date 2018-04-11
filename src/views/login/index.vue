@@ -59,29 +59,31 @@ export default {
   components: { LangSelect, SocialSign },
   name: 'login',
   data() {
-    // const validateUsername = (rule, value, callback) => {
-    //   if (!isvalidUsername(value)) {
-    //     callback(new Error('Please enter the correct user name'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
-    // const validatePassword = (rule, value, callback) => {
-    //   if (value.length < 6) {
-    //     callback(new Error('The password can not be less than 6 digits'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
+    const validateUsername = (rule, value, callback) => {
+      // if (!isvalidUsername(value)) {
+      //   callback(new Error('Please enter the correct user name'))
+      // } else {
+      //    callback()
+      // }
+      return callback()
+    }
+    const validatePassword = (rule, value, callback) => {
+      // if (value.length < 6) {
+      //   callback(new Error('The password can not be less than 6 digits'))
+      // } else {
+      //   callback()
+      // }
+      return callback()
+    }
     return {
       loginForm: {
-        username: 'admin',
-        password: '123456'
+        username: '',
+        password: ''
       },
-      // loginRules: {
-      //   username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-      //   password: [{ required: true, trigger: 'blur', validator: validatePassword }]
-      // },
+      loginRules: {
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      },
       passwordType: 'password',
       loading: false,
       showDialog: false
@@ -95,32 +97,34 @@ export default {
         this.passwordType = 'password'
       }
     },
-    handleLogin() {
+    handleLogin: function() {
       // this.loading = true
-      //  axios.post(
-      //       'http://localhost:3000/api/allUserLogin',
-      //       {
-      //         Account: this.loginForm.username,
-      //         Password: this.loginForm.password
-      //       }).then(
-      //         function(res){
-      //           var num=res.data.num;
-      //           console.log('登录返回值：'+num)
-      //         },
-      //         
-      //         this.$message('登录成功'),
-              
-      //       )
-      //       console.log('出来执行')
-      // this.loading =false
-      // this.$router.push({ path: '/' })
+      // console.log(this.loginForm.username)
+      // console.log(this.loginForm.password)
+      var num = -1
+      var params = new URLSearchParams()
+      params.append('Account', this.loginForm.username)
+      params.append('Password', this.loginForm.password)
+      axios.post('http://localhost:3000/api/allUserLogin', params)
+        .then(function(res) {
+          num = res.data.num
+          console.log('登录返回值：' + num)
+        })
+
+      setTimeout(10000)
+
+      num = 11
 
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-            this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
-            this.loading = false
-            this.$router.push({ path: '/' })
+          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+            if (num != -1) {
+              this.loading = false
+              this.$router.push({ path: '/' })
+            } else {
+              this.loading = false
+            }
           }).catch(() => {
             this.loading = false
           })
@@ -129,7 +133,6 @@ export default {
           return false
         }
       })
-
     },
     afterQRScan() {
       // const hash = window.location.hash.slice(1)
