@@ -1,6 +1,6 @@
 <template>
   <div class="checkPageContainer">
-      <el-row :gutter="50">
+      <el-row :gutter="50" class="childDiv">
           <el-col :span="8">
             <el-card shadow="always" class="applyInfo" :model="applyInfo">
                 <div slot="header" class="clearfix">
@@ -58,7 +58,7 @@
                 <div class="checkText"><span>服务时间与描述相符</span></div>
                 <div class="rateBar">
                         <el-rate
-                        v-model="checkRate.contentRate"
+                        v-model="checkRate.durationRate"
                         show-text>
                         </el-rate>
                     </div>
@@ -67,7 +67,7 @@
                 <div class="checkText"><span>服务态度评价</span></div>
                 <div class="rateBar">
                         <el-rate
-                        v-model="checkRate.contentRate"
+                        v-model="checkRate.attitudeRate"
                         show-text>
                         </el-rate>
                     </div>
@@ -96,14 +96,14 @@ export default {
   data(){
       return {
           applyInfo:{
-            serviceID: 1,
-            oldMan:'老人',
-            volunteer:'小红',
-            startTime: '2018-03-24T08:00:00.000Z',
-            endTime: '2018-03-24T10:00:00.000Z',
-            duration: 2,
-            content:'打扫卫生',
-            remark: '帮助老人真的很开心'
+            serviceID: null,
+            oldMan:null,
+            volunteer:null,
+            startTime: null,
+            endTime:null,
+            duration: null,
+            content:null,
+            remark: null
           },
           checkRate:{
               contentRate:null,
@@ -123,16 +123,32 @@ export default {
         var date = new Date(time)
         return formatDate(date, 'hh:mm:ss')
     }
+  },
+  mounted: function() {
+      this.applyInfo.serviceID=this.$route.params.serviceId;
+      this.applyInfo.oldMan=this.$route.params.oldMan;
+      this.applyInfo.volunteer=this.$route.params.volunteer;
+      this.applyInfo.startTime=this.$route.params.startTime;
+      this.applyInfo.endTime=this.$route.params.endTime;
+      this.applyInfo.duration=this.$route.params.duration;
+      this.applyInfo.content=this.$route.params.content;
+      this.applyInfo.remark=this.$route.params.remark;
+      
+      
   }
 }
 </script>
 <style scoped>
 .checkPageContainer{
-    padding: 50px;
+   padding-top: 50px;
     background-color: #f0f2f5;
     height: 100% ;
     position: fixed ;
     width: 100%
+}
+.childDiv{
+    position: relative ;
+    left: 16%;
 }
 .clearfix:before,
   .clearfix:after {

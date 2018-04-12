@@ -59,6 +59,26 @@ export default {
         var date = new Date(time)
         return formatDate(date, 'hh:mm:ss')
     }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+       this.listLoading = true;
+       axios.post('http://localhost:3000/api/getCheckList',
+        {
+          UserID : 1,
+          status: 1
+        }
+       ).then(
+         (res)=>{
+                  this.checkedList=res.data.list;
+                  console.log(res.data.list); 
+                  this.listLoading = false
+                }
+       )
+     }
   }
 }
 </script>

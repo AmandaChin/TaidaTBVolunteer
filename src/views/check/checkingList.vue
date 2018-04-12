@@ -11,7 +11,7 @@
 
       <el-table-column width="150px" align="center" label="志愿者">
         <template slot-scope="scope">
-          <span>{{scope.row.volunteer}}</span>
+          <span>{{scope.row.volunteerName}}</span>
         </template>
       </el-table-column>
 
@@ -45,7 +45,7 @@ export default {
   data(){
     return {
         checkingList:null,
-        listLoading: false
+        listLoading: true
     }
   },
   filters: {
@@ -58,6 +58,40 @@ export default {
         var date = new Date(time)
         return formatDate(date, 'hh:mm:ss')
     }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+     getList() {
+       this.listLoading = true;
+       axios.post('http://localhost:3000/api/getCheckList',
+        {
+          UserID : 1,
+          status: 0
+        }
+       ).then(
+         (res)=>{
+                  this.checkingList=res.data.list;
+                  console.log(res.data.list); 
+                  this.listLoading = false
+                }
+       )
+     },
+     checkRecord(row){
+       this.$router.push({ name: 'checkInfo',
+          params:{
+            serviceId: row.serviceId,
+            oldMan: row.oldManName,
+            volunteer: row.volunteerName,
+            startTime: row.startTime,
+            endTime: row.endTime,
+            duration: row.duration,
+            content: row.content,
+            remark: row.remark
+          }
+     })
+     }
   }
 }
 </script>
