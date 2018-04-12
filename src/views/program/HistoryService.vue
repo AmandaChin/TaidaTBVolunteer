@@ -34,7 +34,8 @@
     <el-table-column
       label="更多操作">
       <template scope="scope">
-        <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="func(scope.row.ServiceID,scope.row.Content, scope.row.RealStartTime,scope.row.RealEndTime, scope.row.Duration)">申请勋章</el-button>
+        <el-button v-if="scope.row.Status==1" style="font-weight: bold; color:dodgerblue" type="text" @click="func(scope.row.ServiceID,scope.row.Content, scope.row.RealStartTime,scope.row.RealEndTime, scope.row.Duration)">申请勋章</el-button>
+        <el-button v-if="scope.row.Status!=1" style="font-weight: bold; color:dodgerblue" type="text">查看申请</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -74,6 +75,7 @@
         Remark: undefined,
         str_startTime: '',
         service: [],
+        applyDisable:false,
         name: '',
         CreateTime: undefined
       }

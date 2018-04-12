@@ -232,16 +232,23 @@
     methods: {
       submit: function() {
         var params = new URLSearchParams()
-        params.append('UserID', '7')
+        params.append('UserID', 7)
         params.append('ServiceID', this.ServiceId)
+        
         params.append('Material1', '')
         params.append('Material2', '')
         params.append('Material3', '')
-        params.append('RealStartTime', this.StartTime)
-        params.append('RealEndTime', this.EndTime)
-        console.log(this.StartTime)
+        params.append('RealStartTime','2018-01-05 00:09:20')
+        params.append('RealEndTime','2018-01-05 00:09:20')
+        if(this.postForm.content==null){
+          params.append('Remark',' ')
+        }else{
+          params.append('Remark',this.postForm.content)
+        }
+        
         axios.post('http://localhost:3000/api/applicate', params).then(
           (res) => {
+            this.$message('申请成功，等待审核');
             console.log(res)
           }
         ).catch((err) => {
