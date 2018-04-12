@@ -27,7 +27,7 @@ export default {
       thumbnailHeight: this.thumbnailHeight,
       maxFiles: this.maxFiles,
       maxFilesize: this.maxFilesize,
-      dictRemoveFile: 'Remove',
+      dictRemoveFile: '删除图片',
       addRemoveLinks: this.showRemoveLink,
       acceptedFiles: this.acceptedFiles,
       autoProcessQueue: this.autoProcessQueue,

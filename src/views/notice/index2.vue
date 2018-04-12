@@ -14,7 +14,7 @@
       label="日期">
       <template slot-scope="scope">
         <i class="el-icon-time"></i>
-        <span style="margin-left: 10px">{{ scope.row.ReleaseTime }}</span>
+        <span style="margin-left: 10px">{{ scope.row.ReleaseTime |formatDate}}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -52,6 +52,7 @@
 
 <script>
 import axios from 'axios'
+import { formatDate } from '@/methods/methods.js'
   export default {
     data() {
       
@@ -81,6 +82,13 @@ import axios from 'axios'
           console.log(err);
         })
     },
+    filters: {
+    
+    formatDate(time) {
+        var date = new Date(time)
+        return formatDate(date, 'yyyy-MM-dd')
+      }
+  },
     methods: {
       handleEdit(index, row) {
         console.log(index, row);
