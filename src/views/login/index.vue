@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
 import axios from 'axios'
@@ -98,41 +97,36 @@ export default {
       }
     },
     handleLogin: function() {
-      // this.loading = true
-      // console.log(this.loginForm.username)
-      // console.log(this.loginForm.password)
       var num = -1
       var params = new URLSearchParams()
       params.append('Account', this.loginForm.username)
       params.append('Password', this.loginForm.password)
+
+      const theRefs = this.$refs
+      const theStore = this.$store
+      const theRouter = this.$router
+      const theLoginForm = this.loginForm
+
       axios.post('http://localhost:3000/api/allUserLogin', params)
         .then(function(res) {
           num = res.data.num
           console.log('登录返回值：' + num)
-        })
 
-      setTimeout(10000)
-
-      num = 11
-
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
-            if (num != -1) {
-              this.loading = false
-              this.$router.push({ path: '/' })
+          theRefs.loginForm.validate(valid => {
+            if (valid) {
+              theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
+                if (num === -1) {
+                } else {
+                  theRouter.push({ path: '/' })
+                }
+              }).catch(() => {
+              })
             } else {
-              this.loading = false
+              console.log('error submit!!')
+              return false
             }
-          }).catch(() => {
-            this.loading = false
           })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+        })
     },
     afterQRScan() {
       // const hash = window.location.hash.slice(1)
