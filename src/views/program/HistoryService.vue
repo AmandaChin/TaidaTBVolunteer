@@ -55,6 +55,7 @@
   import clip from '@/utils/clipboard'
   import axios from 'axios'
   import { formatDate } from '@/methods/methods.js'
+  import port from '../../utils/manage'
 
   export default {
     filters: {
@@ -83,7 +84,7 @@
     mounted: function(UserId) {
       var params = new URLSearchParams()
       params.append('UserID', '7')
-      axios.post('http://localhost:3000/api/getServicedList', params).then(
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getServicedList', params).then(
         (res) => {
           this.service = res.data.list
           console.log(res)
@@ -102,7 +103,7 @@
         var params = new URLSearchParams()
         params.append('ServiceID', serviceId)
         console.log(serviceId)
-        axios.post('http://localhost:3000/api/getOldManName', params).then(
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getOldManName', params).then(
           (res) => {
             this.name = res.data.Name
             console.log(this.name)

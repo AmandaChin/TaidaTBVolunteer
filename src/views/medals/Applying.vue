@@ -50,11 +50,12 @@
   import applying_image from '@/assets/medals_images/applying.gif'
   import clip from '@/utils/clipboard'
   import axios from 'axios'
+  import port from '../../utils/manage'
   export default {
     methods: {
       mounted: function(UserId) {
         // GET /someUrl
-        axios.post('http://localhost:3000/api/applicating',
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicating',
           {
             dataType: 'jsonp',
             crossDomain: true

@@ -12,16 +12,16 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://localhost:3000/api/',
+        target: '202.113.31.101:13000/api/',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          '^/api/': ''
         }
       }
     },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '0.0.0.0', // can be overwritten by process.env.HOST
     port: 9527, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,

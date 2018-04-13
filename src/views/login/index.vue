@@ -54,6 +54,7 @@
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
 import axios from 'axios'
+import port from '../../utils/manage'
 export default {
   components: { LangSelect, SocialSign },
   name: 'login',
@@ -107,7 +108,7 @@ export default {
       const theRouter = this.$router
       const theLoginForm = this.loginForm
 
-      axios.post('http://localhost:3000/api/allUserLogin', params)
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/allUserLogin', params)
         .then(function(res) {
           num = res.data.num
           console.log('登录返回值：' + num)

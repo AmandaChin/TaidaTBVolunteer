@@ -2,7 +2,7 @@
 <div class="checkingList">
     <el-table  :data="checkingList" v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
       style="width: 80%">
-    
+
       <el-table-column width="200px" align="center" label="服务日期">
         <template slot-scope="scope">
           <span>{{scope.row.startTime|formatDate}}</span>
@@ -17,11 +17,11 @@
 
       <el-table-column min-width="150px" label="服务内容">
         <template slot-scope="scope">
-          <span>{{scope.row.content}}</span>       
+          <span>{{scope.row.content}}</span>
       </template>
       </el-table-column>
-      
-      
+
+
       <el-table-column width="250px" align="center" label="服务时段">
         <template slot-scope="scope">
           <span>{{scope.row.startTime|getTime}}</span>
@@ -29,18 +29,19 @@
           <span>{{scope.row.endTime|getTime}}</span>
         </template>
       </el-table-column>
-      
+
       <el-table-column align="center" label="审核" width="120" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="checkRecord(scope.row)">审核</el-button>
         </template>
       </el-table-column>
     </el-table>
-</div>  
+</div>
 </template>
 <script>
 import axios from 'axios'
 import { formatDate } from '@/methods/methods.js'
+import port from '../../utils/manage'
 export default {
   data(){
     return {
@@ -64,8 +65,8 @@ export default {
   },
   methods: {
      getList() {
-       this.listLoading = true;
-       axios.post('http://localhost:3000/api/getCheckList',
+       this.listLoading = true
+       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getCheckList',
         {
           UserID : 1,
           status: 0
@@ -73,7 +74,7 @@ export default {
        ).then(
          (res)=>{
                   this.checkingList=res.data.list;
-                  console.log(res.data.list); 
+                  console.log(res.data.list);
                   this.listLoading = false
                 }
        )

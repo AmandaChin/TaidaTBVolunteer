@@ -1,32 +1,32 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="服务内容" 
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="服务内容"
       v-model="listQuery.content">
       </el-input>
-      <el-date-picker clearable style="width: 200px;" 
-        v-model="listQuery.startTime" 
-        class="filter-item" 
+      <el-date-picker clearable style="width: 200px;"
+        v-model="listQuery.startTime"
+        class="filter-item"
         type="datetime"  value-format= "yyyy-MM-dd HH:mm:ss"
         placeholder="选择服务开始时间"></el-date-picker>
-      <el-select clearable style="width: 120px" class="filter-item" 
+      <el-select clearable style="width: 120px" class="filter-item"
       v-model="listQuery.duration" placeholder="服务时长">
         <el-option v-for="item in durationOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
-      <el-select clearable class="filter-item" style="width: 130px" 
+      <el-select clearable class="filter-item" style="width: 130px"
       v-model="listQuery.type"  @change="TypeChangeHandler">
         <el-option v-for="item in  placeOptions" :key="item.key" :label="item.display_name" :value="item.key" >
         </el-option>
       </el-select>
-      
+
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
-      
+
     </div>
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
       style="width: 80%">
-    
+
       <el-table-column width="200px" align="center" label="服务日期">
         <template slot-scope="scope">
           <span>{{scope.row.DemandStartTime|formatDate}}</span>
@@ -34,7 +34,7 @@
       </el-table-column>
       <el-table-column min-width="150px" label="服务内容">
         <template slot-scope="scope">
-          <span class="link-type" @click="handleShowDialog(scope.row)">{{scope.row.Content}}</span>       
+          <span class="link-type" @click="handleShowDialog(scope.row)">{{scope.row.Content}}</span>
       </template>
       </el-table-column>
       <el-table-column width="110px" align="center" label="发布作者">
@@ -42,13 +42,13 @@
           <span>{{scope.row.Name}}</span>
         </template>
       </el-table-column>
-      
+
       <el-table-column width="80px" align="center" label="服务时长">
         <template slot-scope="scope">
           <span>{{scope.row.Duration}}</span>
         </template>
       </el-table-column>
-      
+
       <el-table-column align="center" label="申请" width="100" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini"@click="handleShowDialog(scope.row)">申请</el-button>
@@ -75,7 +75,7 @@
             <el-form-item label="服务内容" prop="Content">
               <span>{{ temp.Content }}</span>
             </el-form-item>
-            
+
             <el-form-item label="具体事宜" prop="Remark">
               <span>{{ temp.Remark }}</span>
             </el-form-item>
@@ -102,6 +102,7 @@ import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import axios from 'axios'
 import { formatDate } from '@/methods/methods.js'
+import port from '../../utils/manage'
 
 const placeOptions = [
   { key: 1, display_name: '同区选择' },
@@ -119,7 +120,7 @@ const calendarTypeKeyValue = placeOptions.reduce((acc, cur) => {
 export default {
   directives: {
     waves
-  },  
+  },
   data() {
     return {
       tableKey: 0,
@@ -136,8 +137,8 @@ export default {
       },
       durationOptions: [1, 1.5, 2, 2.5, 3, 3.5, 4],
       placeOptions,
-      
-      temp: { 
+
+      temp: {
         ServiceID:undefined,
         UserID: undefined,
         Remark:undefined,
@@ -151,8 +152,8 @@ export default {
         Content:undefined
       },
       dialogFormVisible: false,
-      dialogStatus: '',    
-      
+      dialogStatus: '',
+
       rules: {
         type: [{ required: true, message: 'type is required', trigger: 'change' }],
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
@@ -176,7 +177,7 @@ export default {
     //得到初始的全部需求
     getList() {
       this.listLoading = true
-      axios.get('http://localhost:3000/api/getAllDemand',
+      axios.get('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',
         {
           dataType:'jsonp',
           crossDomain:true
@@ -188,7 +189,7 @@ export default {
           }
         ).catch((err)=>{
           console.log(err);
-        })        
+        })
     },
     //处理search函数
     handleFilter() {
@@ -197,7 +198,7 @@ export default {
       this.listLoading=true
             var duration
             var startTime
-         
+
             if (this.listQuery.duration==undefined)
             {
               console.log("undefined duration")
@@ -215,11 +216,11 @@ export default {
               console.log(" startTime")
               startTime=this.listQuery.startTime
             }
-           
+
             if(duration==0){
 
               console.log("enter no duration")
-              axios.post('http://localhost:3000/api/getDemandByConditionNoDuration',
+              axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByConditionNoDuration',
                 { UserID : 7,
                   Content: this.listQuery.content,
                   DemandStartTime: startTime,
@@ -227,15 +228,15 @@ export default {
                 }).then(
                   (res)=>{
                   this.list=res.data.list.rows;
-                  console.log(res); 
+                  console.log(res);
                   this.listLoading = false
                 }
                 ).catch((err)=>{
                 console.log(err);
-              })    
+              })
             }else{
               console.log("enter")
-              axios.post('http://localhost:3000/api/getDemandByCondition',
+              axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByCondition',
               { UserID : 7,
                 Content: this.listQuery.content,
                 Duration: duration,
@@ -249,19 +250,19 @@ export default {
               }
               ).catch((err)=>{
               console.log(err);
-              })    
+              })
             }
 
           console.log(duration)
           console.log(startTime)
-         
+
           // this.listLoading = false
     },
 
     //志愿者申请
      applyService(row) {
        var num;
-       axios.post('http://localhost:3000/api/applicateInSearch',
+       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicateInSearch',
           { UserID : 7,
             ServiceID: row.ServiceID,
           }).then(
@@ -269,15 +270,15 @@ export default {
                 num=res.data.num;
                 console.log('申请返回值：'+num)
             }
-          )   
+          )
       this.dialogFormVisible = false
       this.$notify({
               title: '成功',
               message: '申请成功',
               type: 'success',
               duration: 2000
-            }) 
-            
+            })
+
     },
 
     handleShowDialog(row){
@@ -293,7 +294,7 @@ export default {
       this.listQuery.page = val
       this.getList()
     },
-   
+
    TypeChangeHandler(value){
     this.listQuery.type=value
    },

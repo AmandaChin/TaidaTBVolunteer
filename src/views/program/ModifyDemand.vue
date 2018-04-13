@@ -87,6 +87,7 @@
   import complexTable from './../example/table/complexTable'
   import axios from 'axios'
   import { formatDate } from '@/methods/methods.js'
+  import port from '../../utils/manage'
 
   const defaultForm = {
     status: 'draft',
@@ -212,7 +213,7 @@
         console.log(this.StartTime)
         params.append('DemandEndTime', this.EndTime)
         params.append('Remark', this.Remark)
-        axios.post('http://localhost:3000/api/updateDemand', params).then(
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/updateDemand', params).then(
           (res) => {
             this.service = res.data.list
             console.log(res)

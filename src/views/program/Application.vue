@@ -132,6 +132,7 @@
   import complexTable from './../example/table/complexTable'
   import { formatDate } from '@/methods/methods.js'
   import axios from 'axios'
+  import port from '../../utils/manage'
 
   const defaultForm = {
     status: 'draft',
@@ -234,7 +235,7 @@
         var params = new URLSearchParams()
         params.append('UserID', 7)
         params.append('ServiceID', this.ServiceId)
-        
+
         params.append('Material1', '')
         params.append('Material2', '')
         params.append('Material3', '')
@@ -245,8 +246,8 @@
         }else{
           params.append('Remark',this.postForm.content)
         }
-        
-        axios.post('http://localhost:3000/api/applicate', params).then(
+
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicate', params).then(
           (res) => {
             this.$message('申请成功，等待审核');
             console.log(res)

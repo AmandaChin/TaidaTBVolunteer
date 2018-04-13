@@ -6,7 +6,7 @@
 
     <el-table-column label="标题">
       <template slot-scope="scope">
-        <el-button type="text" @click="handleShowDialog(scope.row)">{{scope.row.Title}}</el-button>       
+        <el-button type="text" @click="handleShowDialog(scope.row)">{{scope.row.Title}}</el-button>
       </template>
     </el-table-column>
 
@@ -53,11 +53,12 @@
 <script>
 import axios from 'axios'
 import { formatDate } from '@/methods/methods.js'
+import port from '../../utils/manage'
   export default {
     data() {
-      
+
       return {
-        temp: { 
+        temp: {
         Title:undefined,
         NoticeID: undefined,
         Content:undefined,
@@ -69,7 +70,7 @@ import { formatDate } from '@/methods/methods.js'
       }
     },
     mounted() {
-        axios.post('http://localhost:3000/api/noticeOperation',
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/noticeOperation',
         {
           dataType:'jsonp',
           crossDomain:true
@@ -83,7 +84,7 @@ import { formatDate } from '@/methods/methods.js'
         })
     },
     filters: {
-    
+
     formatDate(time) {
         var date = new Date(time)
         return formatDate(date, 'yyyy-MM-dd')

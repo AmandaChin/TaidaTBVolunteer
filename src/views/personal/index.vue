@@ -2,13 +2,13 @@
   <div class="personal">
     <h1 >修改账户基本信息</h1>
       <el-form ref="form" :model="personalInfo" label-width="120px">
-          
+
           <el-form-item label="姓名">
             <el-col :span="9">
           <el-input v-model="personalInfo.UserName"></el-input>
           </el-col>
           </el-form-item>
-          
+
           <el-form-item label="性别">
             <el-radio-group v-model="personalInfo.Gender" @change="sexChangeHandler">
               <el-radio label="男">男</el-radio>
@@ -20,7 +20,7 @@
           <el-col :span="9">
             <el-date-picker type="date" placeholder="选择您的出生日期" v-model="personalInfo.birthday" style="width: 100%;">
             </el-date-picker>
-          </el-col>       
+          </el-col>
         </el-form-item>-->
 
           <el-form-item label="手机号">
@@ -36,7 +36,7 @@
           </el-form-item>
 
           <el-form-item label="所在地区">
-          <el-cascader 
+          <el-cascader
            expand-trigger="hover"
            placeholder="选择您所在地区"
            :options="cityInfo"
@@ -50,7 +50,7 @@
           <el-input v-model="personalInfo.IDNumber"></el-input>
           </el-col>
           </el-form-item>
-           
+
           <!--<el-row>
               <el-col span="3">
               <el-form-item label="更改头像"></el-form-item>
@@ -59,18 +59,18 @@
                   <Photo  style="width:800px" v-model="personalInfo.image_uri" ></Photo>
               </el-col>
           </el-row>-->
-          
+
           <el-button type="primary" style="width:20%;margin-left:100px;" :loading="loading" @click.native.prevent="handleUpdate">修改</el-button>
-          
+
       </el-form>
   </div>
 </template>
 
 <script >
 import Photo from '@/components/Upload/singleImage'
- import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
-import CityInfo from './CityInfo'
-import axios from 'axios';
+import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
+import axios from 'axios'
+import port from '../../utils/manage'
 export default {
   name: 'personal',
   components: {Photo},
@@ -101,7 +101,7 @@ export default {
           callback()
         }
       }
-    return {     
+    return {
       loading: false,
       cityInfo :
       [
@@ -3721,9 +3721,9 @@ export default {
           Gender: '',
           Phone: '',
           Email:'',
-          IDNumber:'123421196708138944',       
+          IDNumber:'123421196708138944',
           region: []
-        
+
       }
 
     }
@@ -3732,13 +3732,13 @@ export default {
     mounted() {
         // console.log(this.personalInfo.region)
          var that=this;
-        axios.post('http://localhost:3000/api/getUserInfo',
-        {         
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getUserInfo',
+        {
           UserId:3
         }).then(
           (res)=>{
-            
-            console.log(res.data);  
+
+            console.log(res.data);
             that.personalInfo.UserName=res.data.UserName;
             that.personalInfo.Gender=res.data.Gender;
             that.personalInfo.Phone=res.data.Phone;
@@ -3760,11 +3760,11 @@ export default {
         this.personalInfo.region[0]=value[0];
         this.personalInfo.region[1]=value[1];
         this.personalInfo.region[2]=value[2];
-        
+
         console.log( this.personalInfo.region);
       },
       handleUpdate(){
-        axios.post('http://localhost:3000/api/changeUserInformation',
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/changeUserInformation',
         {
             UserID:3,
             Gender:this.personalInfo.Gender,

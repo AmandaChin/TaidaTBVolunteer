@@ -53,6 +53,7 @@
   import clip from '@/utils/clipboard'
   import axios from 'axios'
   import { formatDate } from '@/methods/methods.js'
+  import port from '../../utils/manage'
   export default {
     filters: {
       formatDate(time) {
@@ -70,7 +71,7 @@
     mounted: function(UserId) {
       var params = new URLSearchParams()
       params.append('UserID', '8')
-      axios.post('http://localhost:3000/api/getDemandByUserID', params).then(
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByUserID', params).then(
         (res) => {
           this.demands = res.data.list
           console.log(res)
