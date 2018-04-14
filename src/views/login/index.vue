@@ -23,19 +23,8 @@
       </el-form-item>
 
       <el-button type="primary" style="width:100%;margin-bottom:20px;" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
-<!--
-      <div class="tips">
-        <span>{{$t('login.username')}} : admin</span>
-        <span>{{$t('login.password')}} : {{$t('login.any')}}</span>
-      </div>
-      <div class="tips">
-        <span style="margin-right:18px;">{{$t('login.username')}} : editor</span>
-        <span>{{$t('login.password')}} : {{$t('login.any')}}</span>
-      </div>
 
-      <el-button class="thirdparty-button" type="primary" @click="showDialog=true">{{$t('login.thirdparty')}}</el-button>
-      -->
-      <el-button type="primary" style="width:96%;margin-bottom:30px;">还没账号？快去注册</el-button>
+      <el-button type="primary" style="width:96%;margin-bottom:30px;" @click="register">还没账号？快去注册</el-button>
 
     </el-form>
 
@@ -120,9 +109,10 @@ export default {
                   this.$error('用户名或密码错误');
                 } else {
                   theRouter.push({ path: '/' })
+                  // theRouter.push({ name: 'register' })
                 }
               }).catch(() => {
-                
+                this.$error('提交格式错误');
               })
             } else {
               console.log('error submit!!')
@@ -134,6 +124,31 @@ export default {
         console.log('login error'+err);
         this.$error('网络异常');
         })
+    },
+
+    register: function(){
+        this.loginForm.username='admin';
+        this.loginForm.password='123456';
+        
+      const theRefs = this.$refs
+      const theStore = this.$store
+      const theRouter = this.$router
+      const theLoginForm = this.loginForm
+
+      theRefs.loginForm.validate(valid => {
+            if (valid) {
+              theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
+                theRouter.push({ name: 'register' })
+              }).catch(() => {
+                this.$error('提交格式错误');
+              })
+            } else {
+              console.log('error submit!!')
+               this.$error('提交格式错误');
+              return false
+            }
+          })
+
     },
     afterQRScan() {
       // const hash = window.location.hash.slice(1)

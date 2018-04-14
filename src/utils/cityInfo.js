@@ -1,24 +1,8 @@
-<template>
-<div class="city-info">
-<el-form ref="form" :model="personalInfo" label-width="120px">
-  <el-form-item label="所在地区">
-          <el-cascader 
-           expand-trigger="hover"
-           placeholder="选择您所在地区"
-           :options="cityInfo"
-           v-model="personalInfo.region"
-           @change="handleChange">
-          </el-cascader>
-          </el-form-item>
-</el-form>
-</div>
-</template>
-
-<script>
-export default {
-  data(){
-      return {
-       cityInfo :[
+//省市信息
+module.exports={
+    info:{
+      cityInfo :
+      [
           {value: 1, label: '北京', children: [
               {value: 1, label: '北京市', children: [
                   {value: 1, label: '东城区'},
@@ -3629,9 +3613,6 @@ export default {
           {value: 34, label: '台湾', children: [
               {value: 345, label: '台湾', children: []}
           ]}
-         ] 
-  }
+    ]
+    }
 }
-}
-</script>
-

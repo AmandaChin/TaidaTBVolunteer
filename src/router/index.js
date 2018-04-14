@@ -38,7 +38,7 @@ import CheckInfo from '../views/check/index'
   }**/
 
 export const constantRouterMap = [
-  { path: '/login', component: _import('login/index'), hidden: true },
+  { path: '/login', name:'login', component: _import('login/index'), hidden: true },
   { path: '/authredirect', component: _import('login/authredirect'), hidden: true },
   { path: '/404', component: _import('errorPage/404'), hidden: true },
   { path: '/401', component: _import('errorPage/401'), hidden: true },
@@ -202,7 +202,14 @@ export const asyncRouterMap = [
   {
     path: '/CheckInfo',
     component: CheckInfo,
-    name: 'checkInfo'
+    name: 'checkInfo',
+    hidden: true
+  },
+  {
+    path: '/Register',
+    component: _import('register/index'),
+    name: 'register',
+    hidden: true
   }
 
   // {
