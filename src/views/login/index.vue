@@ -117,16 +117,22 @@ export default {
             if (valid) {
               theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
                 if (num === -1) {
+                  this.$error('用户名或密码错误');
                 } else {
                   theRouter.push({ path: '/' })
                 }
               }).catch(() => {
+                
               })
             } else {
               console.log('error submit!!')
+               this.$error('提交格式错误');
               return false
             }
           })
+        }).catch(function(err) {
+        console.log('login error'+err);
+        this.$error('网络异常');
         })
     },
     afterQRScan() {
