@@ -1,7 +1,7 @@
 <template>
   <div class="register-container">
   
-      <el-form  class="register-form" :model="registerForm" :rules="rules" ref="ruleForm" label-position="right" label-width="100px">
+      <el-form  class="register-form" :model="registerForm" :rules="rules" ref="registerForm" label-position="right" label-width="100px">
           <h3 class="title">注册页面</h3>
 
           <el-form-item label="用户名"  prop="username">
@@ -58,8 +58,8 @@
           </el-form-item>
 
           <el-form-item>
-          <el-button type="primary" @click="submitForm('registerForm')">提交</el-button>
-          <el-button @click="resetForm('registerForm')">重置</el-button>
+          <el-button type="primary" @click="submitForm">提交</el-button>
+          <el-button @click="resetForm">重置</el-button>
           </el-form-item>
 
       </el-form>
@@ -111,7 +111,7 @@ export default {
         ],
         phone:[
           {required:true, message:'请输入手机号', trigger:'blur'},
-          {type: 'number', message: '手机号为数字'}
+          {type: 'number',min:11,max:11, message: '手机号为11位数字', trigger: 'blur'}
         ],
         email:[
           {required:true,message:'请输入邮箱地址',trigger:'blur'},
@@ -133,7 +133,34 @@ export default {
         ]
       },
      
-    }
+    }   
+  },
+  methods:{
+
+    submitForm() {
+     
+        this.$refs.registerForm.validate((valid) => {
+          if (valid) {
+            // var params = new URLSearchParams();
+            // params.append('Account', this.loginForm.username);
+
+            // axios.post('http://' + port.info.host + ':' + port.info.port + '/api/UserRegister', params).then(
+            //   function(res){
+            //     var num = res.data.num;
+
+            //   }
+            // )
+            this.$message('提交成功');
+          } else {
+            console.log('error submit!!');
+            this.$error('请填写必要信息');            
+            return false;
+          }
+        });
+      },
+    resetForm() {
+        this.$refs.registerForm.resetFields();
+      }
   }
 }
 </script>
