@@ -95,9 +95,9 @@ export default {
     return {
       registerForm:{
         username:'',
+        pass:'',
         phone: '',
         email: '',
-        pass:'',
         checkPass: '',
         gender:'',
         region:[],
@@ -138,18 +138,25 @@ export default {
   methods:{
 
     submitForm() {
-     
         this.$refs.registerForm.validate((valid) => {
           if (valid) {
-            // var params = new URLSearchParams();
-            // params.append('Account', this.loginForm.username);
-
-            // axios.post('http://' + port.info.host + ':' + port.info.port + '/api/UserRegister', params).then(
-            //   function(res){
-            //     var num = res.data.num;
-
-            //   }
-            // )
+            var params = new URLSearchParams();
+            params.append('account', this.registerForm.username);
+            params.append('password', this.registerForm.pass);
+            params.append('phone', this.registerForm.phone);
+            params.append('email', this.registerForm.email);
+            params.append('gender', this.registerForm.gender);
+            params.append('province', this.registerForm.region[0]);
+            params.append('city', this.registerForm.region[1]);
+            params.append('district', this.registerForm.region[2]);
+            params.append('IDNumber', this.registerForm.IDNumber);
+            
+            axios.post('http://' + port.info.host + ':' + port.info.port + '/api/UserRegister', params).then(
+              function(res){
+                var num = res.data.num;
+                
+              }
+            )
             this.$message('提交成功');
           } else {
             console.log('error submit!!');
