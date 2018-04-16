@@ -210,6 +210,12 @@ export const asyncRouterMap = [
     component: _import('register/index'),
     name: 'register',
     hidden: true
+  },
+  {
+     path: '/Register/jump',
+    component: _import('register/jumpPage'),
+    name: 'registerJump',
+    hidden: true
   }
 
   // {

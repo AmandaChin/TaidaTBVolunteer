@@ -4,7 +4,13 @@
       <el-form  class="register-form" :model="registerForm" :rules="rules" ref="registerForm" label-position="right" label-width="100px">
           <h3 class="title">注册页面</h3>
 
-          <el-form-item label="用户名"  prop="username">
+          <el-form-item label="用户名"  prop="account">
+          <el-col :span="12">
+          <el-input v-model="registerForm.account"></el-input>
+          </el-col>
+          </el-form-item>
+
+           <el-form-item label="真实姓名"  prop="username">
           <el-col :span="12">
           <el-input v-model="registerForm.username"></el-input>
           </el-col>
@@ -70,6 +76,7 @@
 <script>
 import cityInfo from '../../utils/cityInfo'
 import axios from 'axios'
+import port from '../../utils/manage'
 export default {
   data(){
     var validatePass = (rule, value, callback) => {
@@ -94,6 +101,7 @@ export default {
       };
     return {
       registerForm:{
+        account:'',
         username:'',
         pass:'',
         phone: '',
@@ -105,13 +113,15 @@ export default {
       },
       cityInfo: cityInfo.info.cityInfo,
       rules: {
-        username:[
+        account:[
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 10 个字符', trigger: 'blur' }
         ],
+        username:[
+          { required: true, message: '请输入真实姓名', trigger: 'blur' }
+        ],
         phone:[
-          {required:true, message:'请输入手机号', trigger:'blur'},
-          {type: 'number',min:11,max:11, message: '手机号为11位数字', trigger: 'blur'}
+          {required:true, message:'请输入手机号', trigger:'blur'}
         ],
         email:[
           {required:true,message:'请输入邮箱地址',trigger:'blur'},
@@ -138,10 +148,13 @@ export default {
   methods:{
 
     submitForm() {
+
+       const theRouter = this.$router
         this.$refs.registerForm.validate((valid) => {
           if (valid) {
             var params = new URLSearchParams();
-            params.append('account', this.registerForm.username);
+            params.append('account', this.registerForm.account);            
+            params.append('username', this.registerForm.username);
             params.append('password', this.registerForm.pass);
             params.append('phone', this.registerForm.phone);
             params.append('email', this.registerForm.email);
@@ -153,14 +166,21 @@ export default {
             
             axios.post('http://' + port.info.host + ':' + port.info.port + '/api/UserRegister', params).then(
               function(res){
+                console.log(res);
                 var num = res.data.num;
-                
+                console.log("num=="+num);
+                if(num===1){
+                   console.log("registerJump=="+num);
+                    theRouter.push({ name: 'registerJump' });
+                }else{
+                    this.$message('用户名重复！');
+                }
               }
             )
-            this.$message('提交成功');
+            
           } else {
             console.log('error submit!!');
-            this.$error('请填写必要信息');            
+            this.$message('请填写正确信息');        
             return false;
           }
         });

@@ -69,6 +69,7 @@ export default {
     },
     JumpSearch:function(){
       this.$router.push({ name: 'search'})
+      
     }
   }
 }
