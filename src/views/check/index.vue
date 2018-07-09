@@ -81,7 +81,7 @@
                         </el-rate>
                     </div>
                </div>
-               
+
                <div class="checkFooter">
                    <el-button class="button" type="primary" round @click="submitCheck">提交</el-button>
                </div>
@@ -93,50 +93,53 @@
 <script>
 import { formatDate } from '@/methods/methods.js'
 export default {
-  data(){
-      return {
-          applyInfo:{
-            serviceID: null,
-            oldMan:null,
-            volunteer:null,
-            startTime: null,
-            endTime:null,
-            duration: null,
-            content:null,
-            remark: null
-          },
-          checkRate:{
-              contentRate:null,
-              durationRate:null,
-              attitudeRate:null,
-              oldManRate:null
-          }
+  data() {
+    return {
+      applyInfo: {
+        serviceID: null,
+        oldMan: null,
+        volunteer: null,
+        startTime: null,
+        endTime: null,
+        duration: null,
+        content: null,
+        remark: null
+      },
+      checkRate: {
+        contentRate: null,
+        durationRate: null,
+        attitudeRate: null,
+        oldManRate: null
       }
+    }
   },
   filters: {
     formatDate(time) {
-        var date = new Date(time)
-        return formatDate(date, 'yyyy-MM-dd')
-      },
-
-    getTime(time){
-        var date = new Date(time)
-        return formatDate(date, 'hh:mm:ss')
+      var date = new Date(time)
+      return formatDate(date, 'yyyy-MM-dd')
+    },
+    getTime(time) {
+      var date = new Date(time)
+      return formatDate(date, 'hh:mm:ss')
     }
   },
   mounted: function() {
-      this.applyInfo.serviceID=this.$route.params.serviceId;
-      this.applyInfo.oldMan=this.$route.params.oldMan;
-      this.applyInfo.volunteer=this.$route.params.volunteer;
-      this.applyInfo.startTime=this.$route.params.startTime;
-      this.applyInfo.endTime=this.$route.params.endTime;
-      this.applyInfo.duration=this.$route.params.duration;
-      this.applyInfo.content=this.$route.params.content;
-      this.applyInfo.remark=this.$route.params.remark;
-      
-      
+    this.applyInfo.serviceID = this.$route.params.serviceId;
+    this.applyInfo.oldMan = this.$route.params.oldMan;
+    this.applyInfo.volunteer = this.$route.params.volunteer;
+    this.applyInfo.startTime = this.$route.params.startTime;
+    this.applyInfo.endTime = this.$route.params.endTime;
+    this.applyInfo.duration = this.$route.params.duration;
+    this.applyInfo.content = this.$route.params.content;
+    this.applyInfo.remark = this.$route.params.remark;
+  },
+  methods: {
+    submitCheck: function (UserId, serviceID, volunteers) {
+
+    }
   }
 }
+
 </script>
 <style scoped>
 .checkPageContainer{
@@ -163,19 +166,19 @@ export default {
     width:50%;
     float: left;
    padding-bottom: 25px;
-   
+
 }
 
-.rateBar { 
+.rateBar {
   width:50%;
   float: right;
   padding-bottom: 25px;
-  
+
 }
 
 .checkFooter{
     width: 100%;
-    
+
 }
 .button{
     float:right;

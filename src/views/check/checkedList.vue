@@ -1,28 +1,28 @@
 <template>
 <div class="checkedList">
      <el-table  :data="checkedList" v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
-      style="width: 80%">
+                style="width: 100%;margin-left: 20px" >
 
-      <el-table-column width="200px" align="center" label="服务日期">
+      <el-table-column  label="服务日期">
         <template slot-scope="scope">
           <span>{{scope.row.startTime|formatDate}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="150px" align="center" label="志愿者">
+      <el-table-column label="志愿者">
         <template slot-scope="scope">
           <span>{{scope.row.volunteer}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column min-width="150px" label="服务内容">
+      <el-table-column label="服务内容">
         <template slot-scope="scope">
           <span>{{scope.row.content}}</span>
       </template>
       </el-table-column>
 
 
-      <el-table-column width="250px" align="center" label="服务时段">
+      <el-table-column label="服务时段">
         <template slot-scope="scope">
           <span>{{scope.row.startTime|getTime}}</span>
           <span> - </span>
@@ -30,7 +30,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="查看" width="120" class-name="small-padding fixed-width">
+      <el-table-column label="查看"  class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="showDialog(scope.row)">查看</el-button>
         </template>
@@ -66,20 +66,18 @@ export default {
   },
   methods: {
     getList() {
-       this.listLoading = true;
-       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getCheckList',
-        {
-          UserID : 1,
-          status: 1
+      this.listLoading = true
+      var params = new URLSearchParams()
+      params.append('UserID', '1')
+      params.append('status', '1')
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getCheckList', params).then(
+        (res) => {
+          this.checkedList = res.data.list
+          console.log(res.data.list)
+          this.listLoading = false
         }
-       ).then(
-         (res)=>{
-                  this.checkedList=res.data.list;
-                  console.log(res.data.list);
-                  this.listLoading = false
-                }
-       )
-     }
+      )
+    }
   }
 }
 </script>

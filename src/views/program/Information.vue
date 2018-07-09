@@ -86,6 +86,7 @@
   import { userSearch } from '@/api/remoteSearch'
   import complexTable from './../example/table/complexTable'
   import axios from 'axios'
+  import global from '../../utils/global_userID'
   import port from '../../utils/manage'
 
   const defaultForm = {
@@ -94,6 +95,7 @@
     content_short: '', // 文章摘要
     source_uri: '', // 文章外链
     image_uri: '', // 上传图片
+    start_time: '',
     pdf_uri: '', //上传证明
     source_number: '', // 文章外部作者
     display_time: undefined, // 前台展示时间
@@ -185,19 +187,37 @@
     methods: {
       submit: function() {
         var params = new URLSearchParams()
-        params.append('UserId', '8')
-        params.append('Content', this.postForm.service_content)
-        params.append('DemandStartTime', this.postForm.start_time)
-        params.append('DemandEndTime', this.postForm.end_time)
-        params.append('Duration', this.postForm.duration)
-        params.append('Remark', this.postForm.content)
-        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement', params).then(
-          (res) => {
-            console.log(res)
-          }
-        ).catch((err) => {
-          console.log(err)
-        })
+        if (this.postForm.service_content.length == 0) {
+          this.$message('服务内容禁止为空')
+          return
+        } else if (this.postForm.start_time.length == 0) {
+          this.$message('起始时间禁止为空')
+          return
+        } else if (this.postForm.end_time.length == 0) {
+          this.$message('终止时间禁止为空')
+          return
+        } else if (this.postForm.content.length == 0) {
+          this.$message('详情内容禁止为空')
+          return
+        } else if (this.postForm.duration.length == 0) {
+          this.$message('服务时长禁止为空')
+          return
+        } else {
+          params.append('UserId', global.global_userID)
+          params.append('Content', this.postForm.service_content)
+          params.append('DemandStartTime', this.postForm.start_time)
+          params.append('DemandEndTime', this.postForm.end_time)
+          params.append('Duration', this.postForm.duration)
+          params.append('Remark', this.postForm.content)
+          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement', params).then(
+            (res) => {
+              console.log(res)
+            }
+          ).catch((err) => {
+            console.log(err)
+          })
+          this.$message('发布成功')
+        }
       },
 
       fetchData() {

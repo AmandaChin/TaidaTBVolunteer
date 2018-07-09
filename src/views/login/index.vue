@@ -44,6 +44,8 @@ import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
 import axios from 'axios'
 import port from '../../utils/manage'
+import global from '../../utils/global_userID'
+
 export default {
   components: { LangSelect, SocialSign },
   name: 'login',
@@ -92,6 +94,17 @@ export default {
       params.append('Account', this.loginForm.username)
       params.append('Password', this.loginForm.password)
 
+      var params_ID = new URLSearchParams()
+      params_ID.append('Account', this.loginForm.username)
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getUserIDbyAccount', params_ID).then(
+        (res) => {
+          global.global_userID = res.data.UserID
+          console.log(res)
+        }
+      ).catch((err) => {
+        console.log(err)
+      })
+
       const theRefs = this.$refs
       const theStore = this.$store
       const theRouter = this.$router
@@ -129,7 +142,7 @@ export default {
     register: function(){
         this.loginForm.username='admin';
         this.loginForm.password='123456';
-        
+
       const theRefs = this.$refs
       const theStore = this.$store
       const theRouter = this.$router

@@ -21,21 +21,30 @@
       label="开始时间"
       prop="users">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.RealStartTime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.DemandStartTime|formatDate}}</span>
       </template>
     </el-table-column>
     <el-table-column
       label="结束时间"
       prop="applyingtime">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.RealEndTime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.DemandEndTime|formatDate}}</span>
       </template>
     </el-table-column>
+
+    <el-table-column
+      label="当前状态">
+      <template scope="scope">
+        <span v-if="scope.row.Status ==1" style="color: darkgray" type="text">未完成勋章申请</span>
+        <span v-if="scope.row.Status !=1" style="color: darkgray" type="text">已完成勋章申请</span>
+      </template>
+    </el-table-column>
+
     <el-table-column
       label="更多操作">
       <template scope="scope">
-        <el-button v-if="scope.row.Status==1" style="font-weight: bold; color:dodgerblue" type="text" @click="func(scope.row.ServiceID,scope.row.Content, scope.row.RealStartTime,scope.row.RealEndTime, scope.row.Duration)">申请勋章</el-button>
-        <el-button v-if="scope.row.Status!=1" style="font-weight: bold; color:dodgerblue" type="text">查看申请</el-button>
+        <el-button v-if="scope.row.Status==1" style="font-weight: bold; color:dodgerblue" type="text" @click="func(scope.row.ServiceID,scope.row.Content, scope.row.DemandStartTime,scope.row.DemandEndTime, scope.row.Duration)">申请勋章</el-button>
+        <span v-if="scope.row.Status!=1" style="font-weight: bold; color:dodgerblue" type="text">申请中</span>
       </template>
     </el-table-column>
   </el-table>
@@ -55,13 +64,19 @@
   import clip from '@/utils/clipboard'
   import axios from 'axios'
   import { formatDate } from '@/methods/methods.js'
+  import { formatDatex } from '@/methods/date.js'
   import port from '../../utils/manage'
+  import global from '../../utils/global_userID'
 
   export default {
     filters: {
       formatDate(time) {
         var date = new Date(time)
         return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+      },
+      formatDatex(time) {
+        var date = new Date(time)
+        return formatDatex(date, 'yyyy-MM-dd hh:mm:ss')
       }
     },
     data() {
@@ -76,14 +91,14 @@
         Remark: undefined,
         str_startTime: '',
         service: [],
-        applyDisable:false,
+        applyDisable: false,
         name: '',
         CreateTime: undefined
       }
     },
     mounted: function(UserId) {
       var params = new URLSearchParams()
-      params.append('UserID', '7')
+      params.append('UserID', global.global_userID)
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getServicedList', params).then(
         (res) => {
           this.service = res.data.list

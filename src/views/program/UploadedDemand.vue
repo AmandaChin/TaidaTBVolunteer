@@ -7,7 +7,7 @@
     <el-table-column
       label="发布时间">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.CreateTime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.CreateTime|formatDatex}}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -20,20 +20,59 @@
       label="起始时间"
       prop="applyingtime">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandStartTime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.DemandStartTime|formatDatex}}</span>
       </template>
     </el-table-column>
     <el-table-column
       label="终止时间"
       prop="applyingtime">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandEndTime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.DemandEndTime|formatDatex}}</span>
       </template>
     </el-table-column>
     <el-table-column
-      label="更多操作">
+      label="当前状态">
       <template scope="scope">
-        <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="change(scope.row.Content, scope.row.ServiceId, scope.row.DemandStartTime, scope.row.DemandEndTime, scope.row.Duration, scope.row.Remark)">修改需求</el-button>
+        <span v-if="scope.row.Status ==0" style="color: darkgray" type="text">未被响应</span>
+        <span v-if="scope.row.Status !=0" style="color: darkgray" type="text">已被响应</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="响应者信息">
+      <template scope="scope">
+        <span v-if="scope.row.Status == 0" style="color: darkgray" type="text">暂无响应</span>
+        <el-button v-if="scope.row.Status!=0" style="font-weight: bold; color:dodgerblue" type="text" @click="volunteerInfo(scope.row.ServiceID)">响应者信息</el-button>
+//ensure the info of this dialog
+        <el-dialog title="服务详情" :visible.sync="dialogFormVisible">
+          <el-form :rules="rules" ref="dataForm" :model="volunteer" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
+            <el-form-item label="志愿者用户名" prop="UserName">
+              <span>{{volunteer.UserName}}</span>
+            </el-form-item>
+
+            <el-form-item label="志愿者性别" prop="Gender">
+              <span>{{ volunteer.Gender }}</span>
+            </el-form-item>
+
+            <el-form-item label="志愿者姓名" prop="Name">
+              <span>{{ volunteer.Name }}</span>
+            </el-form-item>
+
+            <el-form-item label="志愿者身份证号" prop="IDnumber">
+              <span>{{ volunteer.IDNumber }}</span>
+            </el-form-item>
+
+            <el-form-item label="邮箱地址" prop="Email">
+              <span>{{ volunteer.Email }}</span>
+            </el-form-item>
+
+            <el-form-item label="联系方式" prop="Phone">
+              <span>{{ volunteer.Phone }}</span>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">关闭</el-button>
+          </div>
+        </el-dialog>
       </template>
     </el-table-column>
   </el-table>
@@ -53,24 +92,38 @@
   import clip from '@/utils/clipboard'
   import axios from 'axios'
   import { formatDate } from '@/methods/methods.js'
+  import { formatDatex } from '@/methods/date.js'
   import port from '../../utils/manage'
+  import global from '../../utils/global_userID'
   export default {
     filters: {
       formatDate(time) {
         var date = new Date(time)
         return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+      },
+      formatDatex(time) {
+        var date = new Date(time)
+        return formatDatex(date, 'yyyy-MM-dd hh:mm:ss')
       }
     },
     data() {
       return {
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
-        dialogTableVisible: false,
-        demands: []
+        dialogFormVisible: false,
+        demands: [],
+        volunteer: {
+          UserName: '',
+          Gender: '',
+          Name: '',
+          IDNumber: '',
+          Email: '',
+          Phone: ''
+        }
       }
     },
     mounted: function(UserId) {
       var params = new URLSearchParams()
-      params.append('UserID', '8')
+      params.append('UserID', global.global_userID)
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByUserID', params).then(
         (res) => {
           this.demands = res.data.list
@@ -81,9 +134,17 @@
       })
     },
     methods: {
-      change: function(content, serviceId, startTime, endTime, duration, remark) {
-        this.$router.push({ name: 'modify', params: { content: content, serviceid: serviceId, startTime: startTime, endTime: endTime, duration: duration, remark: remark }})
-
+      volunteerInfo(ServiceId) {
+        var params = new URLSearchParams()
+        params.append('ServiceID', ServiceId)
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getUserByService', params).then(
+          (res) => {
+            this.volunteer = res.data.list
+            this.dialogFormVisible = true
+          }
+        ).catch((err) => {
+          console.log(err)
+        })
       },
       tableRowClassName({ row, rowIndex }) {
         if (rowIndex === 0) {

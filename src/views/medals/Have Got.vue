@@ -40,9 +40,10 @@
         <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="getchain(scope.$index, scope.row)">交易链</el-button>
         <el-dialog title="交易历史" :visible.sync="dialogTableVisible">
           <el-table :data="gridData">
-            <el-table-column property="date" label="日期" width="150"></el-table-column>
-            <el-table-column property="from" label="勋章来源" width="200"></el-table-column>
-            <el-table-column property="to" label="勋章去向"></el-table-column>
+            <el-table-column property="date" label="交易日期" width="150"></el-table-column>
+            <el-table-column property="block" label="交易区块" width="200"></el-table-column>
+            <el-table-column property="transaction" label="交易哈希"></el-table-column>
+            <el-table-column property="from" label="勋章来源"></el-table-column>
           </el-table>
         </el-dialog>
       </template>
@@ -68,21 +69,6 @@
 
   export default {
     methods: {
-      mounted: function(UserId) {
-        // GET /someUrl
-        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicated',
-          {
-            dataType: 'jsonp',
-            crossDomain: true
-          }).then(
-          (res) => {
-            this.applyingmedals = res.data.list
-            console.log(res)
-          }
-        ).catch((err) => {
-          console.log(err)
-        })
-      },
       tableRowClassName({ row, rowIndex }) {
         if (rowIndex === 0) {
           return 'warning-row'
@@ -104,13 +90,13 @@
         serviceId = this.gettingmedals.indexOf(index)
         this.getDetail(this.UserId, serviceId)
         /**
-         * 在这个函数中尝试通过点击位置所在的行获得对应的index 以及serviceId
+         *在这个函数中尝试通过点击位置所在的行获得对应的index 以及serviceId
          */
       },
       getDetail(UserId, ServiceId) {
         var chain = this
         this.$http.get({
-          url:'',
+          url: '',
           data: {
             UserId: UserId,
             ServiceId: ServiceId
@@ -126,49 +112,67 @@
           this.gridData = res.body
         })
       },
-      getChainDetail(text,event){
+      getChainDetail(text, event) {
         clip(text, event)
       },
       showAlert() {
-        this.$alert('这是一段内容','交易记录', {
+        this.$alert('这是一段内容', '交易记录', {
           confirmButtonText: '确定'
         })
       }
     },
     data() {
-      return{
+      return {
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
         Getting_image: getting_image,
         gridData: [{
           date: '2016-05-02',
-          from: '王小虎',
-          to: '李四'
+          block: '王小虎',
+          transaction: '李四',
+          from: 'sadfd'
         }, {
-          date: '2016-05-04',
-          from: '王一',
-          to: '李二'
+          date: '2016-05-02',
+          block: '王小虎',
+          transaction: '李四',
+          from: 'sadfd'
         }, {
-          date: '2016-05-01',
-          from: '王二',
-          to: '李三'
+          date: '2016-05-02',
+          block: '王小虎',
+          transaction: '李四',
+          from: 'sadfd'
         }],
         dialogTableVisible: false,
-        gettingmedals: [{
-          medals:'5',
-          users:'张三',
-          applyingtime:'2018-01-05',
-          gettingtime:'2018-01-10',
-          serviceId: 'hahaha'
-        },
+        gettingmedals: [
           {
-            medals:'10',
-            users:'张三',
-            applyingtime:'2018-01-05',
-            gettingtime:'2018-01-10',
+            medals: '5',
+            users: '张三',
+            applyingtime: '2018-01-05',
+            gettingtime: '2018-01-10',
+            serviceId: 'hahaha'
+          },
+          {
+            medals: '10',
+            users: '张三',
+            applyingtime: '2018-01-05',
+            gettingtime: '2018-01-10',
             serviceId: 'hehehe'
           }
         ]
       }
+    },
+    mounted: function(UserId) {
+      // GET /someUrl
+      // var params = new URLSearchParams()
+      // params.append('UserID', '7')
+      // axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicated', params).then(
+      //   (res) => {
+      //     this.gettingmedals = res.data.list
+      //     console.log(res)
+      //     //back a list of medal info
+      //   }
+      // ).catch((err) => {
+      //   console.log(err)
+      // })
     }
   }
 </script>

@@ -1,11 +1,11 @@
-export function formatDate(date, fmt) {
+export function formatDatex(date, fmt) {
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
   }
   const o = {
     'M+': date.getMonth() + 1,
     'd+': date.getDate(),
-    'h+': date.getHours(),
+    'h+': date.getHours() - 8,
     'm+': date.getMinutes(),
     's+': date.getSeconds()
   }

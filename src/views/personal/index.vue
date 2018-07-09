@@ -72,6 +72,7 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
 import axios from 'axios'
 import port from '../../utils/manage'
 import cityInfo from '../../utils/cityInfo'
+import global from '../../utils/global_userID'
 
 export default {
   name: 'personal',
@@ -125,7 +126,7 @@ export default {
          var that=this;
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getUserInfo',
         {
-          UserId:3
+          UserId: global.global_userID
         }).then(
           (res)=>{
 
@@ -157,15 +158,15 @@ export default {
       handleUpdate(){
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/changeUserInformation',
         {
-            UserID:3,
-            Gender:this.personalInfo.Gender,
-            UserName:this.personalInfo.UserName,
-            IDNumber:this.personalInfo.IDNumber,
-            Email:this.personalInfo.Email,
-            Phone:this.personalInfo.Phone,
-            Province:this.personalInfo.region[0],
-            City:this.personalInfo.region[1],
-            District:this.personalInfo.region[2]
+            UserID: global.global_userID,
+            Gender: this.personalInfo.Gender,
+            Name: this.personalInfo.UserName,
+            IDNumber: this.personalInfo.IDNumber,
+            Email: this.personalInfo.Email,
+            Phone: this.personalInfo.Phone,
+            Province: this.personalInfo.region[0],
+            City: this.personalInfo.region[1],
+            District: this.personalInfo.region[2]
         }).then(
             function(res){
                 var num=res.data.num;

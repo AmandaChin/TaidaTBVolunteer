@@ -88,6 +88,7 @@
   import axios from 'axios'
   import { formatDate } from '@/methods/methods.js'
   import port from '../../utils/manage'
+  import global from '../../utils/global_userID'
 
   const defaultForm = {
     status: 'draft',
@@ -205,7 +206,7 @@
     methods: {
       submit: function() {
         var params = new URLSearchParams()
-        params.append('UserID', '8')
+        params.append('UserID', global.global_userID)
         params.append('ServiceID', this.ServiceId)
         params.append('Duration', this.Duration)
         params.append('content', this.Content)

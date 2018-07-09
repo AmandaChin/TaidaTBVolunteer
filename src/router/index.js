@@ -73,7 +73,7 @@ export const asyncRouterMap = [
       meta: {title:'搜索',icon: 'search'}
     }]
   },
-  
+
   {
     path: '/program',
     name: 'program',
@@ -138,7 +138,7 @@ export const asyncRouterMap = [
       icon: 'medal'
     },
     children: [
-      { path: 'applying', component: _import('medals/Applying'), name: 'applying', meta: { title: '申请中' }},
+      { path: 'applying', component: _import('medals/Applying'), name: 'applying', meta: { title: '已转移' }},
       { path: 'got', component: _import('medals/Have Got'), name: 'got', meta: { title: '已获得' }}
     ]
   },
@@ -164,7 +164,7 @@ export const asyncRouterMap = [
       meta: {title:'通知',icon:'message'}
     }]
   },
- 
+
   {
     path: '/volunteers',
     component: volunteers,
@@ -342,7 +342,7 @@ export const asyncRouterMap = [
   //   ]
   // },
 
-  
+
 
   // {
   //   path: '/form',

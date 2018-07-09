@@ -103,6 +103,7 @@ import { parseTime } from '@/utils'
 import axios from 'axios'
 import { formatDate } from '@/methods/methods.js'
 import port from '../../utils/manage'
+import global from '../../utils/global_userID'
 
 const placeOptions = [
   { key: 1, display_name: '同区选择' },
@@ -139,17 +140,17 @@ export default {
       placeOptions,
 
       temp: {
-        ServiceID:undefined,
+        ServiceID: undefined,
         UserID: undefined,
-        Remark:undefined,
-        Province:undefined,
-        City:undefined,
-        District:undefined,
-        Phone:undefined,
-        Name:undefined,
-        Duration:undefined,
-        DemandStartTime:undefined,
-        Content:undefined
+        Remark: undefined,
+        Province: undefined,
+        City: undefined,
+        District: undefined,
+        Phone: undefined,
+        Name: undefined,
+        Duration: undefined,
+        DemandStartTime: undefined,
+        Content: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -221,7 +222,7 @@ export default {
 
               console.log("enter no duration")
               axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByConditionNoDuration',
-                { UserID : 7,
+                { UserID : global.global_userID,
                   Content: this.listQuery.content,
                   DemandStartTime: startTime,
                   type: this.listQuery.type
@@ -237,7 +238,7 @@ export default {
             }else{
               console.log("enter")
               axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByCondition',
-              { UserID : 7,
+              { UserID : global.global_userID,
                 Content: this.listQuery.content,
                 Duration: duration,
                 DemandStartTime: startTime,
@@ -263,7 +264,7 @@ export default {
      applyService(row) {
        var num;
        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicateInSearch',
-          { UserID : 7,
+          { UserID : global.global_userID,
             ServiceID: row.ServiceID,
           }).then(
             function(res){
