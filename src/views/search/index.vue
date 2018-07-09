@@ -1,9 +1,13 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="服务内容"
+      <!-- <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="服务内容"
       v-model="listQuery.content">
-      </el-input>
+      </el-input> -->
+      <el-select clearable style="width: 130px" class="filter-item" v-model="listQuery.content" placeholder="内容类型">
+            <el-option v-for="item in servecontent_info" :key="item.ID" :label="item.type" :value="item.ID" >
+            </el-option>
+      </el-select>
       <el-date-picker clearable style="width: 200px;"
         v-model="listQuery.startTime"
         class="filter-item"
@@ -35,7 +39,7 @@
       <el-table-column min-width="150px" label="服务内容">
         <template slot-scope="scope">
           <span class="link-type" @click="handleShowDialog(scope.row)">{{scope.row.Content}}</span>
-      </template>
+        </template>
       </el-table-column>
       <el-table-column width="110px" align="center" label="发布作者">
         <template slot-scope="scope">
@@ -124,6 +128,7 @@ export default {
   },
   data() {
     return {
+      servecontent_info: [],
       tableKey: 0,
       list: null,
       total: null,
@@ -172,9 +177,25 @@ export default {
       }
   },
   created() {
+    this.showServerType()
     this.getList()
   },
   methods: {
+    showServerType(){
+        //得到全部服务类型
+        axios.get('http://' + port.info.host + ':' + port.info.port + '/api/itemOperation',
+          {
+            dataType:'jsonp',
+            crossDoxmain:true
+          }).then(
+            (res)=>{
+              this.servecontent_info=res.data.list.rows;
+              console.log(res);
+            }
+          ).catch((err)=>{
+            console.log(err);
+          })
+      },
     //得到初始的全部需求
     getList() {
       this.listLoading = true
@@ -194,6 +215,7 @@ export default {
     },
     //处理search函数
     handleFilter() {
+      console.log("search"+this.listQuery.content)
       this.listQuery.page = 1
       // this.getList()
       this.listLoading=true

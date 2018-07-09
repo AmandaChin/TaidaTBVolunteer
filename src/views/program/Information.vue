@@ -21,17 +21,20 @@
       <div class="createPost-main-container">
         <el-row>
           <el-col :span="21">
-
             <div class="postInfo-container">
               <el-row>
-                <el-col :span="4">
+                <el-col :span="5">
                   <el-form-item label-width="90px" label="服务内容:" class="postInfo-container-item">
-                    <el-input placeholder="10字以内" style='min-width:100px;' v-model="postForm.service_content" required :maxlength="10">
-                    </el-input>
+                    <el-select clearable style="width: 130px" class="filter-item" v-model="postForm.service_content" placeholder="服务类型">
+                      <el-option v-for="item in servecontent_info" :key="item.ID" :label="item.type" :value="item.ID" >
+                      </el-option>
+                    </el-select>
+                    <!-- <el-input placeholder="10字以内" style='min-width:100px;' v-model="postForm.service_content" required :maxlength="10">
+                    </el-input> -->
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="8">
+                <el-col :span="7">
                   <el-form-item style="margin-bottom: 10px;" label-width="130px" label=" 服务时段:" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.start_time" type="datetime" value-format= "yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
                     </el-date-picker>
@@ -47,8 +50,8 @@
 
                 <el-col :span="4">
                   <el-form-item label-width="225px" label="服务时长:" class="postInfo-container-item">
-                    <el-select clearable style="width: 100px" class="filter-item" v-model="postForm.duration":placeholder="$t('小时')">
-                      <el-option v-for="item in importanceOptions_info" :key="item" :label="item" :value="item" >
+                    <el-select clearable style="width: 100px" class="filter-item" v-model="postForm.duration" placeholder="小时">
+                      <el-option v-for="item in time_info" :key="item" :label="item" :value="item" >
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -153,7 +156,8 @@
           { key: 'b-platform', name: 'b-platform' },
           { key: 'c-platform', name: 'c-platform' }
         ],
-        importanceOptions_info: [1, 1.5, 2, 2.5, 3, 3.5, 4],
+        servecontent_info: [],
+        time_info: [1, 1.5, 2, 2.5, 3, 3.5, 4],
         listQuery_info: {
           page: 1,
           limit: 20,
@@ -178,6 +182,7 @@
       }
     },
     created() {
+      this.showServerType()
       if (this.isEdit) {
         this.fetchData()
       } else {
@@ -186,6 +191,7 @@
     },
     methods: {
       submit: function() {
+        console.log("submit!!"+this.postForm.service_content);
         var params = new URLSearchParams()
         if (this.postForm.service_content.length == 0) {
           this.$message('服务内容禁止为空')
@@ -220,6 +226,21 @@
         }
       },
 
+      showServerType(){
+        //得到全部服务类型
+        axios.get('http://' + port.info.host + ':' + port.info.port + '/api/itemOperation',
+          {
+            dataType:'jsonp',
+            crossDoxmain:true
+          }).then(
+            (res)=>{
+              this.servecontent_info=res.data.list.rows;
+              console.log(res);
+            }
+          ).catch((err)=>{
+            console.log(err);
+          })
+      },
       fetchData() {
         fetchArticle().then(response => {
           this.postForm = response.data

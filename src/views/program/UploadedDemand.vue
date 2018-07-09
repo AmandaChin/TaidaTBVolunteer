@@ -42,7 +42,6 @@
       <template scope="scope">
         <span v-if="scope.row.Status == 0" style="color: darkgray" type="text">暂无响应</span>
         <el-button v-if="scope.row.Status!=0" style="font-weight: bold; color:dodgerblue" type="text" @click="volunteerInfo(scope.row.ServiceID)">响应者信息</el-button>
-//ensure the info of this dialog
         <el-dialog title="服务详情" :visible.sync="dialogFormVisible">
           <el-form :rules="rules" ref="dataForm" :model="volunteer" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
             <el-form-item label="志愿者用户名" prop="UserName">

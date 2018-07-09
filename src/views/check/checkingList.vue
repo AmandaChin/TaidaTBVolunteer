@@ -67,7 +67,7 @@ export default {
     getList() {
       var params = new URLSearchParams()
       params.append('UserID', '1')
-      params.append('status', '2')
+      params.append('status', '0')
       this.listLoading = true
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getCheckList', params).then(
         (res) => {

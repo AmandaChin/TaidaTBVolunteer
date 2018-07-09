@@ -11,11 +11,11 @@
         <screenfull class="screenfull right-menu-item"></screenfull>
       </el-tooltip>
 
-      <lang-select class="international right-menu-item"></lang-select>
+      <!-- <lang-select class="international right-menu-item"></lang-select> -->
 
-      <el-tooltip effect="dark" :content="$t('navbar.theme')" placement="bottom">
+      <!-- <el-tooltip effect="dark" :content="$t('navbar.theme')" placement="bottom">
         <theme-picker class="theme-switch right-menu-item"></theme-picker>
-      </el-tooltip>
+      </el-tooltip> -->
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
@@ -28,11 +28,11 @@
               {{$t('navbar.dashboard')}}
             </el-dropdown-item>
           </router-link>
-          <a target='_blank' href="https://github.com/PanJiaChen/vue-element-admin/">
+          <!-- <a target='_blank' href="https://github.com/PanJiaChen/vue-element-admin/">
             <el-dropdown-item>
               {{$t('navbar.github')}}
             </el-dropdown-item>
-          </a>
+          </a> -->
           <el-dropdown-item divided>
             <span @click="logout" style="display:block;">{{$t('navbar.logOut')}}</span>
           </el-dropdown-item>
