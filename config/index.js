@@ -23,6 +23,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
+    // 页面加载有误
      host: '0.0.0.0',
     // host: '0.0.0.0', // can be overwritten by process.env.HOST
     port: 9527, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined

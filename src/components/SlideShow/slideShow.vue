@@ -18,53 +18,53 @@
 
 <script>
 export default {
-    props:{
-        slides:{
-            type: Array,
-            default: []
-        },
-        inv:{
-            type:Number,
-            default:1500
-        }
+  props: {
+    slides: {
+      type: Array,
+      default: []
     },
-  data(){
-      return {
-          nowIndex:0
-      }
-  },
-  computed: {
-      preIndex(){
-          if(this.nowIndex===0){
-              return this.slides.length-1;
-          }else{
-              return this.nowIndex-1;
-          }
-      },
-      nextIndex(){
-          if(this.nowIndex===this.slides.length-1){
-              return 0;
-          }else{
-              return this.nowIndex+1;
-          }
-      }
-  },
-  methods: {
-    goto(index){
-        this.nowIndex=index;
-    },
-    runInv(){
-        this.invId=setInterval(()=>{
-            this.goto(this.nextIndex)
-        },this.inv)
-    },
-    clearInv(){
-        clearInterval(this.invId)
+    inv: {
+      type: Number,
+      default: 1500
     }
   },
-  mounted(){
-      console.log(this.slides);
-      this.runInv();
+  data() {
+    return {
+      nowIndex: 0
+    }
+  },
+  computed: {
+    preIndex() {
+      if (this.nowIndex === 0) {
+        return this.slides.length - 1
+      } else {
+        return this.nowIndex - 1
+      }
+    },
+    nextIndex() {
+      if (this.nowIndex === this.slides.length - 1) {
+        return 0
+      } else {
+        return this.nowIndex + 1
+      }
+    }
+  },
+  methods: {
+    goto(index) {
+      this.nowIndex = index
+    },
+    runInv() {
+      this.invId = setInterval(() => {
+        this.goto(this.nextIndex)
+      }, this.inv)
+    },
+    clearInv() {
+      clearInterval(this.invId)
+    }
+  },
+  mounted() {
+    console.log(this.slides)
+    this.runInv()
   }
 }
 </script>

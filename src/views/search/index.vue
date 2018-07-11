@@ -12,16 +12,10 @@
                       v-model="listQuery.startTime"
                       :picker-options="pickerBeginDateAfter"
                       class="filter-item"
+
                       type="date" value-format="yyyy-MM-dd HH:mm:ss"
                       placeholder="选择服务开始日期"></el-date-picker>
-      <el-time-select clearable style="  width: 120px"
-                      placeholder="起始时间"
-                      v-model="startTime"
-                      :picker-options="{
-                     start: '05:30',
-                      step: '00:30',
-                      end: '23:30'
-                   }"></el-time-select>
+
       <el-select clearable style="width: 120px" class="filter-item"
       v-model="listQuery.duration" placeholder="服务时长">
         <el-option v-for="item in durationOptions" :key="item" :label="item" :value="item">
@@ -187,138 +181,140 @@ export default {
       return calendarTypeKeyValue[type]
     },
     formatDate(time) {
-        var date = new Date(time)
-        return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
-      }
+      var date = new Date(time)
+      return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+    }
   },
   created() {
     this.showServerType()
     this.getList()
   },
   methods: {
-    showServerType(){
-        //得到全部服务类型
-        axios.get('http://' + port.info.host + ':' + port.info.port + '/api/itemOperation',
-          {
-            dataType:'jsonp',
-            crossDoxmain:true
-          }).then(
-            (res)=>{
-              this.servecontent_info=res.data.list.rows;
-              console.log(res);
-            }
-          ).catch((err)=>{
-            console.log(err);
-          })
-      },
-    //得到初始的全部需求
+    showServerType() {
+      // 得到全部服务类型
+      axios.get('http://' + port.info.host + ':' + port.info.port + '/api/itemOperation',
+        {
+          dataType: 'jsonp',
+          crossDoxmain: true
+        }).then(
+        (res) => {
+          this.servecontent_info = res.data.list.rows
+          console.log(res)
+        }
+      ).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 得到初始的全部需求
     getList() {
       this.listLoading = true
-      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand', 
-      {
-        UserID: global.global_userID
-      }).then(
-          (res)=>{
-            this.list=res.data.list.rows;
-            console.log(res);
-            this.listLoading = false
-          }
-        ).catch((err)=>{
-          console.log(err);
-        })
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',
+        {
+          UserID: global.global_userID
+        }).then(
+        (res) => {
+          this.list = res.data.list.rows
+          console.log(res)
+          this.listLoading = false
+        }
+      ).catch((err) => {
+        console.log(err)
+      })
     },
-    //处理search函数
+    //时间戳改为正常时间格式
+    fixtime(time) {
+      var date = new Date(time)
+      return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+    },
+    // 处理search函数
     handleFilter() {
-      console.log("search"+this.listQuery.content)
+      console.log('search' + this.listQuery.content)
       this.listQuery.page = 1
       // this.getList()
-      this.listLoading=true
-            var duration
-            var startTime
+      this.listLoading = true
+      var duration
+      var startTime
 
-            if (this.listQuery.duration==undefined)
-            {
-              console.log("undefined duration")
-              duration=0
-            }else{
-              console.log(" duration")
-              duration=this.listQuery.duration
-            }
+      if (this.listQuery.duration == undefined) {
+        console.log('undefined duration')
+        duration = 0
+      } else {
+        console.log(' duration')
+        duration = this.listQuery.duration
+      }
 
-            if (this.listQuery.startTime==undefined)
-            {
-              console.log("undefined startTime")
-              startTime="1980-03-15 15:35:04"
-            }else{
-              console.log(" startTime")
-              startTime=this.listQuery.startTime
-            }
+      if (this.listQuery.startTime == undefined) {
+        var now = Date.now()
+        startTime = this.fixtime(now)
+        console.log('undefined startTimeeeeee' + startTime)
+      } else {
+        console.log(' startTime')
+        startTime = this.listQuery.startTime
+      }
 
-            if(duration==0){
+      if (duration == 0) {
+        console.log('enter no duration')
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByConditionNoDuration',
+          { UserID: global.global_userID,
+            Content: this.listQuery.content,
+            DemandStartTime: startTime,
+            type: this.listQuery.type
+          }).then(
+          (res) => {
+            this.list = res.data.list.rows
+            console.log(res)
+            this.listLoading = false
+          }
+        ).catch((err) => {
+          console.log(err)
+        })
+      } else {
+        console.log('enter')
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByCondition',
+          { UserID: global.global_userID,
+            Content: this.listQuery.content,
+            Duration: duration,
+            DemandStartTime: startTime,
+            type: this.listQuery.type
+          }).then(
+          (res) => {
+            this.list = res.data.list.rows
+            console.log(res)
+            this.listLoading = false
+          }
+        ).catch((err) => {
+          console.log(err)
+        })
+      }
 
-              console.log("enter no duration")
-              axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByConditionNoDuration',
-                { UserID : global.global_userID,
-                  Content: this.listQuery.content,
-                  DemandStartTime: startTime,
-                  type: this.listQuery.type
-                }).then(
-                  (res)=>{
-                  this.list=res.data.list.rows;
-                  console.log(res);
-                  this.listLoading = false
-                }
-                ).catch((err)=>{
-                console.log(err);
-              })
-            }else{
-              console.log("enter")
-              axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByCondition',
-              { UserID : global.global_userID,
-                Content: this.listQuery.content,
-                Duration: duration,
-                DemandStartTime: startTime,
-                  type: this.listQuery.type
-              }).then(
-                (res)=>{
-                this.list=res.data.list.rows;
-                console.log(res);
-                this.listLoading = false
-              }
-              ).catch((err)=>{
-              console.log(err);
-              })
-            }
+      console.log(duration)
+      console.log(startTime)
 
-          console.log(duration)
-          console.log(startTime)
-
-          // this.listLoading = false
+      // this.listLoading = false
     },
 
-    //志愿者申请
-     applyService(row) {
-       var num;
-       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicateInSearch',
-          { UserID : global.global_userID,
-            ServiceID: row.ServiceID,
-          }).then(
-            function(res){
-                num=res.data.num;
-                console.log('申请返回值：'+num)
-            }
-          )
+    // 志愿者申请
+    applyService(row) {
+      var num
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicateInSearch',
+        { UserID: global.global_userID,
+          ServiceID: row.ServiceID
+        }).then(
+        function(res) {
+          num = res.data.num
+          console.log('申请返回值：' + num)
+        }
+      )
       this.dialogFormVisible = false
       this.$notify({
-              title: '成功',
-              message: '申请成功',
-              type: 'success',
-              duration: 2000
-            })
-
+        title: '成功',
+        message: '申请成功',
+        type: 'success',
+        duration: 2000
+      })
     },
 
-    handleShowDialog(row){
+    handleShowDialog(row) {
       this.temp = Object.assign({}, row) // copy obj
       this.dialogFormVisible = true
     },
@@ -332,9 +328,9 @@ export default {
       this.getList()
     },
 
-   TypeChangeHandler(value){
-    this.listQuery.type=value
-   },
+    TypeChangeHandler(value) {
+      this.listQuery.type = value
+    },
 
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {

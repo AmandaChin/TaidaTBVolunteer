@@ -41,7 +41,7 @@
 
 <script>
 import Vue from 'vue'
-import {Message} from 'element-ui'
+import { Message } from 'element-ui'
 import SocialSign from './socialsignin'
 import axios from 'axios'
 import port from '../../utils/manage'
@@ -98,7 +98,7 @@ export default {
       var params_ID = new URLSearchParams()
       params_ID.append('Account', this.loginForm.username)
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getUserIDbyAccount', params_ID).then(
-      //axios.post('http://localhost:3000/api/getUserIDbyAccount', params_ID).then(
+      // axios.post('http://localhost:3000/api/getUserIDbyAccount', params_ID).then(
         (res) => {
           global.global_userID = res.data.UserID
           console.log(res)
@@ -114,7 +114,7 @@ export default {
       const message = this.$message
 
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/allUserLogin', params)
-      //axios.post('http://localhost:3000/api/allUserLogin', params)
+      // axios.post('http://localhost:3000/api/allUserLogin', params)
         .then(function(res) {
           num = res.data.num
           console.log('登录返回值：' + num)
@@ -123,34 +123,31 @@ export default {
             if (valid) {
               theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
                 if (num === -1) {
-
-                  console.log('用户名或密码错误');
-                  Message('用户名或密码错误');
-
+                  console.log('用户名或密码错误')
+                  Message('用户名或密码错误')
                 } else {
                   theRouter.push({ path: '/homepage' })
                   // theRouter.push({ name: 'register' })
                 }
               }).catch(() => {
-                //this.$error('提交格式错误');
-                Message('提交格式错误');  
-
+                // this.$error('提交格式错误');
+                Message('提交格式错误')
               })
             } else {
               console.log('error submit!!')
-              this.$error('提交格式错误');
+              this.$error('提交格式错误')
               return false
             }
           })
         }).catch(function(err) {
-        console.log('login error'+err);
-        Message('网络异常');
+          console.log('login error' + err)
+          Message('网络异常')
         })
     },
 
-    register: function(){
-        // this.loginForm.username='admin';
-        // this.loginForm.password='123456';
+    register: function() {
+      // this.loginForm.username='admin';
+      // this.loginForm.password='123456';
 
       const theRefs = this.$refs
       const theStore = this.$store
@@ -158,19 +155,18 @@ export default {
       const theLoginForm = this.loginForm
 
       theRefs.loginForm.validate(valid => {
-            if (valid) {
-              theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
-                theRouter.push({ name: 'register' })
-              }).catch(() => {
-                this.$error('提交格式错误');
-              })
-            } else {
-              console.log('error submit!!')
-               this.$error('提交格式错误');
-              return false
-            }
+        if (valid) {
+          theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
+            theRouter.push({ name: 'register' })
+          }).catch(() => {
+            this.$error('提交格式错误')
           })
-
+        } else {
+          console.log('error submit!!')
+          this.$error('提交格式错误')
+          return false
+        }
+      })
     },
     afterQRScan() {
       // const hash = window.location.hash.slice(1)
