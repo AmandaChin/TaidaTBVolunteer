@@ -9,10 +9,19 @@
             </el-option>
       </el-select>
       <el-date-picker clearable style="width: 200px;"
-        v-model="listQuery.startTime"
-        class="filter-item"
-        type="datetime"  value-format= "yyyy-MM-dd HH:mm:ss"
-        placeholder="选择服务开始时间"></el-date-picker>
+                      v-model="listQuery.startTime"
+                      :picker-options="pickerBeginDateAfter"
+                      class="filter-item"
+                      type="date" value-format="yyyy-MM-dd HH:mm:ss"
+                      placeholder="选择服务开始日期"></el-date-picker>
+      <el-time-select clearable style="  width: 120px"
+                      placeholder="起始时间"
+                      v-model="startTime"
+                      :picker-options="{
+                     start: '05:30',
+                      step: '00:30',
+                      end: '23:30'
+                   }"></el-time-select>
       <el-select clearable style="width: 120px" class="filter-item"
       v-model="listQuery.duration" placeholder="服务时长">
         <el-option v-for="item in durationOptions" :key="item" :label="item" :value="item">
@@ -128,6 +137,12 @@ export default {
   },
   data() {
     return {
+      pickerBeginDateAfter: {
+        disabledDate(time) {
+          var timeSpace = time.getTime() < (Date.now() - 24 * 60 * 60 * 1000)
+          return timeSpace
+        }
+      },
       servecontent_info: [],
       tableKey: 0,
       list: null,
