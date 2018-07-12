@@ -214,11 +214,10 @@ export default {
     //得到初始的全部需求
     getList() {
       this.listLoading = true
-      axios.get('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',
-        {
-          dataType:'jsonp',
-          crossDomain:true
-        }).then(
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand', 
+      {
+        UserID: global.global_userID
+      }).then(
           (res)=>{
             this.list=res.data.list.rows;
             console.log(res);
