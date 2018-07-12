@@ -113,7 +113,7 @@ export default {
           Gender: '',
           Phone: '',
           Email:'',
-          IDNumber:'123421196708138944',
+          IDNumber:'',
           region: []
 
       }
