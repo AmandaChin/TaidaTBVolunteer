@@ -13,25 +13,23 @@
     <el-table-column
       label="交易数目">
       <template scope="scope">
-        <span style="font-size: 18px;margin-left:10px">{{"*" + scope.row.medals}}</span>
+        <span style="font-size: 18px;margin-left:10px">{{"*" + scope.row.medalnum}}</span>
       </template>
     </el-table-column>
-    <el-table-column
-      label="交易用户"
-      prop="users">
-    </el-table-column>
+    
     <el-table-column
       label="交易时间"
-      prop="applyingtime">
+      prop="applyingtime"
+      >
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.applyingtime}}</span>
+        <span style="color: darkgray">{{scope.row.getmedaltime|formatDate}}</span>
       </template>
     </el-table-column>
     <el-table-column
       label="更  多">
       <template scope="scope">
         <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="dialogTableVisible = true">交易链</el-button>
-        <el-dialog title="交易历史" :visible.sync="dialogTableVisible">
+        <el-dialog title="交易链详情" :visible.sync="dialogTableVisible">
           <el-table :data="gridData">
             <el-table-column property="date" label="交易日期" width="150"></el-table-column>
             <el-table-column property="block" label="交易区块" width="200"></el-table-column>
@@ -50,14 +48,23 @@
   }
 
   .el-table .success-row {
-    background: #f0f9eb;
+    background:#f0f9eb;
   }
 </style>
 
 <script>
+  import axios from 'axios'
   import applying_image from '@/assets/medals_images/applying.gif'
   import clip from '@/utils/clipboard'
+  import port from '../../utils/manage'
+  import { formatDate } from '@/methods/methods.js'
   export default {
+    filters: {
+      formatDate(time) {
+        var date = new Date(time)
+        return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+      }
+    },
     data() {
       return {
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
@@ -68,48 +75,35 @@
           block: '王小虎',
           transaction: '李四',
           to: 'sadfd'
-        }, {
-          date: '2016-05-02',
-          block: '王小虎',
-          transaction: '李四',
-          to: 'sadfd'
-        }, {
-          date: '2016-05-02',
-          block: '王小虎',
-          transaction: '李四',
-          to: 'sadfd'
         }],
-        applyingmedals: [
-          {
-            medals: '5',
-            users: '张三',
-            applyingtime: '2018-01-05',
-            gettingtime: '2018-01-10'
-          },
-          {
-            medals: '10',
-            users: '张三',
-            applyingtime: '2018-01-05',
-            gettingtime: '2018-01-10'
-          }
-        ]
+        applyingmedals: []
+        // [
+        //   // {
+        //   //   medals: '5',
+        //   //   applyingtime: '2018-01-05',
+        //   //   gettingtime: '2018-01-10'
+        //   // }
+        // ]
       }
     },
-    mounted: function(UserId) {
-      // GET /someUrl
-      // var params = new URLSearchParams()
-      // params.append('UserID', '7')
-      // params.append('Hash', '0Xgkonnniini')
-      // //add hash as an public params in the register part
-      // axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicating', params).then(
-      //   (res) => {
-      //     this.applyingmedals = res.data.list
-      //     console.log(res)
-      //     //back a list of medal info
-      //   }
-      // ).catch((err) => {
-      //   console.log(err)
-      // })
+    // mounted: function(UserId) {
+    //   // GET /someUrl
+    //   // var params = new URLSearchParams()
+    //   // params.append('UserID', '7')
+    //   // params.append('Hash', '0Xgkonnniini')
+    //   // //add hash as an public params in the register part
+    //   // axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicating', params).then(
+    //   //   (res) => {
+    //   //     this.applyingmedals = res.data.list
+    //   //     console.log(res)
+    //   //     //back a list of medal info
+    //   //   }
+    //   // ).catch((err) => {
+    //   //   console.log(err)
+    //   // })
+    // },
+    created() {
+    this.getList()
     },
     methods: {
       tableRowClassName({ row, rowIndex}) {
@@ -120,6 +114,21 @@
         }
         return ''
       },
+      getList() {
+      var params = new URLSearchParams()
+      //写死 后测试引用全局变量！！！！
+      params.append('UserID', '1')
+      this.listLoading = true
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getGiveInfo', params).then(
+              
+        (res) => {
+          this.applyingmedals = res.data.list.rows
+          console.log(res.data.list.rows)
+          console.log("testtesttest!!!")
+          this.listLoading = false
+        }
+      )
+    },
       getChainDetail(text,event){
         clip(text, event)
       },
