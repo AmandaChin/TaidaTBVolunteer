@@ -13,31 +13,40 @@
     <el-table-column
       label="交易数目">
       <template scope="scope">
-        <span style="font-size: 18px;margin-left:10px">{{"*" + scope.row.medals}}</span>
+        <span style="font-size: 18px;margin-left:10px">{{"*" + scope.row.medalnum}}</span>
       </template>
     </el-table-column>
-    <el-table-column
-      label="交易用户"
-      prop="users">
-    </el-table-column>
+    
     <el-table-column
       label="交易时间"
       prop="applyingtime">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.applyingtime}}</span>
+        <span style="color: darkgray">{{scope.row.getmedaltime|formatDate}}</span>
       </template>
     </el-table-column>
     <el-table-column
       label="更  多">
       <template scope="scope">
-        <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="dialogTableVisible = true">交易链</el-button>
-        <el-dialog title="交易历史" :visible.sync="dialogTableVisible">
-          <el-table :data="gridData">
-            <el-table-column property="date" label="交易日期" width="150"></el-table-column>
-            <el-table-column property="block" label="交易区块" width="200"></el-table-column>
-            <el-table-column property="transaction" label="交易哈希"></el-table-column>
-            <el-table-column property="to" label="勋章去向"></el-table-column>
-          </el-table>
+        <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="getChainDetail(scope.row.TransferHASH)">交易链</el-button>
+        <el-dialog
+        title="交易链详情"
+        :visible.sync="dialogVisible"
+        v-loading="listLoading" element-loading-text="加载中" 
+        width="60%">
+        <el-form :model="temp">
+          <el-form-item label="交易区块编号:">
+            <span>{{ temp.blockNumber }}</span>
+          </el-form-item>
+          <el-form-item label="交易区块哈希:">
+            <span>{{ temp.blockHash }}</span>
+          </el-form-item>
+          <el-form-item label="交易哈希:  ">
+            <span>{{ temp.transactionHash }}</span>
+          </el-form-item>
+          <el-form-item label="勋章去向:  ">
+            <span>{{ temp.to }}</span>
+          </el-form-item>
+          </el-form>
         </el-dialog>
       </template>
     </el-table-column>
@@ -50,66 +59,42 @@
   }
 
   .el-table .success-row {
-    background: #f0f9eb;
+    background:#f0f9eb;
   }
 </style>
 
 <script>
+  import axios from 'axios'
   import applying_image from '@/assets/medals_images/applying.gif'
   import clip from '@/utils/clipboard'
+  import port from '../../utils/manage'
+  import { formatDate } from '@/methods/methods.js'
+  import global from '../../utils/global_userID'
+
   export default {
+    filters: {
+      formatDate(time) {
+        var date = new Date(time)
+        return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+      }
+    },
     data() {
       return {
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
         Applying_image: applying_image,
-        dialogTableVisible: false,
-        gridData: [{
-          date: '2016-05-02',
-          block: '王小虎',
-          transaction: '李四',
-          to: 'sadfd'
-        }, {
-          date: '2016-05-02',
-          block: '王小虎',
-          transaction: '李四',
-          to: 'sadfd'
-        }, {
-          date: '2016-05-02',
-          block: '王小虎',
-          transaction: '李四',
-          to: 'sadfd'
-        }],
-        applyingmedals: [
-          {
-            medals: '5',
-            users: '张三',
-            applyingtime: '2018-01-05',
-            gettingtime: '2018-01-10'
-          },
-          {
-            medals: '10',
-            users: '张三',
-            applyingtime: '2018-01-05',
-            gettingtime: '2018-01-10'
-          }
-        ]
+        dialogVisible: false,
+         temp: {
+        blockNumber:"加载中",
+        blockHash: "加载中",
+        transactionHash:"加载中",
+        to:"加载中",
+         },
+       
+        applyingmedals: []
       }
     },
-    mounted: function(UserId) {
-      // GET /someUrl
-      // var params = new URLSearchParams()
-      // params.append('UserID', '7')
-      // params.append('Hash', '0Xgkonnniini')
-      // //add hash as an public params in the register part
-      // axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicating', params).then(
-      //   (res) => {
-      //     this.applyingmedals = res.data.list
-      //     console.log(res)
-      //     //back a list of medal info
-      //   }
-      // ).catch((err) => {
-      //   console.log(err)
-      // })
+    created() {
+    this.getList()
     },
     methods: {
       tableRowClassName({ row, rowIndex}) {
@@ -120,15 +105,44 @@
         }
         return ''
       },
-      getChainDetail(text,event){
-        clip(text, event)
+      getList() {
+      var params = new URLSearchParams()
+      params.append('UserID', global.global_userID)
+      this.listLoading = true
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getGiveInfo', params).then(
+              
+        (res) => {
+          this.applyingmedals = res.data.list.rows
+          this.listLoading = false
+        }
+      )
+    },
+  
+      getChainDetail(transactionHASH){
+
+          this.dialogVisible = true
+          var params = new URLSearchParams()
+          params.append('UserId', global.global_userID)
+          params.append('transactionHash',transactionHASH)
+          this.listLoading = true
+           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getTransactionInfo', params).then(
+                
+          (res) => {
+
+          console.log(res.data.list)
+
+          this.temp = res.data.list
+          this.listLoading = false
+        }
+      )
+
+
       },
       showAlert() {
         this.$alert('这是一段内容', '交易记录', {
-          confirmButtonText: '确定'
+        confirmButtonText: '确定'
         })
       }
     }
   }
 </script>
-
