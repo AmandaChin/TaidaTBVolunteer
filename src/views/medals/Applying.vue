@@ -72,7 +72,10 @@
   import clip from '@/utils/clipboard'
   import port from '../../utils/manage'
   import { formatDate } from '@/methods/methods.js'
+
   import global from '../../utils/global_userID'
+
+
   export default {
     filters: {
       formatDate(time) {
@@ -84,6 +87,7 @@
       return {
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
         Applying_image: applying_image,
+
         dialogVisible: false,
          temp: {
         blockNumber:"加载中",
@@ -93,6 +97,10 @@
          },
        
         applyingmedals: []
+      }
+    },
+
+
       }
     },
 
@@ -110,7 +118,9 @@
       },
       getList() {
       var params = new URLSearchParams()
+
       params.append('UserID', global.global_userID)
+
 
       this.listLoading = true
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getGiveInfo', params).then(
@@ -121,8 +131,6 @@
         }
       )
     },
-
-  
       getChainDetail(transactionHASH){
 
           this.dialogVisible = true
@@ -140,6 +148,9 @@
           this.listLoading = false
         }
       )
+
+      getChainDetail(text,event){
+       clip(text, event)
       },
       showAlert() {
         this.$alert('这是一段内容', '交易记录', {

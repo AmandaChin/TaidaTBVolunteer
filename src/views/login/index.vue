@@ -123,8 +123,10 @@ export default {
             if (valid) {
               theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
                 if (num === -1) {
+
                   console.log('用户名或密码错误');
                   Message('用户名或密码错误');
+
                 } else {
                   theRouter.push({ path: '/homepage' })
                   // theRouter.push({ name: 'register' })
@@ -132,6 +134,7 @@ export default {
               }).catch(() => {
                 //this.$error('提交格式错误');
                 Message('提交格式错误');  
+
               })
             } else {
               console.log('error submit!!')
