@@ -251,12 +251,12 @@
           console.log('time:'+this.postForm.end_time+'oldtime:'+this.postForm.start_time)
           params.append('UserId', global.global_userID)
           params.append('Content', this.postForm.service_content)
-          params.append('DemandStartTime', this.postForm.start_time)
-          params.append('DemandEndTime', this.postForm.end_time)
+          //params.append('DemandStartTime', this.postForm.start_time)
+          //params.append('DemandEndTime', this.postForm.end_time)
           params.append('Duration', this.postForm.duration)
           params.append('Remark', this.postForm.content)
           //'http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement'
-          axios.post('http://localhost:3000/api/postNewRequirement', params).then(
+          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement', params).then(
             (res) => {
               console.log(res)
             }
