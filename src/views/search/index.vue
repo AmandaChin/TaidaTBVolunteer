@@ -214,16 +214,10 @@ export default {
     //得到初始的全部需求
     getList() {
       this.listLoading = true
-<<<<<<< HEAD
-      var params = new URLSearchParams()
-      params.append('UserID', global.global_userID)
-      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',params).then(
-=======
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand', 
       {
         UserID: global.global_userID
       }).then(
->>>>>>> 882f5232fcd264c3dfc872174337931c85e92b2f
           (res)=>{
             this.list=res.data.list.rows;
             console.log(res);

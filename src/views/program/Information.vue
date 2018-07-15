@@ -34,21 +34,17 @@
                   </el-form-item>
                 </el-col>
 
-<<<<<<< HEAD
+
                 <el-col :span="5">
                   <el-form-item style="margin-bottom: 10px;" label-width="130px" label=" 服务日期:" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.start_time" type="date"
                                     :picker-options="pickerBeginDateAfter" placeholder="选择开始的时间">
-=======
-                <el-col :span="8">
-                  <el-form-item style="margin-bottom: 10px;" label-width="130px" label=" 服务时段:" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.start_time" type="datetime" value-format= "yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
->>>>>>> 修改登录bug之未登录就跳转首页
+
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
 
-<<<<<<< HEAD
+
                 <el-col :span="4">
                   <el-form-item style="margin-bottom: 10px;" label-width="130px" label=" 服务时段:" class="postInfo-container-item">
                     <el-time-select
@@ -59,6 +55,7 @@
                       step: '00:30',
                       end: '23:30'
                    }"></el-time-select>
+
                   </el-form-item>
                 </el-col>
                 <!--<el-col :span="5">-->
@@ -67,14 +64,13 @@
                     <!--</el-date-picker>-->
                   <!--</el-form-item>-->
                 <!--</el-col>-->
-=======
+
                 <!-- <el-col :span="5">
                   <el-form-item style="margin-bottom: 10px;" label-width="100px" label="—" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.end_time" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
                     </el-date-picker>
                   </el-form-item>
                 </el-col> -->
->>>>>>> 修改登录bug之未登录就跳转首页
 
                 <el-col :span="4">
                   <el-form-item label-width="225px" label="服务时长:" class="postInfo-container-item">

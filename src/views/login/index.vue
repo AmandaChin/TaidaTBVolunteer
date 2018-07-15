@@ -40,14 +40,15 @@
 </template>
 
 <script>
-import LangSelect from '@/components/LangSelect'
+import Vue from 'vue'
+import {Message} from 'element-ui'
 import SocialSign from './socialsignin'
 import axios from 'axios'
 import port from '../../utils/manage'
 import global from '../../utils/global_userID'
 
 export default {
-  components: { LangSelect, SocialSign },
+  components: { SocialSign },
   name: 'login',
   data() {
     const validateUsername = (rule, value, callback) => {
@@ -110,6 +111,7 @@ export default {
       const theStore = this.$store
       const theRouter = this.$router
       const theLoginForm = this.loginForm
+      const message = this.$message
 
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/allUserLogin', params)
       //axios.post('http://localhost:3000/api/allUserLogin', params)
@@ -121,17 +123,18 @@ export default {
             if (valid) {
               theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
                 if (num === -1) {
-                  //this.$error('用户名或密码错误');
-                  //callback(new Error('用户名或密码错误'));
+
                   console.log('用户名或密码错误');
-                  this.$message('用户名或密码错误'); 
+                  Message('用户名或密码错误');
+
                 } else {
                   theRouter.push({ path: '/homepage' })
                   // theRouter.push({ name: 'register' })
                 }
               }).catch(() => {
                 //this.$error('提交格式错误');
-                console.log('提交格式错误');  
+                Message('提交格式错误');  
+
               })
             } else {
               console.log('error submit!!')
@@ -141,7 +144,7 @@ export default {
           })
         }).catch(function(err) {
         console.log('login error'+err);
-        this.$error('网络异常');
+        Message('网络异常');
         })
     },
 
