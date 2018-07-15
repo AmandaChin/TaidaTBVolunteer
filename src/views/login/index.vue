@@ -2,7 +2,7 @@
   <div class="login-container">
     <el-form class="login-form" autoComplete="on" :model="loginForm" ref="loginForm" label-position="left" >
       <div class="title-container">
-        <h3 class="title">登录</h3>
+        <h3 class="title">欢迎来到时间银行</h3>
         <!--<lang-select class="set-language"></lang-select>-->
       </div>
       <el-form-item prop="username">
@@ -24,7 +24,7 @@
 
       <el-button type="primary" style="width:100%;margin-bottom:20px;" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
 
-      <el-button type="primary" style="width:96%;margin-bottom:30px;" @click="register">还没账号？快去注册</el-button>
+      <el-button type="primary" style="width:100%;margin-bottom:30px;margin-left:0" @click="register">还没账号？快去注册</el-button>
 
     </el-form>
 
@@ -97,6 +97,7 @@ export default {
       var params_ID = new URLSearchParams()
       params_ID.append('Account', this.loginForm.username)
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getUserIDbyAccount', params_ID).then(
+      //axios.post('http://localhost:3000/api/getUserIDbyAccount', params_ID).then(
         (res) => {
           global.global_userID = res.data.UserID
           console.log(res)
@@ -111,6 +112,7 @@ export default {
       const theLoginForm = this.loginForm
 
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/allUserLogin', params)
+      //axios.post('http://localhost:3000/api/allUserLogin', params)
         .then(function(res) {
           num = res.data.num
           console.log('登录返回值：' + num)
@@ -119,17 +121,21 @@ export default {
             if (valid) {
               theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
                 if (num === -1) {
-                  this.$error('用户名或密码错误');
+                  //this.$error('用户名或密码错误');
+                  //callback(new Error('用户名或密码错误'));
+                  console.log('用户名或密码错误');
+                  this.$message('用户名或密码错误'); 
                 } else {
-                  theRouter.push({ path: '/' })
+                  theRouter.push({ path: '/homepage' })
                   // theRouter.push({ name: 'register' })
                 }
               }).catch(() => {
-                this.$error('提交格式错误');
+                //this.$error('提交格式错误');
+                console.log('提交格式错误');  
               })
             } else {
               console.log('error submit!!')
-               this.$error('提交格式错误');
+              this.$error('提交格式错误');
               return false
             }
           })
@@ -140,8 +146,8 @@ export default {
     },
 
     register: function(){
-        this.loginForm.username='admin';
-        this.loginForm.password='123456';
+        // this.loginForm.username='admin';
+        // this.loginForm.password='123456';
 
       const theRefs = this.$refs
       const theStore = this.$store

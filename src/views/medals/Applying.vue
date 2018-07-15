@@ -19,7 +19,8 @@
     
     <el-table-column
       label="交易时间"
-      prop="applyingtime">
+      prop="applyingtime"
+      >
       <template scope="scope">
         <span style="color: darkgray">{{scope.row.getmedaltime|formatDate}}</span>
       </template>
@@ -27,6 +28,7 @@
     <el-table-column
       label="更  多">
       <template scope="scope">
+<<<<<<< HEAD
         <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="getChainDetail(scope.row.TransferHASH)">交易链</el-button>
         <el-dialog
         title="交易链详情"
@@ -47,6 +49,16 @@
             <span>{{ temp.to }}</span>
           </el-form-item>
           </el-form>
+=======
+        <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="dialogTableVisible = true">交易链</el-button>
+        <el-dialog title="交易链详情" :visible.sync="dialogTableVisible">
+          <el-table :data="gridData">
+            <el-table-column property="date" label="交易日期" width="150"></el-table-column>
+            <el-table-column property="block" label="交易区块" width="200"></el-table-column>
+            <el-table-column property="transaction" label="交易哈希"></el-table-column>
+            <el-table-column property="to" label="勋章去向"></el-table-column>
+          </el-table>
+>>>>>>> 882f5232fcd264c3dfc872174337931c85e92b2f
         </el-dialog>
       </template>
     </el-table-column>
@@ -69,8 +81,11 @@
   import clip from '@/utils/clipboard'
   import port from '../../utils/manage'
   import { formatDate } from '@/methods/methods.js'
+<<<<<<< HEAD
   import global from '../../utils/global_userID'
 
+=======
+>>>>>>> 882f5232fcd264c3dfc872174337931c85e92b2f
   export default {
     filters: {
       formatDate(time) {
@@ -82,6 +97,7 @@
       return {
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
         Applying_image: applying_image,
+<<<<<<< HEAD
         dialogVisible: false,
          temp: {
         blockNumber:"加载中",
@@ -93,6 +109,41 @@
         applyingmedals: []
       }
     },
+=======
+        dialogTableVisible: false,
+        gridData: [{
+          date: '2016-05-02',
+          block: '王小虎',
+          transaction: '李四',
+          to: 'sadfd'
+        }],
+        applyingmedals: []
+        // [
+        //   // {
+        //   //   medals: '5',
+        //   //   applyingtime: '2018-01-05',
+        //   //   gettingtime: '2018-01-10'
+        //   // }
+        // ]
+      }
+    },
+    // mounted: function(UserId) {
+    //   // GET /someUrl
+    //   // var params = new URLSearchParams()
+    //   // params.append('UserID', '7')
+    //   // params.append('Hash', '0Xgkonnniini')
+    //   // //add hash as an public params in the register part
+    //   // axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicating', params).then(
+    //   //   (res) => {
+    //   //     this.applyingmedals = res.data.list
+    //   //     console.log(res)
+    //   //     //back a list of medal info
+    //   //   }
+    //   // ).catch((err) => {
+    //   //   console.log(err)
+    //   // })
+    // },
+>>>>>>> 882f5232fcd264c3dfc872174337931c85e92b2f
     created() {
     this.getList()
     },
@@ -107,16 +158,27 @@
       },
       getList() {
       var params = new URLSearchParams()
+<<<<<<< HEAD
       params.append('UserID', global.global_userID)
+=======
+      //写死 后测试引用全局变量！！！！
+      params.append('UserID', '1')
+>>>>>>> 882f5232fcd264c3dfc872174337931c85e92b2f
       this.listLoading = true
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getGiveInfo', params).then(
               
         (res) => {
           this.applyingmedals = res.data.list.rows
+<<<<<<< HEAD
+=======
+          console.log(res.data.list.rows)
+          console.log("testtesttest!!!")
+>>>>>>> 882f5232fcd264c3dfc872174337931c85e92b2f
           this.listLoading = false
         }
       )
     },
+<<<<<<< HEAD
   
       getChainDetail(transactionHASH){
 
@@ -137,6 +199,10 @@
       )
 
 
+=======
+      getChainDetail(text,event){
+        clip(text, event)
+>>>>>>> 882f5232fcd264c3dfc872174337931c85e92b2f
       },
       showAlert() {
         this.$alert('这是一段内容', '交易记录', {

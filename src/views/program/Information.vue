@@ -23,7 +23,7 @@
           <el-col :span="21">
             <div class="postInfo-container">
               <el-row>
-                <el-col :span="5">
+                <el-col :span="6">
                   <el-form-item label-width="90px" label="服务内容:" class="postInfo-container-item">
                     <el-select clearable style="width: 130px" class="filter-item" v-model="postForm.service_content" placeholder="服务类型">
                       <el-option v-for="item in servecontent_info" :key="item.ID" :label="item.type" :value="item.ID" >
@@ -34,14 +34,21 @@
                   </el-form-item>
                 </el-col>
 
+<<<<<<< HEAD
                 <el-col :span="5">
                   <el-form-item style="margin-bottom: 10px;" label-width="130px" label=" 服务日期:" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.start_time" type="date"
                                     :picker-options="pickerBeginDateAfter" placeholder="选择开始的时间">
+=======
+                <el-col :span="8">
+                  <el-form-item style="margin-bottom: 10px;" label-width="130px" label=" 服务时段:" class="postInfo-container-item">
+                    <el-date-picker v-model="postForm.start_time" type="datetime" value-format= "yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
+>>>>>>> 修改登录bug之未登录就跳转首页
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
 
+<<<<<<< HEAD
                 <el-col :span="4">
                   <el-form-item style="margin-bottom: 10px;" label-width="130px" label=" 服务时段:" class="postInfo-container-item">
                     <el-time-select
@@ -60,6 +67,14 @@
                     <!--</el-date-picker>-->
                   <!--</el-form-item>-->
                 <!--</el-col>-->
+=======
+                <!-- <el-col :span="5">
+                  <el-form-item style="margin-bottom: 10px;" label-width="100px" label="—" class="postInfo-container-item">
+                    <el-date-picker v-model="postForm.end_time" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col> -->
+>>>>>>> 修改登录bug之未登录就跳转首页
 
                 <el-col :span="4">
                   <el-form-item label-width="225px" label="服务时长:" class="postInfo-container-item">
@@ -100,6 +115,7 @@
   import { validateURL } from '@/utils/validate'
   import { fetchArticle } from '@/api/article'
   import { userSearch } from '@/api/remoteSearch'
+  import { formatDatex } from '@/methods/date.js'
   import complexTable from './../example/table/complexTable'
   import axios from 'axios'
   import global from '../../utils/global_userID'
@@ -122,6 +138,12 @@
   }
 
   export default {
+    filters: {
+      formatDate(time) {
+        var date = new Date(time)
+        return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+      }
+    },
     name: 'articleDetail',
     components: { Tinymce, MDinput, Upload4, Upload3, Multiselect, Sticky, complexTable },
     props: {
@@ -203,6 +225,13 @@
       }
     },
     methods: {
+      datePlus(date,hour) {
+        console.log(new Date(date))
+        console.log((new Date(date)+ hour * 60 * 60 * 1000))
+        var time = new Date(new Date(date)+ hour * 60 * 60 * 1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
+        console.log(time)
+        return time
+      },
       submit: function() {
         console.log("submit!!"+this.postForm.service_content);
         var params = new URLSearchParams()
@@ -212,30 +241,40 @@
         } else if (this.postForm.start_time.length == 0) {
           this.$message('起始时间禁止为空')
           return
-        } else if (this.postForm.end_time.length == 0) {
-          this.$message('终止时间禁止为空')
-          return
-        } else if (this.postForm.content.length == 0) {
-          this.$message('详情内容禁止为空')
-          return
+        // } else if (this.postForm.end_time.length == 0) {
+        //   this.$message('终止时间禁止为空')
+        //   return
+        // } else if (this.postForm.content.length == 0) {
+        //   this.$message('详情内容禁止为空')
+        //   return
         } else if (this.postForm.duration.length == 0) {
           this.$message('服务时长禁止为空')
           return
         } else {
+          this.postForm.end_time = this.datePlus(this.postForm.start_time,this.postForm.duration)
+          console.log('time:'+this.postForm.end_time+'oldtime:'+this.postForm.start_time)
           params.append('UserId', global.global_userID)
           params.append('Content', this.postForm.service_content)
           params.append('DemandStartTime', this.postForm.start_time)
           params.append('DemandEndTime', this.postForm.end_time)
           params.append('Duration', this.postForm.duration)
           params.append('Remark', this.postForm.content)
-          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement', params).then(
+          //'http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement'
+          axios.post('http://localhost:3000/api/postNewRequirement', params).then(
             (res) => {
               console.log(res)
             }
           ).catch((err) => {
             console.log(err)
+          }).then(
+            (res)=>{
+              this.$message('发布成功')
+              console.log(res);
+            }
+          ).catch((err)=>{
+            this.$message('发布失败，请重试或联系管理员！')
+            console.log(err);
           })
-          this.$message('发布成功')
         }
       },
 
