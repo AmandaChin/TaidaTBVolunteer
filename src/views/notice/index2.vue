@@ -21,7 +21,18 @@
       label="作者">
       <template slot-scope="scope">
         <div slot="reference" class="name-wrapper">
-            <el-tag size="medium">{{ scope.row.UserName }}</el-tag>
+            <el-tag size="medium">{{ scope.row.WriterName }}</el-tag>
+          </div>
+      </template>
+    </el-table-column>
+     <el-table-column
+      label="状态">
+      <template slot-scope="scope">
+        <div slot="reference" class="name-wrapper">
+
+        <span v-if="scope.row.Checked ==0" style="color: dodgerblue" type="text">未读</span>
+        <span v-if="scope.row.Checked !=0" style="color: darkgray" type="text">已读</span>
+            
           </div>
       </template>
     </el-table-column>
@@ -31,16 +42,17 @@
   <el-dialog
         title="通知详情"
         :visible.sync="dialogVisible"
-        width="50%">
+        width="50%"
+        @close = 'closeDialog'>
         <el-form :model="temp">
           <el-form-item label="标题">
             <span>{{ temp.Title }}</span>
           </el-form-item>
           <el-form-item label="发布人">
-            <span>{{ temp.UserName }}</span>
+            <span>{{ temp.WriterName }}</span>
           </el-form-item>
           <el-form-item label="发布日期">
-            <span>{{ temp.ReleaseTime }}</span>
+            <span>{{ temp.ReleaseTime|formatDate }}</span>
           </el-form-item>
           <el-form-item label="内容">
             <span>{{ temp.Content }}</span>
@@ -54,6 +66,8 @@
 import axios from 'axios'
 import { formatDate } from '@/methods/methods.js'
 import port from '../../utils/manage'
+import global from '../../utils/global_userID'
+
   export default {
     data() {
 
@@ -63,20 +77,19 @@ import port from '../../utils/manage'
         NoticeID: undefined,
         Content:undefined,
         ReleaseTime:undefined,
-        UserName:undefined
+        WriterName:undefined,
+        Checked:undefined
       },
         dialogVisible: false,
         noticeData: []
       }
     },
     mounted() {
-        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/noticeOperation',
-        {
-          dataType:'jsonp',
-          crossDomain:true
-        }).then(
+      var params = new URLSearchParams()
+      params.append('UserID', global.global_userID)
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/noticeOperation', params).then(
           (res)=>{
-            this.noticeData=res.data.list;
+            this.noticeData=res.data.list.rows;
             console.log(res);
           }
         ).catch((err)=>{
@@ -91,6 +104,18 @@ import port from '../../utils/manage'
       }
   },
     methods: {
+    closeDialog(){
+        var params = new URLSearchParams()
+        params.append('UserID', global.global_userID)
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/noticeOperation', params).then(
+          (res)=>{
+            this.noticeData=res.data.list.rows;
+            console.log(res);
+          }
+        ).catch((err)=>{
+          console.log(err);
+        })
+    },
       handleEdit(index, row) {
         console.log(index, row);
       },
@@ -101,6 +126,22 @@ import port from '../../utils/manage'
       handleShowDialog(row){
       this.temp = Object.assign({}, row) // copy obj
       this.dialogVisible = true
+
+      if(this.temp.Checked == 0){
+           //修改通知状态 进入后未读变成已读
+      var params = new URLSearchParams()
+      params.append('NoticeID', this.temp.NoticeID)
+       params.append('UserID', global.global_userID)
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/changeNoticeChecked', params).then(
+         
+        ).catch((err)=>{
+          console.log(err);
+        })
+      }else{
+          console.log(this.temp.Checked)
+      }
+     
+
       }
     }
   }

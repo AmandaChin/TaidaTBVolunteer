@@ -28,7 +28,6 @@
     <el-table-column
       label="更  多">
       <template scope="scope">
-
         <el-button style="font-weight: bold; color:dodgerblue" type="text" @click="getChainDetail(scope.row.TransferHASH)">交易链</el-button>
         <el-dialog
         title="交易链详情"
@@ -49,7 +48,6 @@
             <span>{{ temp.to }}</span>
           </el-form-item>
           </el-form>
-
         </el-dialog>
       </template>
     </el-table-column>
@@ -72,9 +70,7 @@
   import clip from '@/utils/clipboard'
   import port from '../../utils/manage'
   import { formatDate } from '@/methods/methods.js'
-
   import global from '../../utils/global_userID'
-
 
   export default {
     filters: {
@@ -87,7 +83,6 @@
       return {
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
         Applying_image: applying_image,
-
         dialogVisible: false,
          temp: {
         blockNumber:"加载中",
@@ -99,11 +94,6 @@
         applyingmedals: []
       }
     },
-
-
-      }
-    },
-
     created() {
     this.getList()
     },
@@ -118,19 +108,17 @@
       },
       getList() {
       var params = new URLSearchParams()
-
       params.append('UserID', global.global_userID)
-
-
       this.listLoading = true
-      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getGiveInfo', params).then(
-              
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getGiveInfo', params).then(             
         (res) => {
           this.applyingmedals = res.data.list.rows
           this.listLoading = false
         }
       )
+      
     },
+  
       getChainDetail(transactionHASH){
 
           this.dialogVisible = true
@@ -149,8 +137,7 @@
         }
       )
 
-      getChainDetail(text,event){
-       clip(text, event)
+
       },
       showAlert() {
         this.$alert('这是一段内容', '交易记录', {

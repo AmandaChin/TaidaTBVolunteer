@@ -2,20 +2,7 @@
   <div class="createPost-container">
     <el-form class="form-container" :model="postForm" :rules="rules" ref="postForm">
 
-      <sticky :className="'sub-navbar '+postForm.status">
-        <template v-if="fetchSuccess">
-
-          <router-link style="margin-right:15px;" v-show='isEdit' :to="{ path:'create-form'}">
-            <el-button type="info">创建form</el-button>
-          </router-link>
-
-          <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submit()">立即申请
-          </el-button>
-        </template>
-        <template v-else>
-          <el-tag>发送异常错误,刷新页面,或者联系程序员</el-tag>
-        </template>
-      </sticky>
+     
 
       <div class="createPost-main-container">
         <el-row>
@@ -113,6 +100,22 @@
         </el-row>
 
       </div>
+       <!-- <sticky :className="'sub-navbar '+postForm.status">
+        <template v-if="fetchSuccess">
+
+          <router-link style="margin-right:15px;" v-show='isEdit' :to="{ path:'create-form'}">
+            <el-button type="info">创建form</el-button>
+          </router-link>
+
+          <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submit()">立即申请
+          </el-button>
+        </template>
+        <template v-else>
+          <el-tag>发送异常错误,刷新页面,或者联系程序员</el-tag>
+        </template>
+      </sticky> -->
+      <el-button v-loading="loading" style="margin-left: 1000px;" type="success" @click="submit()">立即申请
+          </el-button>
     </el-form>
 
   </div>
