@@ -114,7 +114,7 @@
           <el-tag>发送异常错误,刷新页面,或者联系程序员</el-tag>
         </template>
       </sticky> -->
-      <el-button v-loading="loading" style="margin-left: 1000px;" type="success" @click="submit()">立即申请
+      <el-button v-loading="loading" style="margin-left: 600px;" type="success" @click="submit()">立即申请
           </el-button>
     </el-form>
 

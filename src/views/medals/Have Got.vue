@@ -110,6 +110,7 @@
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getGetInfo', params).then(
               
         (res) => {
+          console.log(res.data.list)
           this.gettingmedals = res.data.list.rows
           this.listLoading = false
         }

@@ -43,6 +43,8 @@
 import axios from 'axios'
 import { formatDate } from '@/methods/methods.js'
 import port from '../../utils/manage'
+import global from '../../utils/global_userID'
+
 export default {
   data(){
       return {
@@ -68,7 +70,7 @@ export default {
     getList() {
       this.listLoading = true
       var params = new URLSearchParams()
-      params.append('UserID', '1')
+      params.append('UserID', global.global_userID)
       params.append('status', '1')
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getCheckList', params).then(
         (res) => {
