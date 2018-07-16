@@ -27,7 +27,7 @@
                </div>
                <div style="padding: 5px;">
                 <span>服务时长: </span>
-                <span>{{applyInfo.duration}}</span>
+                <span>{{applyInfo.duration+"h"}}</span>
                </div>
                <div style="padding: 5px;">
                 <span>服务内容: </span>
@@ -37,6 +37,18 @@
                 <span>志愿者自述: </span>
                 <span>{{applyInfo.remark}}</span>
                </div>
+                <div style="padding: 5px;">
+                <span>申请材料1: </span>
+                </div>
+                <div>
+                <span><img  :src="Material1" style="width: 155px;height: 175px"></span>
+                </div>
+                <div style="padding: 5px;">
+                <span>申请材料2: </span>
+                </div>
+                <div>
+                <span><img  :src="Material2" style="width: 155px;height: 175px"></span>
+                </div>
 
             </el-card>
           </el-col>
@@ -73,7 +85,7 @@
                     </div>
                </div>
                <div class="checkRow">
-                <div class="checkText"><span>来自老人的评价</span></div>
+                <div class="checkText"><span>服务能力评价</span></div>
                 <div class="rateBar">
                         <el-rate
                         v-model="checkRate.oldManRate"
@@ -92,6 +104,10 @@
 </template>
 <script>
 import { formatDate } from '@/methods/methods.js'
+import global from '../../utils/global_userID'
+import axios from 'axios'
+import port from '../../utils/manage'
+
 export default {
   data() {
     return {
@@ -110,7 +126,9 @@ export default {
         durationRate: null,
         attitudeRate: null,
         oldManRate: null
-      }
+      },
+      Material1: undefined,
+      Material2: undefined
     }
   },
   filters: {
@@ -130,12 +148,51 @@ export default {
     this.applyInfo.startTime = this.$route.params.startTime;
     this.applyInfo.endTime = this.$route.params.endTime;
     this.applyInfo.duration = this.$route.params.duration;
-    this.applyInfo.content = this.$route.params.content;
+  //  this.applyInfo.content = this.$route.params.content;
     this.applyInfo.remark = this.$route.params.remark;
+    console.log("!!!!!!!volunteerid:"+this.$route.params.volunteerId)
+    console.log("!!!!!!!contentid:"+this.$route.params.content)
+    console.log("!!!!!!!serviceid:"+this.$route.params.serviceId)
+    var params = new URLSearchParams()
+
+    params.append('ServiceContentID', this.$route.params.content)
+    axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getServiceType', params).then(             
+        (res) => {          
+              console.log(res.data.list)
+              this.applyInfo.content = res.data.list.rows[0].type; 
+        }
+      )
+
+    var params2 = new URLSearchParams()
+    params2.append('ServiceID',this.$route.params.serviceId)
+    params2.append('UserID',this.$route.params.volunteerId)
+    axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getMaterial', params2).then(             
+        (res) => {          
+              console.log(res.data.list.rows[0].Material1)
+              this.Material1 = res.data.list.rows[0].Material1;
+              this.Material2 = res.data.list.rows[0].Material2;
+        }
+      )
+
   },
   methods: {
-    submitCheck: function (UserId, serviceID, volunteers) {
+    submitCheck: function () {
+        //console.log(this.checkRate.oldManRate)
+        var params = new URLSearchParams()
+        params.append('UserID', global.global_userID)
+        params.append('ServiceID', this.$route.params.serviceId)
+        params.append('Score1', this.checkRate.contentRate)
+        params.append('Score2', this.checkRate.durationRate)
+        params.append('Score3', this.checkRate.attitudeRate)
+        params.append('Score4', this.checkRate.oldManRate)
 
+       
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/checkApplication', params).then(             
+        () => {          
+         this.$message('申请成功，等待审核');
+         this.$router.push({ name: 'checkedList', params: {}})
+        }
+      )
     }
   }
 }

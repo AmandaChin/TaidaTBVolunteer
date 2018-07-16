@@ -15,11 +15,11 @@
         </template>
       </el-table-column>
 
-      <el-table-colum label="服务内容">
+      <el-table-column label="服务内容">
         <template slot-scope="scope">
           <span>{{scope.row.content}}</span>
       </template>
-      </el-table-colum>
+      </el-table-column>
 
 
       <el-table-column label="服务时段">
@@ -42,6 +42,8 @@
 import axios from 'axios'
 import { formatDate } from '@/methods/methods.js'
 import port from '../../utils/manage'
+import global from '../../utils/global_userID'
+
 export default {
   data() {
     return {
@@ -66,7 +68,7 @@ export default {
   methods: {
     getList() {
       var params = new URLSearchParams()
-      params.append('UserID', '1')
+      params.append('UserID', global.global_userID)
       params.append('status', '0')
       this.listLoading = true
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getCheckList', params).then(
@@ -87,7 +89,8 @@ export default {
           endTime: row.endTime,
           duration: row.duration,
           content: row.content,
-          remark: row.remark
+          remark: row.remark,
+          volunteerId: row.volunteerID
         }
       })
     }

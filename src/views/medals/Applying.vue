@@ -8,6 +8,7 @@
       label="勋章币">
       <template scope="scope">
         <img  :src="Applying_image" style="width: 35px;height: 45px">
+
       </template>
     </el-table-column>
     <el-table-column
@@ -32,7 +33,7 @@
         <el-dialog
         title="交易链详情"
         :visible.sync="dialogVisible"
-        v-loading="listLoading" element-loading-text="加载中" 
+        v-loading="listLoading" element-loading-text="加载中"
         width="60%">
         <el-form :model="temp">
           <el-form-item label="交易区块编号:">
