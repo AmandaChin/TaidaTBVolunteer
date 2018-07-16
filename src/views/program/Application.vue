@@ -148,7 +148,7 @@
     content_short: '', // 文章摘要
     source_uri: '', // 文章外链
     image_uri: '', // 上传图片
-    pdf_uri: '', //上传证明
+    pdf_uri: '', // 上传证明
     source_number: '', // 文章外部作者
     display_time: undefined, // 前台展示时间
     id: undefined,
@@ -245,17 +245,17 @@
         params.append('Material1', '')
         params.append('Material2', '')
         params.append('Material3', '')
-        params.append('RealStartTime','2018-01-05 00:09:20')
-        params.append('RealEndTime','2018-01-05 00:09:20')
+        params.append('RealStartTime', '2018-01-05 00:09:20')
+        params.append('RealEndTime', '2018-01-05 00:09:20')
         if (this.postForm.content.length == 0) {
-          //if it is empty we should make the message as it cannot be submitted
+          // if it is empty we should make the message as it cannot be submitted
           this.$message('详情部分禁止为空')
           return
         } else {
           params.append('Remark', this.postForm.content)
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicate', params).then(
             (res) => {
-              this.$message('申请成功，等待审核');
+              this.$message('申请成功，等待审核')
               console.log(res)
             }
           ).catch((err) => {
