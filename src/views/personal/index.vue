@@ -76,46 +76,45 @@ import global from '../../utils/global_userID'
 
 export default {
   name: 'personal',
-  components: {Photo},
+  components: { Photo },
   data() {
-      const validateRequire = (rule, value, callback) => {
-        if (value === '') {
+    const validateRequire = (rule, value, callback) => {
+      if (value === '') {
+        this.$message({
+          message: rule.field + '为必传项',
+          type: 'error'
+        })
+        callback(null)
+      } else {
+        callback()
+      }
+    }
+    const validateSourceUri = (rule, value, callback) => {
+      if (value) {
+        if (validateURL(value)) {
+          callback()
+        } else {
           this.$message({
-            message: rule.field + '为必传项',
+            message: '外链url填写不正确',
             type: 'error'
           })
           callback(null)
-        } else {
-          callback()
         }
+      } else {
+        callback()
       }
-      const validateSourceUri = (rule, value, callback) => {
-        if (value) {
-          if (validateURL(value)) {
-            callback()
-          } else {
-            this.$message({
-              message: '外链url填写不正确',
-              type: 'error'
-            })
-            callback(null)
-          }
-        } else {
-          callback()
-        }
-      }
+    }
     return {
       loading: false,
-     cityInfo: cityInfo.info.cityInfo,
+      cityInfo: cityInfo.info.cityInfo,
 
       personalInfo: {
-          UserName: '',
-          Gender: '',
-          Phone: '',
-          Email:'',
-          IDNumber:'',
-          region: []
-
+        UserName: '',
+        Gender: '',
+        Phone: '',
+        Email: '',
+        IDNumber: '',
+        region: []
       }
 
     }
@@ -127,66 +126,64 @@ export default {
       console.log(global.global_userID)
     },
 
-    mounted() {
-        // console.log(this.personalInfo.region)
-         var that=this;
-        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getUserInfo',
-        {
-          UserId: global.global_userID
-        }).then(
-          (res)=>{
-
-            console.log(res.data);
-            that.personalInfo.UserName=res.data.UserName;
-            that.personalInfo.Gender=res.data.Gender;
-            that.personalInfo.Phone=res.data.Phone;
-            that.personalInfo.Email=res.data.Email;
-            that.personalInfo.IDNumber=res.data.IDNumber;
-            var arr=new Array();
-            arr.push(res.data.Province);
-            arr.push(res.data.City);
-            arr.push(res.data.District);
-            that.personalInfo.region=arr;
-          }
-        ).catch((err)=>{
-          console.log(err);
-        })
-    },
+  mounted() {
+    // console.log(this.personalInfo.region)
+    var that = this
+    axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getUserInfo',
+      {
+        UserId: global.global_userID
+      }).then(
+      (res) => {
+        console.log(res.data)
+        that.personalInfo.UserName = res.data.UserName
+        that.personalInfo.Gender = res.data.Gender
+        that.personalInfo.Phone = res.data.Phone
+        that.personalInfo.Email = res.data.Email
+        that.personalInfo.IDNumber = res.data.IDNumber
+        var arr = new Array()
+        arr.push(res.data.Province)
+        arr.push(res.data.City)
+        arr.push(res.data.District)
+        that.personalInfo.region = arr
+      }
+    ).catch((err) => {
+      console.log(err)
+    })
+  },
 
   methods: {
-      handleChange(value) {
-        this.personalInfo.region[0]=value[0];
-        this.personalInfo.region[1]=value[1];
-        this.personalInfo.region[2]=value[2];
+    handleChange(value) {
+      this.personalInfo.region[0] = value[0]
+      this.personalInfo.region[1] = value[1]
+      this.personalInfo.region[2] = value[2]
 
-        console.log( this.personalInfo.region);
-      },
-      handleUpdate(){
-        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/changeUserInformation',
+      console.log(this.personalInfo.region)
+    },
+    handleUpdate() {
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/changeUserInformation',
         {
-            UserID: global.global_userID,
-            Gender: this.personalInfo.Gender,
-            Name: this.personalInfo.UserName,
-            IDNumber: this.personalInfo.IDNumber,
-            Email: this.personalInfo.Email,
-            Phone: this.personalInfo.Phone,
-            Province: this.personalInfo.region[0],
-            City: this.personalInfo.region[1],
-            District: this.personalInfo.region[2]
+          UserID: global.global_userID,
+          Gender: this.personalInfo.Gender,
+          Name: this.personalInfo.UserName,
+          IDNumber: this.personalInfo.IDNumber,
+          Email: this.personalInfo.Email,
+          Phone: this.personalInfo.Phone,
+          Province: this.personalInfo.region[0],
+          City: this.personalInfo.region[1],
+          District: this.personalInfo.region[2]
         }).then(
-            function(res){
-                var num=res.data.num;
-                console.log('修改函数返回值：'+num)
-            },
-            this.$message('修改成功')
-        )
-
-      },
-      sexChangeHandler(value){
-          this.personalInfo.Gender=value;
-          console.log('改变之后的值：'+value)
-      }
+        function(res) {
+          var num = res.data.num
+          console.log('修改函数返回值：' + num)
+        },
+        this.$message('修改成功')
+      )
+    },
+    sexChangeHandler(value) {
+      this.personalInfo.Gender = value
+      console.log('改变之后的值：' + value)
     }
+  }
 }
 </script>
 

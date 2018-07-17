@@ -161,18 +161,18 @@ export default {
     var params = new URLSearchParams()
 
     params.append('ServiceContentID', this.$route.params.content)
-    axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getServiceType', params).then(             
-        (res) => {          
+    axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getServiceType', params).then(
+        (res) => {
               console.log(res.data.list)
-              this.applyInfo.content = res.data.list.rows[0].type; 
+              this.applyInfo.content = res.data.list.rows[0].type;
         }
       )
 
     var params2 = new URLSearchParams()
     params2.append('ServiceID',this.$route.params.serviceId)
     params2.append('UserID',this.$route.params.volunteerId)
-    axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getMaterial', params2).then(             
-        (res) => {          
+    axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getMaterial', params2).then(
+        (res) => {
               console.log(res.data.list.rows[0].Material1)
               this.Material1 = res.data.list.rows[0].Material1;
               this.Material2 = res.data.list.rows[0].Material2;
@@ -191,9 +191,9 @@ export default {
         params.append('Score3', this.checkRate.attitudeRate)
         params.append('Score4', this.checkRate.oldManRate)
 
-       
-        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/checkApplication', params).then(             
-        () => {          
+
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/checkApplication', params).then(
+        () => {
          this.$message('申请成功，等待审核');
          this.$router.push({ name: 'checkedList', params: {}})
         }

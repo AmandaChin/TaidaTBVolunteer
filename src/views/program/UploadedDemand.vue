@@ -7,7 +7,7 @@
     <el-table-column
       label="发布时间">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.CreateTime|formatDatex}}</span>
+        <span style="color: darkgray">{{scope.row.CreateTime|formatDate}}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -20,14 +20,14 @@
       label="起始时间"
       prop="applyingtime">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandStartTime|formatDatex}}</span>
+        <span style="color: darkgray">{{scope.row.DemandStartTime|formatDate}}</span>
       </template>
     </el-table-column>
     <el-table-column
       label="终止时间"
       prop="applyingtime">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandEndTime|formatDatex}}</span>
+        <span style="color: darkgray">{{scope.row.DemandEndTime|formatDate}}</span>
       </template>
     </el-table-column>
     <el-table-column

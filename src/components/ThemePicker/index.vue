@@ -1,3 +1,4 @@
+<!--既然取消了换肤功能那么这个组件也可以删除-->
 <template>
   <el-color-picker
     class="theme-picker"

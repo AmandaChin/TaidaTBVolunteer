@@ -45,7 +45,7 @@
       label="更多操作">
       <template scope="scope">
         <el-button v-if="scope.row.Status==1" style="font-weight: bold; color:dodgerblue" type="text" @click="func(scope.row.ServiceID,scope.row.Content, scope.row.DemandStartTime,scope.row.DemandEndTime, scope.row.Duration)">申请勋章</el-button>
-        <span v-if="scope.row.Status!=1" style="font-weight: bold; color:dodgerblue" type="text">申请中</span>
+        <span v-if="scope.row.Status!=1" style="font-weight: bold; color:darkgray" type="text">申请中</span>
       </template>
     </el-table-column>
   </el-table>

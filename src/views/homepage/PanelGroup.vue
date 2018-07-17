@@ -57,19 +57,18 @@
 
 export default {
   methods: {
-    
-    JumpApplication:function(){
-      this.$router.push({ name: 'oldman'})
+
+    JumpApplication: function() {
+      this.$router.push({ name: 'oldman' })
     },
-    JumpApplyingMedals:function(){
-      this.$router.push({ name: 'applying'})
+    JumpApplyingMedals: function() {
+      this.$router.push({ name: 'applying' })
     },
-    JumpNoticeList:function(){
-      this.$router.push({ name: 'notice'})
+    JumpNoticeList: function() {
+      this.$router.push({ name: 'notice' })
     },
-    JumpSearch:function(){
-      this.$router.push({ name: 'search'})
-      
+    JumpSearch: function() {
+      this.$router.push({ name: 'search' })
     }
   }
 }

@@ -46,21 +46,21 @@ import port from '../../utils/manage'
 import global from '../../utils/global_userID'
 
 export default {
-  data(){
-      return {
-        checkedList:null,
-        listLoading:false
-      }
+  data() {
+    return {
+      checkedList: null,
+      listLoading: false
+    }
   },
- filters: {
+  filters: {
     formatDate(time) {
-        var date = new Date(time)
-        return formatDate(date, 'yyyy-MM-dd')
-      },
+      var date = new Date(time)
+      return formatDate(date, 'yyyy-MM-dd')
+    },
 
-    getTime(time){
-        var date = new Date(time)
-        return formatDate(date, 'hh:mm:ss')
+    getTime(time) {
+      var date = new Date(time)
+      return formatDate(date, 'hh:mm:ss')
     }
   },
   created() {
