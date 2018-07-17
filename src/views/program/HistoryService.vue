@@ -36,7 +36,8 @@
       label="当前状态">
       <template scope="scope">
         <span v-if="scope.row.Status ==1" style="color: darkgray" type="text">未完成勋章申请</span>
-        <span v-if="scope.row.Status !=1" style="color: darkgray" type="text">已完成勋章申请</span>
+        <span v-if="scope.row.Status ==2" style="color: darkgray" type="text">已完成勋章申请</span>
+        <span v-if="scope.row.Status ==3" style="color: darkgray" type="text">交易已完成</span>
       </template>
     </el-table-column>
 
@@ -95,6 +96,11 @@
         name: '',
         CreateTime: undefined
       }
+    },
+    created() {
+      var id = JSON.parse(localStorage.getItem('volunteerid'))
+      global.global_userID = id
+      console.log('全局：'+global.global_userID)
     },
     mounted: function(UserId) {
       var params = new URLSearchParams()

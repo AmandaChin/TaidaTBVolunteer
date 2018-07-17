@@ -131,6 +131,11 @@ export default {
       Material2: undefined
     }
   },
+  created() {
+    var id = JSON.parse(localStorage.getItem('volunteerid'))
+    global.global_userID = id
+    console.log('全局：'+global.global_userID)
+  },
   filters: {
     formatDate(time) {
       var date = new Date(time)

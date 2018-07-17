@@ -92,7 +92,10 @@
       }
     },
     created() {
-    this.getList()
+      this.getList()
+      var id = JSON.parse(localStorage.getItem('volunteerid'))
+      global.global_userID = id
+      console.log('全局：'+global.global_userID)
     },
     methods: {
       tableRowClassName({ row, rowIndex }) {

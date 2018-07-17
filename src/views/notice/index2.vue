@@ -84,6 +84,11 @@ import global from '../../utils/global_userID'
         noticeData: []
       }
     },
+    created(){
+      var id = JSON.parse(localStorage.getItem('volunteerid'))
+      console.log('全局：'+id)
+      global.global_userID = id
+    },
     mounted() {
       var params = new URLSearchParams()
       params.append('UserID', global.global_userID)

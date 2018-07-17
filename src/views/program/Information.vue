@@ -219,6 +219,9 @@
       } else {
         this.postForm = Object.assign({}, defaultForm)
       }
+      var id = JSON.parse(localStorage.getItem('volunteerid'))
+      global.global_userID = id
+      console.log('全局：'+global.global_userID)
     },
     methods: {
       datePlus(date,hour) {

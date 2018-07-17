@@ -120,6 +120,11 @@
         }
       }
     },
+    created() {
+      var id = JSON.parse(localStorage.getItem('volunteerid'))
+      global.global_userID = id
+      console.log('全局：'+global.global_userID)
+    },
     mounted: function(UserId) {
       var params = new URLSearchParams()
       params.append('UserID', global.global_userID)

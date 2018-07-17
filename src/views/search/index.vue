@@ -194,6 +194,9 @@ export default {
   created() {
     this.showServerType()
     this.getList()
+    var id = JSON.parse(localStorage.getItem('volunteerid'))
+    global.global_userID = id
+    console.log('全局：'+global.global_userID)
   },
   methods: {
     showServerType(){
@@ -306,15 +309,17 @@ export default {
             function(res){
                 num=res.data.num;
                 console.log('申请返回值：'+num)
+                this.dialogFormVisible = false
+                this.$notify({
+                  title: '成功',
+                  message: '申请成功',
+                  type: 'success',
+                  duration: 2000
+                })
+                this.getList()
             }
           )
-      this.dialogFormVisible = false
-      this.$notify({
-              title: '成功',
-              message: '申请成功',
-              type: 'success',
-              duration: 2000
-            })
+     
 
     },
 

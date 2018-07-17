@@ -120,6 +120,12 @@ export default {
 
     }
   },
+  created(){
+      var id = JSON.parse(localStorage.getItem('volunteerid'))
+      console.log('全局：'+id)
+      global.global_userID = id
+      console.log(global.global_userID)
+    },
 
     mounted() {
         // console.log(this.personalInfo.region)
