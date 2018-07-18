@@ -2,7 +2,7 @@
   <el-table
     :data="demands"
     style="width: 100%;margin-left: 20px"
-
+    v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
     :row-class-name="tableRowClassName">
     <el-table-column
       label="发布时间">
@@ -20,14 +20,14 @@
       label="起始时间"
       prop="applyingtime">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandStartTime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.DemandStartTime|formatDatex}}</span>
       </template>
     </el-table-column>
     <el-table-column
       label="终止时间"
       prop="applyingtime">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandEndTime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.DemandEndTime|formatDatex}}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -123,10 +123,12 @@
     mounted: function(UserId) {
       var params = new URLSearchParams()
       params.append('UserID', global.global_userID)
+       this.listLoading = true
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByUserID', params).then(
         (res) => {
           this.demands = res.data.list
-          console.log(res)
+          console.log(res.data.list)
+           this.listLoading = false
         }
       ).catch((err) => {
         console.log(err)

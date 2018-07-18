@@ -1,11 +1,12 @@
 <template>
   <el-table
     :data="service"
+    v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
     style="width: 100%;margin-left: 20px"
 
     :row-class-name="tableRowClassName">
     <el-table-column
-      label="申请日期">
+      label="发布时间">
       <template scope="scope">
         <span style="color: darkgray">{{ scope.row.CreateTime|formatDate }}</span>
       </template>
@@ -21,14 +22,14 @@
       label="开始时间"
       prop="users">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandStartTime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.DemandStartTime|formatDatex}}</span>
       </template>
     </el-table-column>
     <el-table-column
       label="结束时间"
       prop="applyingtime">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandEndTime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.DemandEndTime|formatDatex}}</span>
       </template>
     </el-table-column>
 
@@ -99,10 +100,12 @@
     mounted: function(UserId) {
       var params = new URLSearchParams()
       params.append('UserID', global.global_userID)
+       this.listLoading = true
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getServicedList', params).then(
         (res) => {
           this.service = res.data.list
           console.log(res)
+           this.listLoading = false
         }
       ).catch((err) => {
         console.log(err)
