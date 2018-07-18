@@ -43,7 +43,7 @@
           <span class="link-type" @click="handleShowDialog(scope.row)">{{scope.row.Content}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="110px" align="center" label="发布作者">
+      <el-table-column width="120px" align="center" label="发布人">
         <template slot-scope="scope">
           <span>{{scope.row.Name}}</span>
         </template>
@@ -146,7 +146,7 @@
           page: 1,
           limit: 20,
           duration: undefined,
-          content: '',
+          content: undefined,
           type: 4,
           startTime: undefined
         },
@@ -214,7 +214,7 @@
         //   {
         //     UserID: global.global_userID
         //   }).then(
-        axios.get('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand').then(
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',{UserID: global.global_userID}).then(
           (res)=>{
             this.list=res.data.list.rows;
             console.log(res);
@@ -232,6 +232,7 @@
         this.listLoading=true
         var duration
         var startTime
+        var content
         if (this.listQuery.duration==undefined)
         {
           console.log("undefined duration")
@@ -248,8 +249,33 @@
           console.log(" startTime")
           startTime=this.listQuery.startTime
         }
+        if (this.listQuery.content==undefined)
+        {
+          console.log("undefined content")
+          content = 0
+        }else{
+          console.log(" duration")
+          content =this.listQuery.content
+        }
         if(duration==0){
-          console.log("enter no duration")
+
+          if(content ==0){
+          console.log("enter no duration and no content")
+          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByConditionNoDurationNoContent',
+            { UserID : global.global_userID,
+              DemandStartTime: startTime,
+              type: this.listQuery.type
+            }).then(
+            (res)=>{
+              this.list=res.data.list.rows;
+              console.log(res);
+              this.listLoading = false
+            }
+          ).catch((err)=>{
+            console.log(err);
+          })
+          }else{
+            console.log("enter no duration but content")
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByConditionNoDuration',
             { UserID : global.global_userID,
               Content: this.listQuery.content,
@@ -264,11 +290,13 @@
           ).catch((err)=>{
             console.log(err);
           })
+          }
+          
         }else{
-          console.log("enter")
-          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByCondition',
+          if(content ==0){
+          console.log("enter duration and no content")
+          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByConditionNoContent',
             { UserID : global.global_userID,
-              Content: this.listQuery.content,
               Duration: duration,
               DemandStartTime: startTime,
               type: this.listQuery.type
@@ -281,6 +309,26 @@
           ).catch((err)=>{
             console.log(err);
           })
+          }else{
+          console.log("enter duration and content")
+          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByCondition',
+            { UserID : global.global_userID,
+              Content: this.listQuery.content,
+              Duration: duration,
+              DemandStartTime: startTime,
+              type: this.listQuery.type
+            }).then(
+            (res)=>{
+              //console.log("testdurationsearch"+res.data.list)
+              this.list=res.data.list.rows;
+              //console.log(res);
+              this.listLoading = false
+            }
+          ).catch((err)=>{
+            console.log(err);
+          })
+          }
+         
         }
         console.log(duration)
         console.log(startTime)
@@ -289,22 +337,49 @@
       //志愿者申请
       applyService(row) {
         var num;
+        let that = this;
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicateInSearch',
           { UserID : global.global_userID,
             ServiceID: row.ServiceID,
           }).then(
           function(res){
-            num=res.data.num;
-            console.log('申请返回值：'+num)
+            //num=res.data.num;
+            //console.log('申请返回值：'+res.data.num)
+            if(res.data.num === 1){
+               // console.log("testnumsuccess!!"+res.data.num)
+                that.$notify({
+                    title: '成功',
+                    message: '申请成功',
+                    type: 'success',
+                    duration: 2000
+                })
+                setTimeout(() => {
+                  axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',{UserID: global.global_userID}).then(
+                    (res)=>{
+                        that.list=res.data.list.rows;
+                        console.log("刷新页面后"+res);
+                          }
+                  ).catch((err)=>{
+                      console.log(err);
+                  })
+
+                }, 2000)
+                 
+              }else{
+               // console.log("testnumfail!!"+res.data.num)
+                that.$notify({
+                    title: '失败',
+                    message: '申请失败,请重新申请',
+                    type: 'error',
+                    duration: 2000
+                })
+              }
           }
         )
+         
         this.dialogFormVisible = false
-        this.$notify({
-          title: '成功',
-          message: '申请成功',
-          type: 'success',
-          duration: 2000
-        })
+        
+        
       },
       handleShowDialog(row){
         this.temp = Object.assign({}, row) // copy obj
