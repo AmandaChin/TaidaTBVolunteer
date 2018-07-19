@@ -1,8 +1,9 @@
 <template>
   <div class="personal">
-    <h1 >修改账户基本信息</h1>
+    <div>
+    <h1><i class="el-icon-document" style="margin-right:10px"></i>{{username}}的基本信息</h1>
+    </div>
       <el-form ref="form" :model="personalInfo" label-width="120px">
-
           <el-form-item label="姓名">
             <el-col :span="9">
           <el-input v-model="personalInfo.UserName"></el-input>
@@ -107,7 +108,7 @@ export default {
     return {
       loading: false,
       cityInfo: cityInfo.info.cityInfo,
-
+      username:'',
       personalInfo: {
         UserName: '',
         Gender: '',
@@ -140,6 +141,7 @@ export default {
         that.personalInfo.Phone = res.data.Phone
         that.personalInfo.Email = res.data.Email
         that.personalInfo.IDNumber = res.data.IDNumber
+        that.username = res.data.UserName
         var arr = new Array()
         arr.push(res.data.Province)
         arr.push(res.data.City)
@@ -190,5 +192,8 @@ export default {
 <style scoped>
 h1 {
   font-weight:100;
+  margin-left:80px;
+  color:#049BFF;
 }
+
 </style>
