@@ -1,6 +1,7 @@
 <template>
+<div class="havegotmedalinfo">
   <el-table
-    :data="gettingmedals"
+    :data="gettingmedals.slice((pageNo-1)*pageSize,pageNo*pageSize)"
     style="width: 100%;margin-left: 20px"
 
     :row-class-name="tableRowClassName">
@@ -50,6 +51,13 @@
       </template>
     </el-table-column>
   </el-table>
+  <!--分页-->
+    <div class="pagination-container" style = "margin-left:450px">
+      <el-pagination background @current-change="handleIndexChange"
+                      :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
+      </el-pagination>
+    </div>
+     </div>
 </template>
 
 <style scoped>
@@ -88,7 +96,10 @@
         to:"加载中",
          },
         dialogVisible: false,
-        gettingmedals: []
+        gettingmedals: [],
+        pageNo:1,
+        pageSize:10,
+        totalDataNumber:0
       }
     },
     created() {
@@ -115,11 +126,18 @@
         (res) => {
           console.log(res.data.list)
           this.gettingmedals = res.data.list.rows
+          this.totalDataNumber = res.data.list.count;
           this.listLoading = false
         }
       )
     },
-      
+     
+     handleCurrentChange(val) {
+        this.listQuery.page = val
+        var pageSize = this.pageSize
+        this.getAndDraw(parseInt(pageNo),parseInt(pageSize))
+      },
+  
      getChainDetail(transactionHASH){
 
           this.dialogVisible = true

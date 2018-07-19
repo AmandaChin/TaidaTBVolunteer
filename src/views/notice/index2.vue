@@ -1,7 +1,7 @@
 <template>
 <div class="noticeContainer">
   <el-table
-    :data="noticeData"
+    :data="noticeData.slice((pageNo-1)*pageSize,pageNo*pageSize)"
     style="width: 100%">
 
     <el-table-column label="标题">
@@ -59,6 +59,12 @@
           </el-form-item>
           </el-form>
         </el-dialog>
+        <!--分页-->
+    <div class="pagination-container" style = "margin-left:450px" >
+      <el-pagination background @current-change="handleIndexChange"
+                      :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -81,7 +87,10 @@ import global from '../../utils/global_userID'
         Checked:undefined
       },
         dialogVisible: false,
-        noticeData: []
+        noticeData: [],
+        pageNo:1,
+        pageSize:10,
+        totalDataNumber:0
       }
     },
     created(){
@@ -95,6 +104,7 @@ import global from '../../utils/global_userID'
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/noticeOperation', params).then(
           (res)=>{
             this.noticeData=res.data.list.rows;
+             this.totalDataNumber = res.data.list.count;
             console.log(res);
           }
         ).catch((err)=>{
@@ -115,6 +125,7 @@ import global from '../../utils/global_userID'
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/noticeOperation', params).then(
           (res)=>{
             this.noticeData=res.data.list.rows;
+             this.totalDataNumber = res.data.list.count;
             console.log(res);
           }
         ).catch((err)=>{
@@ -127,7 +138,11 @@ import global from '../../utils/global_userID'
       handleDelete(index, row) {
         console.log(index, row);
       },
-
+      handleCurrentChange(val) {
+        this.listQuery.page = val
+        var pageSize = this.pageSize
+        this.getAndDraw(parseInt(pageNo),parseInt(pageSize))
+      },
       handleShowDialog(row){
       this.temp = Object.assign({}, row) // copy obj
       this.dialogVisible = true

@@ -31,7 +31,7 @@
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
     </div>
 
-    <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
+    <el-table :key='tableKey' :data="list.slice((pageNo-1)*pageSize,pageNo*pageSize)" v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
               style="width: 80%" @selection-change="handleSelectionChange" >
       <el-table-column width="200px" align="center" label="服务日期">
         <template slot-scope="scope">
@@ -62,9 +62,9 @@
       </el-table-column>
     </el-table>
     <!--分页-->
-    <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleIndexChange"
-                     :page-sizes="[10,20,30,50]" :page-size="pageSize" :current-page="pageIndex" layout="total, sizes, prev, pager, next, jumper" :total="500 ">
+    <div class="pagination-container" style = "margin-left:450px">
+      <el-pagination background @current-change="handleIndexChange"
+                      :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
       </el-pagination>
     </div>
     <el-dialog title="服务详情" :visible.sync="dialogFormVisible">
@@ -171,7 +171,10 @@
           type: [{ required: true, message: 'type is required', trigger: 'change' }],
           timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
           title: [{ required: true, message: 'title is required', trigger: 'blur' }]
-        }
+        },
+        pageNo:1,
+        pageSize:10,
+        totalDataNumber:0
       }
     },
     filters: {
@@ -221,12 +224,14 @@
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',{UserID: global.global_userID}).then(
           (res)=>{
             this.list=res.data.list.rows;
+            this.totalDataNumber = res.data.list.count;
             console.log(res);
             this.listLoading = false
           }
         ).catch((err)=>{
           console.log(err);
         })
+
       },
       //处理search函数
       handleFilter() {
@@ -272,6 +277,7 @@
             }).then(
             (res)=>{
               this.list=res.data.list.rows;
+              this.totalDataNumber = res.data.list.count;
               console.log(res);
               this.listLoading = false
             }
@@ -288,6 +294,7 @@
             }).then(
             (res)=>{
               this.list=res.data.list.rows;
+              this.totalDataNumber = res.data.list.count;
               console.log(res);
               this.listLoading = false
             }
@@ -307,6 +314,7 @@
             }).then(
             (res)=>{
               this.list=res.data.list.rows;
+              this.totalDataNumber = res.data.list.count;
               console.log(res);
               this.listLoading = false
             }
@@ -325,6 +333,7 @@
             (res)=>{
               //console.log("testdurationsearch"+res.data.list)
               this.list=res.data.list.rows;
+              this.totalDataNumber = res.data.list.count;
               //console.log(res);
               this.listLoading = false
             }
@@ -361,6 +370,7 @@
                   axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',{UserID: global.global_userID}).then(
                     (res)=>{
                         that.list=res.data.list.rows;
+                        this.totalDataNumber = res.data.list.count;
                         console.log("刷新页面后"+res);
                           }
                   ).catch((err)=>{
@@ -389,13 +399,10 @@
         this.temp = Object.assign({}, row) // copy obj
         this.dialogFormVisible = true
       },
-      handleSizeChange(val) {
-        this.listQuery.limit = val
-        this.getList()
-      },
       handleCurrentChange(val) {
         this.listQuery.page = val
-        this.getList()
+        var pageSize = this.pageSize
+        this.getAndDraw(parseInt(pageNo),parseInt(pageSize))
       },
       TypeChangeHandler(value){
         this.listQuery.type=value
