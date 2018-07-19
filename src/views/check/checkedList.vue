@@ -22,19 +22,23 @@
       </el-table-column>
 
 
-      <el-table-column label="服务时段">
+      <el-table-column label="服务开始时间">
         <template slot-scope="scope">
-          <span>{{scope.row.startTime|getTime}}</span>
-          <span> - </span>
-          <span>{{scope.row.endTime|getTime}}</span>
+          <span>{{scope.row.startTime|formatDatex}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="查看"  class-name="small-padding fixed-width">
+      <el-table-column label="服务结束时间" >
+        <template slot-scope="scope">
+          <span>{{scope.row.endTime|formatDatex}}</span>
+        </template>
+      </el-table-column>
+
+      <!-- <el-table-column label="查看"  class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="showDialog(scope.row)">查看</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     </div>
 </template>
@@ -45,6 +49,7 @@ import { formatDate } from '@/methods/methods.js'
 import { formatDatex} from '@/methods/date.js'
 import port from '../../utils/manage'
 import global from '../../utils/global_userID'
+import { formatDatex } from '@/methods/date.js'
 
 export default {
   data() {
@@ -59,7 +64,7 @@ export default {
       return formatDatex(date, 'yyyy-MM-dd')
     },
 
-    getTime(time) {
+    formatDatex(time) {
       var date = new Date(time)
       return formatDatex(date, 'hh:mm:ss')
     }

@@ -18,7 +18,7 @@
       </template>
     </el-table-column>
     <el-table-column
-      label="作者">
+      label="发布者">
       <template slot-scope="scope">
         <div slot="reference" class="name-wrapper">
             <el-tag size="medium">{{ scope.row.WriterName }}</el-tag>
@@ -42,7 +42,7 @@
   <el-dialog
         title="通知详情"
         :visible.sync="dialogVisible"
-        width="50%"
+        width="30%"
         @close = 'closeDialog'>
         <el-form :model="temp">
           <el-form-item label="标题">

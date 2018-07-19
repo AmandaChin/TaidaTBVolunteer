@@ -294,6 +294,9 @@
             (res) => {
               this.$message('发布成功')
               console.log(res)
+              setTimeout(() => {
+              this.$router.push({ name: 'UploadedDemand', params: {}})
+              },500)
             }
           ).catch((err) => {
             this.$message('发布失败，请重试或联系管理员！')
