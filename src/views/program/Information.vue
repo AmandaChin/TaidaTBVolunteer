@@ -22,7 +22,7 @@
           <el-col :span="21">
             <div class="postInfo-container">
               <el-row>
-                <el-col :span="6">
+                <el-col :span="5">
                   <el-form-item label-width="90px" label="服务内容:" class="postInfo-container-item">
                     <el-select clearable style="width: 130px" class="filter-item" v-model="postForm.service_content" placeholder="服务类型">
                       <el-option v-for="item in servecontent_info" :key="item.ID" :label="item.type" :value="item.ID" >
@@ -41,7 +41,7 @@
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
-                 <el-col :span="4">
+                 <el-col :span="6">
                   <el-form-item style="margin-bottom: 10px;" label-width="130px" label=" 服务时段:" class="postInfo-container-item">
                     <el-time-select
                       placeholder="起始时间"

@@ -1,6 +1,7 @@
 <template>
+<div class="applyingmedalinfo">
   <el-table
-    :data="applyingmedals"
+    :data="applyingmedals.slice((pageNo-1)*pageSize,pageNo*pageSize)"
     style="width: 100%;margin-left: 20px"
 
     :row-class-name="tableRowClassName">
@@ -53,6 +54,13 @@
       </template>
     </el-table-column>
   </el-table>
+  <!--分页-->
+    <div class="pagination-container" style = "margin-left:450px">
+      <el-pagination background @current-change="handleIndexChange"
+                      :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
+      </el-pagination>
+    </div>
+     </div>
 </template>
 
 <style scoped>
@@ -92,7 +100,10 @@
         to:"加载中",
          },
        
-        applyingmedals: []
+        applyingmedals: [],
+        pageNo:1,
+        pageSize:10,
+        totalDataNumber:0
       }
     },
     created() {
@@ -117,11 +128,18 @@
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getGiveInfo', params).then(             
         (res) => {
           this.applyingmedals = res.data.list.rows
+          this.totalDataNumber = res.data.list.count;
           this.listLoading = false
         }
       )
       
     },
+      
+      handleCurrentChange(val) {
+        this.listQuery.page = val
+        var pageSize = this.pageSize
+        this.getAndDraw(parseInt(pageNo),parseInt(pageSize))
+      },
   
       getChainDetail(transactionHASH){
 

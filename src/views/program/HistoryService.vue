@@ -1,6 +1,7 @@
 <template>
+<div class="app-container calendar-list-container">
   <el-table
-    :data="service"
+    :data="service.slice((pageNo-1)*pageSize,pageNo*pageSize)"
     v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
     style="width: 100%;margin-left: 20px"
 
@@ -51,6 +52,14 @@
       </template>
     </el-table-column>
   </el-table>
+
+  <!--分页-->
+    <div class="pagination-container" style = "margin-left:450px" >
+      <el-pagination background @current-change="handleIndexChange"
+                      :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
+      </el-pagination>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -96,7 +105,10 @@
         service: [],
         applyDisable: false,
         name: '',
-        CreateTime: undefined
+        CreateTime: undefined,
+        pageNo:1,
+        pageSize:10,
+        totalDataNumber:0
       }
     },
     created() {
@@ -111,6 +123,7 @@
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getServicedList', params).then(
         (res) => {
           this.service = res.data.list
+          this.totalDataNumber = res.data.list.length;
           console.log(res)
            this.listLoading = false
         }
@@ -149,6 +162,11 @@
          * 此处获得这个ServiceId的目的是携带者这两个参数取填写并调用申请勋章的函数 然后把所有数据打包一起发给后台
          * 这个地方还需要一个能调用申请勋章界面的参数
          */
+      },
+       handleCurrentChange(val) {
+        this.listQuery.page = val
+        var pageSize = this.pageSize
+        this.getAndDraw(parseInt(pageNo),parseInt(pageSize))
       },
       tableRowClassName(row, rowIndex) {
         if (rowIndex === 0) {

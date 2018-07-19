@@ -1,6 +1,7 @@
 <template>
+<div class="app-container calendar-list-container">
   <el-table
-    :data="demands"
+    :data="demands.slice((pageNo-1)*pageSize,pageNo*pageSize)"
     style="width: 100%;margin-left: 20px"
     v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
     :row-class-name="tableRowClassName">
@@ -74,7 +75,15 @@
         </el-dialog>
       </template>
     </el-table-column>
+ 
   </el-table>
+<!--分页-->
+    <div class="pagination-container" style = "margin-left:450px" >
+      <el-pagination background @current-change="handleIndexChange"
+                      :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
+      </el-pagination>
+    </div>
+    </div>
 </template>
 
 <style scoped>
@@ -123,7 +132,10 @@
           IDNumber: '',
           Email: '',
           Phone: ''
-        }
+        },
+        pageNo:1,
+        pageSize:10,
+        totalDataNumber:0
       }
     },
     created() {
@@ -138,7 +150,8 @@
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByUserID', params).then(
         (res) => {
           this.demands = res.data.list
-          console.log(res.data.list)
+          this.totalDataNumber = res.data.list.length;
+          console.log(res)
            this.listLoading = false
         }
       ).catch((err) => {
@@ -157,6 +170,11 @@
         ).catch((err) => {
           console.log(err)
         })
+      },
+      handleCurrentChange(val) {
+        this.listQuery.page = val
+        var pageSize = this.pageSize
+        this.getAndDraw(parseInt(pageNo),parseInt(pageSize))
       },
       tableRowClassName({ row, rowIndex }) {
         if (rowIndex === 0) {
