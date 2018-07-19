@@ -142,55 +142,53 @@ export default {
     }
   },
   mounted: function() {
-    this.applyInfo.serviceID = this.$route.params.serviceId;
-    this.applyInfo.oldMan = this.$route.params.oldMan;
-    this.applyInfo.volunteer = this.$route.params.volunteer;
-    this.applyInfo.startTime = this.$route.params.startTime;
-    this.applyInfo.endTime = this.$route.params.endTime;
-    this.applyInfo.duration = this.$route.params.duration;
-  //  this.applyInfo.content = this.$route.params.content;
-    this.applyInfo.remark = this.$route.params.remark;
-    console.log("!!!!!!!volunteerid:"+this.$route.params.volunteerId)
-    console.log("!!!!!!!contentid:"+this.$route.params.content)
-    console.log("!!!!!!!serviceid:"+this.$route.params.serviceId)
+    this.applyInfo.serviceID = this.$route.params.serviceId
+    this.applyInfo.oldMan = this.$route.params.oldMan
+    this.applyInfo.volunteer = this.$route.params.volunteer
+    this.applyInfo.startTime = this.$route.params.startTime
+    this.applyInfo.endTime = this.$route.params.endTime
+    this.applyInfo.duration = this.$route.params.duration
+    //  this.applyInfo.content = this.$route.params.content;
+    this.applyInfo.remark = this.$route.params.remark
+    console.log('!!!!!!!volunteerid:' + this.$route.params.volunteerId)
+    console.log('!!!!!!!contentid:' + this.$route.params.content)
+    console.log('!!!!!!!serviceid:' + this.$route.params.serviceId)
     var params = new URLSearchParams()
 
     params.append('ServiceContentID', this.$route.params.content)
     axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getServiceType', params).then(
-        (res) => {
-              console.log(res.data.list)
-              this.applyInfo.content = res.data.list.rows[0].type;
-        }
-      )
+      (res) => {
+        console.log(res.data.list)
+        this.applyInfo.content = res.data.list.rows[0].type
+      }
+    )
 
     var params2 = new URLSearchParams()
-    params2.append('ServiceID',this.$route.params.serviceId)
-    params2.append('UserID',this.$route.params.volunteerId)
+    params2.append('ServiceID', this.$route.params.serviceId)
+    params2.append('UserID', this.$route.params.volunteerId)
     axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getMaterial', params2).then(
-        (res) => {
-              console.log(res.data.list.rows[0].Material1)
-              this.Material1 = res.data.list.rows[0].Material1;
-              this.Material2 = res.data.list.rows[0].Material2;
-        }
-      )
-
+      (res) => {
+        console.log(res.data.list.rows[0].Material1)
+        this.Material1 = res.data.list.rows[0].Material1
+        this.Material2 = res.data.list.rows[0].Material2
+      }
+    )
   },
   methods: {
-    submitCheck: function () {
-        //console.log(this.checkRate.oldManRate)
-        var params = new URLSearchParams()
-        params.append('UserID', global.global_userID)
-        params.append('ServiceID', this.$route.params.serviceId)
-        params.append('Score1', this.checkRate.contentRate)
-        params.append('Score2', this.checkRate.durationRate)
-        params.append('Score3', this.checkRate.attitudeRate)
-        params.append('Score4', this.checkRate.oldManRate)
+    submitCheck: function() {
+      // console.log(this.checkRate.oldManRate)
+      var params = new URLSearchParams()
+      params.append('UserID', global.global_userID)
+      params.append('ServiceID', this.$route.params.serviceId)
+      params.append('Score1', this.checkRate.contentRate)
+      params.append('Score2', this.checkRate.durationRate)
+      params.append('Score3', this.checkRate.attitudeRate)
+      params.append('Score4', this.checkRate.oldManRate)
 
-
-        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/checkApplication', params).then(
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/checkApplication', params).then(
         () => {
-         this.$message('申请成功，等待审核');
-         this.$router.push({ name: 'checkedList', params: {}})
+          this.$message('申请成功，等待审核')
+          this.$router.push({ name: 'checkedList', params: {}})
         }
       )
     }
