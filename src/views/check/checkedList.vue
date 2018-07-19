@@ -46,7 +46,6 @@
 <script>
 import axios from 'axios'
 import { formatDate } from '@/methods/methods.js'
-import { formatDatex} from '@/methods/date.js'
 import port from '../../utils/manage'
 import global from '../../utils/global_userID'
 import { formatDatex } from '@/methods/date.js'
