@@ -1,15 +1,16 @@
 <template>
-  <div class="createPost-container">
+  <div class="application-container">
     <el-form class="form-container" :model="postForm" :rules="rules" ref="postForm">
-
+      <sticky :className="'sub-navbar '+postForm.status">
+        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submit()">立即申请
+        </el-button>
+      </sticky>
      
-
       <div class="createPost-main-container">
         <el-row>
           <el-col :span="21">
-
             <div class="postInfo-container">
-              <el-row style="margin-left: 100px">
+              <el-row style="margin-left: 20px">
                 <el-col :span="4">
                   <el-form-item label-width="75px" label="服务用户:" class="postInfo-container-item">
                     <el-form-item style="margin-bottom: 20px;" prop="title">
@@ -27,11 +28,18 @@
 
                 </el-col>
 
+                <el-col :span="4">
+                  <el-form-item style="margin-bottom: 20px;" label-width="90px" label=" 服务日期:" class="postInfo-container-item">
+                    <el-form-item style="margin-bottom: 20px;margin-left: 20px" prop="title">
+                      <span style="color: darkgray"  v-cloak >{{ this.StartTime|formatDatex }}</span>
+                    </el-form-item>
+                  </el-form-item>
+                </el-col>
 
-                <el-col :span="6">
+                <el-col :span="4">
                   <el-form-item style="margin-bottom: 20px;" label-width="90px" label=" 服务时段:" class="postInfo-container-item">
                     <el-form-item style="margin-bottom: 20px;margin-left: 20px" prop="title">
-                      <span style="color: darkgray"  v-cloak >{{ this.StartTime|formatDate }}</span>
+                      <span style="color: darkgray"  v-cloak >{{ this.StartTime|getTime }}</span>
                     </el-form-item>
                   </el-form-item>
                 </el-col>
@@ -39,7 +47,7 @@
                 <el-col :span="4">
                   <el-form-item style="margin-bottom: 20px;" label-width="20px" label="—" class="postInfo-container-item">
                     <el-form-item style="margin-bottom: 20px; margin-left: 25px" prop="title">
-                      <span style="color: darkgray"  v-cloak >{{ this.EndTime|formatDate }}</span>
+                      <span style="color: darkgray"  v-cloak >{{ this.EndTime|getTime }}</span>
                     </el-form-item>
                   </el-form-item>
                 </el-col>
@@ -58,10 +66,10 @@
         </el-row>
 
 
-        <el-form-item style="margin-bottom: 10px;" label-width="45px" label="详情:">
+        <el-form-item style="margin-left: 20px;margin-bottom: 10px; font-size: 25px;" label-width="45px" label="详情:">
         </el-form-item>
 
-        <div class="editor-container">
+        <div class="editor-container" style="margin-left: 20px">
           <tinymce :height=400 ref="editor" v-model="postForm.content"></tinymce>
         </div>
 
@@ -82,17 +90,50 @@
             </div>
           </el-col>
         </el-row>
-
         <el-row>
           <el-col>
             <div class="filter-container">
               <el-row>
                 <el-col :span="13">
-                  <Upload4 clearable style="width: 1100px" v-model="postForm.image_uri"></Upload4>
+                  <div class="upload-container" style="width: 1100px">
+                    <el-upload   class="image-uploader" 
+                              v-show="dialogImageUrl1.length==0"
+                              drag :multiple="false" :show-file-list="false" 
+                              action="http://localhost:3000/api/uploadFile"
+                              :on-success="handleImageScucess1">
+                      <i class="el-icon-upload"></i>
+                      <div class="el-upload__text">将其他相关文件拖到此处，或<em>点击上传</em></div>
+                    </el-upload>
+                    <div class="image-preview">
+                    <div class="image-preview-wrapper" v-show="dialogImageUrl1.length>1">
+                      <img :src="dialogImageUrl1">
+                      <div class="image-preview-action">
+                        <i @click="rmImage1" class="el-icon-delete"></i>
+                      </div>
+                    </div>
+                    </div>
+                  </div>
                 </el-col>
 
                 <el-col :span="1">
-                  <Upload3 clearable style="width: 1100px" v-model="postForm.pdf_uri"></Upload3>
+                  <div class="upload-container" style="width: 1100px">
+                    <el-upload class="image-uploader" 
+                    v-show="dialogImageUrl2.length==0"
+                    drag :multiple="false" :show-file-list="false" 
+                    action="http://localhost:3000/api/uploadFile"
+                    :on-success="handleImageScucess2">
+                      <i class="el-icon-upload"></i>
+                      <div class="el-upload__text">将志愿服务证明拖到此处，或<em>点击上传</em></div>
+                    </el-upload>
+                    <div class="image-preview">
+                      <div class="image-preview-wrapper" v-show="dialogImageUrl2.length>1">
+                        <img :src="dialogImageUrl2">
+                      <div class="image-preview-action">
+                      <i @click="rmImage2" class="el-icon-delete"></i>
+                    </div>
+                  </div>
+                  </div>
+                  </div>
                 </el-col>
               </el-row>
             </div>
@@ -100,22 +141,9 @@
         </el-row>
 
       </div>
-       <!-- <sticky :className="'sub-navbar '+postForm.status">
-        <template v-if="fetchSuccess">
-
-          <router-link style="margin-right:15px;" v-show='isEdit' :to="{ path:'create-form'}">
-            <el-button type="info">创建form</el-button>
-          </router-link>
-
-          <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submit()">立即申请
-          </el-button>
-        </template>
-        <template v-else>
-          <el-tag>发送异常错误,刷新页面,或者联系程序员</el-tag>
-        </template>
-      </sticky> -->
-      <el-button v-loading="loading" style="margin-left: 600px;" type="success" @click="submit()">立即申请
-          </el-button>
+       
+      <!-- <el-button v-loading="loading" style="margin-left: 600px;" type="success" @click="submit()">立即申请
+          </el-button> -->
     </el-form>
 
   </div>
@@ -124,16 +152,13 @@
 <script>
   import Tinymce from '@/components/Tinymce'
   import Upload4 from '@/components/Upload/singleImage4'
-  import Upload3 from '@/components/Upload/singleImage3'
-  import MDinput from '@/components/MDinput'
-  import Multiselect from 'vue-multiselect'// 使用的一个多选框组件，element-ui的select不能满足所有需求
-  import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
+  import Upload5 from '@/components/Upload/singleImage5'
   import Sticky from '@/components/Sticky' // 粘性header组件
   import { validateURL } from '@/utils/validate'
   import { fetchArticle } from '@/api/article'
   import { userSearch } from '@/api/remoteSearch'
   import complexTable from './../example/table/complexTable'
-  import { formatDate } from '@/methods/methods.js'
+  import { formatDatex } from '@/methods/date.js'
   import axios from 'axios'
   import port from '../../utils/manage'
   import global from '../../utils/global_userID'
@@ -157,13 +182,17 @@
   }
   export default {
     filters: {
-      formatDate(time) {
-        var date = new Date(time)
-        return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
-      }
+    formatDatex(time) {
+      var date = new Date(time)
+      return formatDatex(date, 'yyyy-MM-dd')
+    },
+    getTime(time) {
+      var date = new Date(time)
+      return formatDatex(date, 'hh:mm:ss')
+    }
     },
     name: 'articleDetail',
-    components: { Tinymce, MDinput, Upload4, Upload3, Multiselect, Sticky, complexTable },
+    components: { Tinymce, Upload4, Upload5 , Sticky, complexTable },
     props: {
       isEdit: {
         type: Boolean,
@@ -187,6 +216,8 @@
         }
       }
       return {
+        dialogImageUrl1:'',
+        dialogImageUrl2:'',
         postForm: Object.assign({}, defaultForm),
         fetchSuccess: true,
         loading: false,
@@ -197,33 +228,18 @@
         Duration: '',
         ServiceId: '',
         userLIstOptions: [],
-        platformsOptions: [
-          { key: 'a-platform', name: 'a-platform' },
-          { key: 'b-platform', name: 'b-platform' },
-          { key: 'c-platform', name: 'c-platform' }
-        ],
-        importanceOptions_info: [1, 1.5, 2, 2.5, 3, 3.5, 4],
-        listQuery_info: {
-          page: 1,
-          limit: 20,
-          importance_info: undefined,
-          coinamount: undefined,
-          title: undefined,
-          type: undefined,
-          sort: '+id'
-        },
         rules: {
           source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
         }
       }
     },
     mounted: function() {
-      this.ServiceId = this.$route.params.serviceId
-      this.Content = this.$route.params.content
-      this.Name = this.$route.params.name
-      this.StartTime = this.$route.params.startTime
-      this.EndTime = this.$route.params.endTime
-      this.Duration = this.$route.params.duration
+      this.ServiceId = this.$route.query.serviceId
+      this.Content = this.$route.query.content
+      this.Name = this.$route.query.name
+      this.StartTime = this.$route.query.startTime
+      this.EndTime = this.$route.query.endTime
+      this.Duration = this.$route.query.duration
     },
     computed: {
       contentShortLength() {
@@ -241,12 +257,29 @@
       console.log('全局：'+global.global_userID)
     },
     methods: {
+      //上传图片未用组件Upload4/5， 原因是点击组件中的确认上传会产生多余跳转， 待解决
+      rmImage1() {
+        this.dialogImageUrl1 = ''
+      },
+      handleImageScucess1(response) {
+        console.log('picture1!')
+        console.log(response)
+        this.dialogImageUrl1 = response.list.url
+      },
+      rmImage2() {
+        this.dialogImageUrl2 = ''
+      },
+      handleImageScucess2(response) {
+        console.log('picture2!')
+        console.log(response)
+        this.dialogImageUrl2 = response.list.url
+      },
       submit: function() {
         var params = new URLSearchParams()
         params.append('UserID', global.global_userID)
         params.append('ServiceID', this.ServiceId)
-        params.append('Material1', '')
-        params.append('Material2', '')
+        params.append('Material1', this.dialogImageUrl1)
+        params.append('Material2', this.dialogImageUrl2)
         params.append('Material3', '')
         params.append('RealStartTime', '2018-01-05 00:09:20')
         params.append('RealEndTime', '2018-01-05 00:09:20')
@@ -330,11 +363,12 @@
   .title-prompt{
     position: absolute;
     right: 0px;
-    font-size: 12px;
+    font-size: 18px;
     top:10px;
     color:#ff4949;
   }
-  .createPost-container {
+  .application-container {
+    font-size: 20px;
     position: relative;
     .createPost-main-container {
       padding: 40px 45px 20px 50px;
@@ -363,6 +397,73 @@
       position: absolute;
       right: -10px;
       top: 0px;
+    }
+  }
+   .upload-container {
+    width: 100%;
+    position: relative;
+    @include clearfix;
+    .image-uploader {
+      width: 35%;
+      float: left;
+    }
+    .image-preview {
+      width: 200px;
+      height: 200px;
+      position: relative;
+      border: 1px dashed #d9d9d9;
+      float: left;
+      margin-left: 50px;
+      .image-preview-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .image-preview-action {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        cursor: default;
+        text-align: center;
+        color: #fff;
+        opacity: 0;
+        font-size: 20px;
+        background-color: rgba(0, 0, 0, .5);
+        transition: opacity .3s;
+        cursor: pointer;
+        text-align: center;
+        line-height: 200px;
+        .el-icon-delete {
+          font-size: 36px;
+        }
+      }
+      &:hover {
+        .image-preview-action {
+          opacity: 1;
+        }
+      }
+    }
+    .image-app-preview {
+      width: 320px;
+      height: 180px;
+      position: relative;
+      border: 1px dashed #d9d9d9;
+      float: left;
+      margin-left: 50px;
+      .app-fake-conver {
+        height: 44px;
+        position: absolute;
+        width: 100%; // background: rgba(0, 0, 0, .1);
+        text-align: center;
+        line-height: 64px;
+        color: #fff;
+      }
     }
   }
 </style>
