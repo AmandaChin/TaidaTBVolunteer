@@ -1,6 +1,6 @@
 <template>
 <div class="checkedList">
-     <el-table  :data="checkedList" v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
+     <el-table  :data="checkedList.slice((pageNo-1)*pageSize,pageNo*pageSize)" v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
                 style="width: 100%;margin-left: 20px" >
 
       <el-table-column  label="服务日期">
@@ -40,6 +40,12 @@
         </template>
       </el-table-column> -->
     </el-table>
+    <!--分页-->
+    <div class="pagination-container" style = "margin-left:450px">
+      <el-pagination background @current-change="handleIndexChange"
+                      :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
+      </el-pagination>
+    </div>
     </div>
 </template>
 
@@ -54,7 +60,10 @@ export default {
   data() {
     return {
       checkedList: null,
-      listLoading: false
+      listLoading: false,
+        pageNo:1,
+        pageSize:10,
+        totalDataNumber:0
     }
   },
   filters: {
@@ -84,11 +93,18 @@ export default {
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getCheckList', params).then(
         (res) => {
           this.checkedList = res.data.list
+          this.totalDataNumber = res.data.list.length;
           console.log(res.data.list)
           this.listLoading = false
         }
       )
-    }
+    },
+    
+    handleCurrentChange(val) {
+        this.listQuery.page = val
+        var pageSize = this.pageSize
+        this.getAndDraw(parseInt(pageNo),parseInt(pageSize))
+      }
   }
 }
 </script>
