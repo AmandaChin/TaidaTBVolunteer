@@ -24,13 +24,13 @@
 
       <el-table-column label="服务开始时间">
         <template slot-scope="scope">
-          <span>{{scope.row.startTime|formatDatex}}</span>
+          <span>{{scope.row.startTime|getTime}}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="服务结束时间" >
         <template slot-scope="scope">
-          <span>{{scope.row.endTime|formatDatex}}</span>
+          <span>{{scope.row.endTime|getTime}}</span>
         </template>
       </el-table-column>
 
@@ -72,7 +72,7 @@ export default {
       return formatDatex(date, 'yyyy-MM-dd')
     },
 
-    formatDatex(time) {
+    getTime(time) {
       var date = new Date(time)
       return formatDatex(date, 'hh:mm:ss')
     }
