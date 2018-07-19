@@ -21,14 +21,14 @@
       label="开始时间"
       prop="users">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandStartTime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.DemandStartTime|formatDatex}}</span>
       </template>
     </el-table-column>
     <el-table-column
       label="结束时间"
       prop="applyingtime">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandEndTime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.DemandEndTime|formatDatex}}</span>
       </template>
     </el-table-column>
 
@@ -45,7 +45,8 @@
       label="更多操作">
       <template scope="scope">
         <el-button v-if="scope.row.Status==1" style="font-weight: bold; color:dodgerblue" type="text" @click="func(scope.row.ServiceID,scope.row.Content, scope.row.DemandStartTime,scope.row.DemandEndTime, scope.row.Duration)">申请勋章</el-button>
-        <span v-if="scope.row.Status!=1" style="font-weight: bold; color:darkgray" type="text">申请中</span>
+        <span v-if="scope.row.Status==2" style="font-weight: bold; color:darkgray" type="text">申请中</span>
+        <span v-if="scope.row.Status==3" style="font-weight: bold; color:darkgray" type="text"></span>
       </template>
     </el-table-column>
   </el-table>
@@ -128,7 +129,7 @@
           (res) => {
             this.name = res.data.Name
             console.log(this.name)
-            this.$router.push({ name: 'application', params: { name: this.name, serviceId: serviceId, content: content, startTime: startTime, endTime: endTime, duration: duration }})
+            this.$router.push({ name: 'application', query: { name: this.name, serviceId: serviceId, content: content, startTime: startTime, endTime: endTime, duration: duration }})
           }
         ).catch((err) => {
           console.log(err)

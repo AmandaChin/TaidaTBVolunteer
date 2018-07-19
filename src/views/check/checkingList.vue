@@ -5,7 +5,7 @@
 
       <el-table-column  label="服务日期">
         <template slot-scope="scope">
-          <span>{{scope.row.startTime|formatDate}}</span>
+          <span>{{scope.row.startTime|formatDatex}}</span>
         </template>
       </el-table-column>
 
@@ -41,6 +41,7 @@
 <script>
 import axios from 'axios'
 import { formatDate } from '@/methods/methods.js'
+import { formatDatex} from '@/methods/date.js'
 import port from '../../utils/manage'
 import global from '../../utils/global_userID'
 
@@ -52,14 +53,14 @@ export default {
     }
   },
   filters: {
-    formatDate(time) {
+    formatDatex(time) {
       var date = new Date(time)
-      return formatDate(date, 'yyyy-MM-dd')
+      return formatDatex(date, 'yyyy-MM-dd')
     },
 
     getTime(time) {
       var date = new Date(time)
-      return formatDate(date, 'hh:mm:ss')
+      return formatDatex(date, 'hh:mm:ss')
     }
   },
   created() {

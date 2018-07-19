@@ -270,7 +270,7 @@
           console.log('test!!!!!!!' + this.pickedtime.substring(0, 2) + this.pickedtime.substring(3, 5))
           console.log('tttttttttt' + String(this.postForm.start_time))
           console.log('timerrefa:' + testtime)
-          var test1 = testtime.getTime() + parseInt(this.postForm.duration) * 60 * 60 * 1000
+          var test1 = testtime.getTime() + (this.postForm.duration) * 60 * 60 * 1000
           console.log('timerrefa:' + testtime.getTime())
           var finalbegin = this.formatDateTime(testtime.getTime())
           var finalend = this.formatDateTime(test1)
@@ -281,7 +281,7 @@
           params.append('DemandStartTime', finalbegin)
           // params.append('DemandEndTime', this.postForm.end_time)
           params.append('DemandEndTime', finalend)
-          params.append('Duration', '1')
+          params.append('Duration', this.postForm.duration)
           params.append('Remark', this.postForm.content)
           // 'http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement'
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement', params).then(
