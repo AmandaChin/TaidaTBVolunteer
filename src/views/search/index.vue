@@ -276,8 +276,18 @@
               type: this.listQuery.type
             }).then(
             (res)=>{
-              this.list=res.data.list.rows;
-              this.totalDataNumber = res.data.list.count;
+              if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.list=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.list=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
+              
+              
               console.log(res);
               this.listLoading = false
             }
@@ -293,8 +303,17 @@
               type: this.listQuery.type
             }).then(
             (res)=>{
-              this.list=res.data.list.rows;
-              this.totalDataNumber = res.data.list.count;
+              if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.list=res.data.list.rows;
+                 this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.list=res.data.list;
+                  this.totalDataNumber = res.data.list.length;
+              }
+             
               console.log(res);
               this.listLoading = false
             }
@@ -313,8 +332,16 @@
               type: this.listQuery.type
             }).then(
             (res)=>{
-              this.list=res.data.list.rows;
-              this.totalDataNumber = res.data.list.count;
+              if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.list=res.data.list.rows;
+                 this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.list=res.data.list;
+                  this.totalDataNumber = res.data.list.length;
+              }
               console.log(res);
               this.listLoading = false
             }
@@ -332,8 +359,16 @@
             }).then(
             (res)=>{
               //console.log("testdurationsearch"+res.data.list)
-              this.list=res.data.list.rows;
-              this.totalDataNumber = res.data.list.count;
+              if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.list=res.data.list.rows;
+                 this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.list=res.data.list;
+                  this.totalDataNumber = res.data.list.length;
+              }
               //console.log(res);
               this.listLoading = false
             }
