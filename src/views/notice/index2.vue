@@ -55,7 +55,7 @@
             <span>{{ temp.ReleaseTime|formatDate }}</span>
           </el-form-item>
           <el-form-item label="内容">
-            <span>{{ temp.Content }}</span>
+            <span v-html="temp.Content"></span>
           </el-form-item>
           </el-form>
         </el-dialog>
