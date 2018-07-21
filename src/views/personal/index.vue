@@ -4,9 +4,15 @@
     <h1><i class="el-icon-document" style="margin-right:10px"></i>{{username}}的基本信息</h1>
     </div>
       <el-form ref="form" :model="personalInfo" label-width="120px">
-          <el-form-item label="姓名">
+          <el-form-item label="昵称">
             <el-col :span="9">
           <el-input v-model="personalInfo.UserName"></el-input>
+          </el-col>
+          </el-form-item>
+
+          <el-form-item label="姓名">
+            <el-col :span="9">
+          <el-input v-model="personalInfo.Name"></el-input>
           </el-col>
           </el-form-item>
 
@@ -111,6 +117,7 @@ export default {
       username:'',
       personalInfo: {
         UserName: '',
+        Name:'',
         Gender: '',
         Phone: '',
         Email: '',
@@ -136,11 +143,12 @@ export default {
       }).then(
       (res) => {
         console.log(res.data)
-        that.personalInfo.UserName = res.data.UserName
-        that.personalInfo.Gender = res.data.Gender
-        that.personalInfo.Phone = res.data.Phone
-        that.personalInfo.Email = res.data.Email
-        that.personalInfo.IDNumber = res.data.IDNumber
+        that.personalInfo.UserName=res.data.UserName;
+        that.personalInfo.Name=res.data.Name;
+        that.personalInfo.Gender=res.data.Gender;
+        that.personalInfo.Phone=res.data.Phone;
+        that.personalInfo.Email=res.data.Email;
+        that.personalInfo.IDNumber=res.data.IDNumber;
         that.username = res.data.UserName
         var arr = new Array()
         arr.push(res.data.Province)
@@ -165,14 +173,15 @@ export default {
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/changeUserInformation',
         {
           UserID: global.global_userID,
-          Gender: this.personalInfo.Gender,
-          Name: this.personalInfo.UserName,
-          IDNumber: this.personalInfo.IDNumber,
-          Email: this.personalInfo.Email,
-          Phone: this.personalInfo.Phone,
-          Province: this.personalInfo.region[0],
-          City: this.personalInfo.region[1],
-          District: this.personalInfo.region[2]
+          Gender:this.personalInfo.Gender,
+          UserName:this.personalInfo.UserName,
+          Name:this.personalInfo.Name,
+          IDNumber:this.personalInfo.IDNumber,
+          Email:this.personalInfo.Email,
+          Phone:this.personalInfo.Phone,
+          Province:this.personalInfo.region[0],
+          City:this.personalInfo.region[1],
+          District:this.personalInfo.region[2]
         }).then(
         function(res) {
           var num = res.data.num
