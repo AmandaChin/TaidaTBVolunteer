@@ -153,20 +153,20 @@ export default {
     this.applyInfo.startTime = this.$route.params.startTime;
     this.applyInfo.endTime = this.$route.params.endTime;
     this.applyInfo.duration = this.$route.params.duration;
-  //  this.applyInfo.content = this.$route.params.content;
+    this.applyInfo.content = this.$route.params.content;
     this.applyInfo.remark = this.$route.params.remark;
     console.log("!!!!!!!volunteerid:"+this.$route.params.volunteerId)
     console.log("!!!!!!!contentid:"+this.$route.params.content)
     console.log("!!!!!!!serviceid:"+this.$route.params.serviceId)
-    var params = new URLSearchParams()
+    // var params1 = new URLSearchParams()
 
-    params.append('ServiceContentID', this.$route.params.content)
-    axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getServiceType', params).then(
-        (res) => {
-              console.log(res.data.list)
-              this.applyInfo.content = res.data.list.rows[0].type;
-        }
-      )
+    // params1.append('ServiceContentID', this.$route.params.content)
+    // axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getServiceType', params1).then(
+    //     (res) => {
+    //           console.log(res.data.list)
+    //           this.applyInfo.content = res.data.list.rows[0].type;
+    //     }
+    //   )
 
     var params2 = new URLSearchParams()
     params2.append('ServiceID',this.$route.params.serviceId)
@@ -183,6 +183,7 @@ export default {
   methods: {
     submitCheck: function () {
         //console.log(this.checkRate.oldManRate)
+        var that = this
         var params = new URLSearchParams()
         params.append('UserID', global.global_userID)
         params.append('ServiceID', this.$route.params.serviceId)
@@ -194,8 +195,8 @@ export default {
 
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/checkApplication', params).then(
         () => {
-         this.$message('审核成功');
-         this.$router.push({ name: 'checkedList', params: {}})
+         that.$message('审核成功');
+         that.$router.push({ name: 'checkedList', params: {}})
         }
       )
     }

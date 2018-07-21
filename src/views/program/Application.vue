@@ -99,13 +99,13 @@
                     <el-upload   class="image-uploader" 
                               v-show="dialogImageUrl1.length==0"
                               drag :multiple="false" :show-file-list="false" 
-                              action="http://localhost:3000/api/uploadFile"
+                              :action="postUrl"
                               :on-success="handleImageScucess1">
                       <i class="el-icon-upload"></i>
                       <div class="el-upload__text">将其他相关文件拖到此处，或<em>点击上传</em></div>
                     </el-upload>
-                    <div class="image-preview">
-                    <div class="image-preview-wrapper" v-show="dialogImageUrl1.length>1">
+                    <div class="image-preview" v-show="dialogImageUrl1.length>1">
+                    <div class="image-preview-wrapper" >
                       <img :src="dialogImageUrl1">
                       <div class="image-preview-action">
                         <i @click="rmImage1" class="el-icon-delete"></i>
@@ -120,13 +120,13 @@
                     <el-upload class="image-uploader" 
                     v-show="dialogImageUrl2.length==0"
                     drag :multiple="false" :show-file-list="false" 
-                    action="http://localhost:3000/api/uploadFile"
+                    :action="postUrl"
                     :on-success="handleImageScucess2">
                       <i class="el-icon-upload"></i>
                       <div class="el-upload__text">将志愿服务证明拖到此处，或<em>点击上传</em></div>
                     </el-upload>
-                    <div class="image-preview">
-                      <div class="image-preview-wrapper" v-show="dialogImageUrl2.length>1">
+                    <div class="image-preview" v-show="dialogImageUrl2.length>1">
+                      <div class="image-preview-wrapper" >
                         <img :src="dialogImageUrl2">
                       <div class="image-preview-action">
                       <i @click="rmImage2" class="el-icon-delete"></i>
@@ -216,6 +216,7 @@
         }
       }
       return {
+        postUrl:'',
         dialogImageUrl1:'',
         dialogImageUrl2:'',
         postForm: Object.assign({}, defaultForm),
@@ -252,11 +253,15 @@
       } else {
         this.postForm = Object.assign({}, defaultForm)
       }
+      this.imgPostUrl()
       var id = JSON.parse(localStorage.getItem('volunteerid'))
       global.global_userID = id
       console.log('全局：'+global.global_userID)
     },
     methods: {
+      imgPostUrl(){
+          this.postUrl = 'http://' + port.info.host + ':' + port.info.port + '/api/uploadFile'
+      },
       //上传图片未用组件Upload4/5， 原因是点击组件中的确认上传会产生多余跳转， 待解决
       rmImage1() {
         this.dialogImageUrl1 = ''
