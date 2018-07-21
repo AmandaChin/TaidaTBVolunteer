@@ -125,8 +125,16 @@
               
         (res) => {
           console.log(res.data.list)
-          this.gettingmedals = res.data.list.rows
-          this.totalDataNumber = res.data.list.count;
+          if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.gettingmedals=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.gettingmedals=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
           this.listLoading = false
         }
       )

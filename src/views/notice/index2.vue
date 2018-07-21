@@ -55,7 +55,7 @@
             <span>{{ temp.ReleaseTime|formatDate }}</span>
           </el-form-item>
           <el-form-item label="内容">
-            <span>{{ temp.Content }}</span>
+            <span v-html="temp.Content"></span>
           </el-form-item>
           </el-form>
         </el-dialog>
@@ -103,8 +103,16 @@ import global from '../../utils/global_userID'
       params.append('UserID', global.global_userID)
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/noticeOperation', params).then(
           (res)=>{
-            this.noticeData=res.data.list.rows;
-             this.totalDataNumber = res.data.list.count;
+            if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.noticeData=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.noticeData=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
             console.log(res);
           }
         ).catch((err)=>{
@@ -124,8 +132,16 @@ import global from '../../utils/global_userID'
         params.append('UserID', global.global_userID)
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/noticeOperation', params).then(
           (res)=>{
-            this.noticeData=res.data.list.rows;
-             this.totalDataNumber = res.data.list.count;
+           if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.noticeData=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.noticeData=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
             console.log(res);
           }
         ).catch((err)=>{

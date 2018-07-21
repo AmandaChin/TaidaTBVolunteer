@@ -35,7 +35,7 @@
                </div>
                <div style="padding: 5px;">
                 <span>志愿者自述: </span>
-                <span>{{applyInfo.remark}}</span>
+                <span v-html="applyInfo.remark"></span>
                </div>
                 <div style="padding: 5px;">
                 <span>申请材料1: </span>
