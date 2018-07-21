@@ -127,8 +127,16 @@
       this.listLoading = true
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getGiveInfo', params).then(             
         (res) => {
-          this.applyingmedals = res.data.list.rows
-          this.totalDataNumber = res.data.list.count;
+           if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.applyingmedals=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.applyingmedals=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
           this.listLoading = false
         }
       )

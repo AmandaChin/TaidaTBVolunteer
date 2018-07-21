@@ -139,7 +139,7 @@
         },
         servecontent_info: [],
         tableKey: 0,
-        list: null,
+        list: [],
         total: null,
         listLoading: true,
         listQuery: {
@@ -223,8 +223,16 @@
         //   }).then(
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',{UserID: global.global_userID}).then(
           (res)=>{
-            this.list=res.data.list.rows;
-            this.totalDataNumber = res.data.list.count;
+            if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.list=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.list=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
             console.log(res);
             this.listLoading = false
           }
