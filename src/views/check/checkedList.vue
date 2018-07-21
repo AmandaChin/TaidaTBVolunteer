@@ -59,7 +59,7 @@ import { formatDatex } from '@/methods/date.js'
 export default {
   data() {
     return {
-      checkedList: null,
+      checkedList: [],
       listLoading: false,
         pageNo:1,
         pageSize:10,
@@ -92,8 +92,16 @@ export default {
       params.append('status', '1')
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getCheckList', params).then(
         (res) => {
-          this.checkedList = res.data.list
-          this.totalDataNumber = res.data.list.length;
+          if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.checkedList=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.checkedList=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
           console.log(res.data.list)
           this.listLoading = false
         }

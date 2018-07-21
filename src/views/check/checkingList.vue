@@ -54,7 +54,7 @@ import global from '../../utils/global_userID'
 export default {
   data() {
     return {
-      checkingList: null,
+      checkingList: [],
       listLoading: true,
         pageNo:1,
         pageSize:10,
@@ -86,8 +86,16 @@ export default {
       this.listLoading = true
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getCheckList', params).then(
         (res) => {
-          this.checkingList = res.data.list
-          this.totalDataNumber = res.data.list.length;
+          if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.checkingList=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.checkingList=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
           console.log(res.data.list)
           this.listLoading = false
         }

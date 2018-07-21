@@ -149,8 +149,16 @@
        this.listLoading = true
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByUserID', params).then(
         (res) => {
-          this.demands = res.data.list
-          this.totalDataNumber = res.data.list.length;
+          if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.demands=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.demands=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
           console.log(res)
            this.listLoading = false
         }
