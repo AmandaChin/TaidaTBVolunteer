@@ -194,7 +194,7 @@ export default {
 
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/checkApplication', params).then(
         () => {
-         this.$message('申请成功，等待审核');
+         this.$message('审核成功');
          this.$router.push({ name: 'checkedList', params: {}})
         }
       )

@@ -78,11 +78,11 @@
         </el-form-item>
 
         <el-form-item label="服务内容" prop="Content">
-          <span>{{ temp.Content }}</span>
+          <span>{{temp.Content}}</span>
         </el-form-item>
 
         <el-form-item label="具体事宜" prop="Remark">
-          <span>{{ temp.Remark }}</span>
+          <span v-html="temp.Remark"></span>
         </el-form-item>
 
         <el-form-item label="服务时长" prop="Duration">
