@@ -142,6 +142,17 @@
           this.listLoading = false
         }
       )
+          
+       //获取帐户余额   
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getUserAccount',
+      {
+        UserId: global.global_userID
+      }).then(
+        (res)=>{
+          console.log(res.data)
+          this.useraccount = res.data.useraccount
+        }
+      )
     },
      
      handleCurrentChange(val) {
