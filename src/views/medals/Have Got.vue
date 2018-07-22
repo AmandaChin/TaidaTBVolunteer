@@ -1,5 +1,8 @@
 <template>
 <div class="havegotmedalinfo">
+  <div>
+    <h1 style="color:darkgray;font-size:25px;margin-left:20px">帐户剩余勋章币:  {{useraccount}}</h1>
+    </div>
   <el-table
     :data="gettingmedals.slice((pageNo-1)*pageSize,pageNo*pageSize)"
     style="width: 100%;margin-left: 20px"
@@ -99,7 +102,8 @@
         gettingmedals: [],
         pageNo:1,
         pageSize:10,
-        totalDataNumber:0
+        totalDataNumber:0,
+        useraccount:0
       }
     },
     created() {
