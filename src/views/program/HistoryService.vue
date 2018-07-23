@@ -9,7 +9,7 @@
     <el-table-column
       label="发布时间">
       <template scope="scope">
-        <span style="color: darkgray">{{ scope.row.CreateTime|formatDate }}</span>
+        <span style="color: darkgray">{{ scope.row.CreateTime|formatDate}}</span>
       </template>
     </el-table-column>
     <el-table-column

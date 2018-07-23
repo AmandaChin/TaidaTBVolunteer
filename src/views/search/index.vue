@@ -61,12 +61,24 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <div class="pagination-container">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30,50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      </el-pagination>
+    </div>
     <!--分页-->
     <div class="pagination-container" style = "margin-left:450px">
       <el-pagination background @current-change="handleIndexChange"
                       :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
+
       </el-pagination>
     </div>
+    <!--分页-->
+    <!--<div class="pagination-container">-->
+    <!--<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"-->
+    <!--:page-sizes="[10,20,30,50]" :page-size="listQuery.limit" :current-page="listQuery.page" layout="total, sizes, prev, pager, next, jumper" :total="total">-->
+    <!--</el-pagination>-->
+    <!--</div>-->
     <el-dialog title="服务详情" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
         <el-form-item label="服务日期" prop="DemandStartTime">
@@ -189,6 +201,7 @@
         var date = new Date(time)
         return formatDatex(date, 'yyyy-MM-dd hh:mm:ss')
       }
+
   },
   created() {
     this.showServerType()
@@ -216,12 +229,24 @@
       },
       //得到初始的全部需求
       getList() {
+        // this.listLoading = true
+        // fetchList(this.listQuery).then(response => {
+        //   // this.list = response.data.items
+        //   this.total = response.data.total
+        //
+        //   // Just to simulate the time of the request
+        //   // setTimeout(() => {
+        //   //   this.listLoading = false
+        //   // }, 1.5 * 1000)
+        // })
         this.listLoading = true
+
         // axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',
         //   {
         //     UserID: global.global_userID
         //   }).then(
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',{UserID: global.global_userID}).then(
+
           (res)=>{
             if(res.data.list.rows)
               {
@@ -245,7 +270,7 @@
       handleFilter() {
         console.log("search"+this.listQuery.content)
         this.listQuery.page = 1
-        // this.getList()
+       // this.getList()
         this.listLoading=true
         var duration
         var startTime
@@ -260,8 +285,12 @@
         }
         if (this.listQuery.startTime==undefined)
         {
-          console.log("undefined startTime")
-          startTime="1980-03-15 15:35:04"
+          console.log("undefined startTime" )
+          //默认时间是今天
+          // startTime="1980-03-15 15:35:04"
+          var now=  this.formatDateTime(Date.now())
+          startTime= now
+          console.log("undefined startTime"+ startTime)
         }else{
           console.log(" startTime")
           startTime=this.listQuery.startTime
@@ -463,3 +492,245 @@
     }
   }
 </script>
+
+
+
+
+<!--<script>-->
+<!--import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'-->
+<!--import waves from '@/directive/waves' // 水波纹指令-->
+<!--import { parseTime } from '@/utils'-->
+<!--import { formatDate } from '@/methods/methods.js'-->
+<!--import { formatDatex} from '@/methods/date.js'-->
+<!--import port from '../../utils/manage'-->
+<!--import global from '../../utils/global_userID'-->
+
+
+<!--const placeOptions = [-->
+  <!--{ key: 1, display_name: '同区选择' },-->
+  <!--{ key: 2, display_name: '同市选择' },-->
+  <!--{ key: 3, display_name: '同省选择' },-->
+  <!--{ key: 4, display_name: '全国不限' }-->
+<!--]-->
+
+<!--// arr to obj ,such as { CN : "China", US : "USA" }-->
+<!--const calendarTypeKeyValue = placeOptions.reduce((acc, cur) => {-->
+  <!--acc[cur.key] = cur.display_name-->
+  <!--return acc-->
+<!--}, {})-->
+
+<!--export default {-->
+<!--directives: {-->
+<!--waves-->
+<!--},-->
+<!--data() {-->
+<!--return {-->
+  <!--pickerBeginDateAfter: {-->
+    <!--disabledDate(time) {-->
+      <!--var timeSpace = time.getTime() < (Date.now() - 24 * 60 * 60 * 1000)-->
+      <!--return timeSpace-->
+    <!--}-->
+  <!--},-->
+  <!--servecontent_info: [],-->
+  <!--tableKey: 0,-->
+  <!--list: null,-->
+  <!--total: null,-->
+  <!--listLoading: true,-->
+  <!--listQuery: {-->
+<!--page: 1,-->
+<!--limit: 20,-->
+<!--importance: undefined,-->
+<!--title: undefined,-->
+<!--type: undefined,-->
+<!--sort: '+id'-->
+<!--},-->
+<!--importanceOptions: [1, 2, 3],-->
+<!--calendarTypeOptions,-->
+<!--sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],-->
+<!--statusOptions: ['published', 'draft', 'deleted'],-->
+<!--showReviewer: false,-->
+<!--temp: {-->
+<!--id: undefined,-->
+<!--importance: 1,-->
+<!--remark: '',-->
+<!--timestamp: new Date(),-->
+<!--title: '',-->
+<!--type: '',-->
+<!--status: 'published'-->
+<!--},-->
+<!--dialogFormVisible: false,-->
+<!--dialogStatus: '',-->
+<!--textMap: {-->
+<!--update: 'Edit',-->
+<!--create: 'Create'-->
+<!--},-->
+<!--dialogPvVisible: false,-->
+<!--pvData: [],-->
+<!--rules: {-->
+<!--type: [{ required: true, message: 'type is required', trigger: 'change' }],-->
+<!--timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],-->
+<!--title: [{ required: true, message: 'title is required', trigger: 'blur' }]-->
+<!--},-->
+<!--downloadLoading: false-->
+<!--}-->
+<!--},-->
+<!--filters: {-->
+<!--statusFilter(status) {-->
+<!--const statusMap = {-->
+<!--published: 'success',-->
+<!--draft: 'info',-->
+<!--deleted: 'danger'-->
+<!--}-->
+<!--return statusMap[status]-->
+<!--},-->
+<!--typeFilter(type) {-->
+<!--return calendarTypeKeyValue[type]-->
+<!--}-->
+<!--},-->
+<!--created() {-->
+<!--this.getList()-->
+<!--},-->
+<!--methods: {-->
+<!--getList() {-->
+<!--this.listLoading = true-->
+<!--fetchList(this.listQuery).then(response => {-->
+<!--this.list = response.data.items-->
+<!--this.total = response.data.total-->
+
+<!--// Just to simulate the time of the request-->
+<!--setTimeout(() => {-->
+<!--this.listLoading = false-->
+<!--}, 1.5 * 1000)-->
+<!--})-->
+<!--},-->
+<!--handleFilter() {-->
+<!--this.listQuery.page = 1-->
+<!--this.getList()-->
+<!--},-->
+<!--handleSizeChange(val) {-->
+<!--this.listQuery.limit = val-->
+<!--this.getList()-->
+<!--},-->
+<!--handleCurrentChange(val) {-->
+<!--this.listQuery.page = val-->
+<!--this.getList()-->
+<!--},-->
+<!--handleModifyStatus(row, status) {-->
+<!--this.$message({-->
+<!--message: '操作成功',-->
+<!--type: 'success'-->
+<!--})-->
+<!--row.status = status-->
+<!--},-->
+<!--resetTemp() {-->
+<!--this.temp = {-->
+<!--id: undefined,-->
+<!--importance: 1,-->
+<!--remark: '',-->
+<!--timestamp: new Date(),-->
+<!--title: '',-->
+<!--status: 'published',-->
+<!--type: ''-->
+<!--}-->
+<!--},-->
+<!--handleCreate() {-->
+<!--this.resetTemp()-->
+<!--this.dialogStatus = 'create'-->
+<!--this.dialogFormVisible = true-->
+<!--this.$nextTick(() => {-->
+<!--this.$refs['dataForm'].clearValidate()-->
+<!--})-->
+<!--},-->
+<!--createData() {-->
+<!--this.$refs['dataForm'].validate((valid) => {-->
+<!--if (valid) {-->
+<!--this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id-->
+<!--this.temp.author = 'vue-element-admin'-->
+<!--createArticle(this.temp).then(() => {-->
+<!--this.list.unshift(this.temp)-->
+<!--this.dialogFormVisible = false-->
+<!--this.$notify({-->
+<!--title: '成功',-->
+<!--message: '创建成功',-->
+<!--type: 'success',-->
+<!--duration: 2000-->
+<!--})-->
+<!--})-->
+<!--}-->
+<!--})-->
+<!--},-->
+<!--handleUpdate(row) {-->
+<!--this.temp = Object.assign({}, row) // copy obj-->
+<!--this.temp.timestamp = new Date(this.temp.timestamp)-->
+<!--this.dialogStatus = 'update'-->
+<!--this.dialogFormVisible = true-->
+<!--this.$nextTick(() => {-->
+<!--this.$refs['dataForm'].clearValidate()-->
+<!--})-->
+<!--},-->
+<!--updateData() {-->
+<!--this.$refs['dataForm'].validate((valid) => {-->
+<!--if (valid) {-->
+<!--const tempData = Object.assign({}, this.temp)-->
+<!--tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464-->
+<!--updateArticle(tempData).then(() => {-->
+<!--for (const v of this.list) {-->
+<!--if (v.id === this.temp.id) {-->
+<!--const index = this.list.indexOf(v)-->
+<!--this.list.splice(index, 1, this.temp)-->
+<!--break-->
+<!--}-->
+<!--}-->
+<!--this.dialogFormVisible = false-->
+<!--this.$notify({-->
+<!--title: '成功',-->
+<!--message: '更新成功',-->
+<!--type: 'success',-->
+<!--duration: 2000-->
+<!--})-->
+<!--})-->
+<!--}-->
+<!--})-->
+<!--},-->
+<!--handleDelete(row) {-->
+<!--this.$notify({-->
+<!--title: '成功',-->
+<!--message: '删除成功',-->
+<!--type: 'success',-->
+<!--duration: 2000-->
+<!--})-->
+<!--const index = this.list.indexOf(row)-->
+<!--this.list.splice(index, 1)-->
+<!--},-->
+<!--handleFetchPv(pv) {-->
+<!--fetchPv(pv).then(response => {-->
+<!--this.pvData = response.data.pvData-->
+<!--this.dialogPvVisible = true-->
+<!--})-->
+<!--},-->
+<!--handleDownload() {-->
+<!--this.downloadLoading = true-->
+<!--import('@/vendor/Export2Excel').then(excel => {-->
+<!--const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']-->
+<!--const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']-->
+<!--const data = this.formatJson(filterVal, this.list)-->
+<!--excel.export_json_to_excel({-->
+<!--header: tHeader,-->
+<!--data,-->
+<!--filename: 'table-list'-->
+<!--})-->
+<!--this.downloadLoading = false-->
+<!--})-->
+<!--},-->
+<!--formatJson(filterVal, jsonData) {-->
+<!--return jsonData.map(v => filterVal.map(j => {-->
+<!--if (j === 'timestamp') {-->
+<!--return parseTime(v[j])-->
+<!--} else {-->
+<!--return v[j]-->
+<!--}-->
+<!--}))-->
+<!--}-->
+<!--}-->
+<!--}-->
+<!--</script>-->

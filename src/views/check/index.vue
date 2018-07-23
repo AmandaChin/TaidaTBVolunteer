@@ -147,6 +147,7 @@ export default {
     }
   },
   mounted: function() {
+
     this.applyInfo.serviceID = this.$route.params.serviceId;
     this.applyInfo.oldMan = this.$route.params.oldMan;
     this.applyInfo.volunteer = this.$route.params.volunteer;
@@ -169,18 +170,18 @@ export default {
     //   )
 
     var params2 = new URLSearchParams()
-    params2.append('ServiceID',this.$route.params.serviceId)
-    params2.append('UserID',this.$route.params.volunteerId)
+    params2.append('ServiceID', this.$route.params.serviceId)
+    params2.append('UserID', this.$route.params.volunteerId)
     axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getMaterial', params2).then(
-        (res) => {
-              console.log(res.data.list.rows[0].Material1)
-              this.Material1 = res.data.list.rows[0].Material1;
-              this.Material2 = res.data.list.rows[0].Material2;
-        }
-      )
-
+      (res) => {
+        console.log(res.data.list.rows[0].Material1)
+        this.Material1 = res.data.list.rows[0].Material1
+        this.Material2 = res.data.list.rows[0].Material2
+      }
+    )
   },
   methods: {
+
     submitCheck: function () {
         //console.log(this.checkRate.oldManRate)
         var that = this
@@ -197,6 +198,7 @@ export default {
         () => {
          that.$message('提交成功，请耐心等待');
          that.$router.push({ name: 'checkedList', params: {}})
+
         }
       )
     }
