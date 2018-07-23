@@ -19,6 +19,7 @@ import Applying from '../views/medals/Applying'
 import NoticeList from '../views/notice/index2'
 import Homepage from '../views/homepage/index'
 import CheckInfo from '../views/check/index'
+import { Upload } from 'element-ui';
 /** note: submenu only apppear when children.length>=1
  *   detail see  https://panjiachen.github.io/vue-element-admin-site/#/router-and-nav?id=sidebar
  **/

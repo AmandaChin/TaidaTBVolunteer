@@ -35,7 +35,7 @@
                </div>
                <div style="padding: 5px;">
                 <span>志愿者自述: </span>
-                <span>{{applyInfo.remark}}</span>
+                <span v-html="applyInfo.remark"></span>
                </div>
                 <div style="padding: 5px;">
                 <span>申请材料1: </span>
@@ -131,6 +131,11 @@ export default {
       Material2: undefined
     }
   },
+  created() {
+    var id = JSON.parse(localStorage.getItem('volunteerid'))
+    global.global_userID = id
+    console.log('全局：'+global.global_userID)
+  },
   filters: {
     formatDate(time) {
       var date = new Date(time)
@@ -142,26 +147,27 @@ export default {
     }
   },
   mounted: function() {
-    this.applyInfo.serviceID = this.$route.params.serviceId
-    this.applyInfo.oldMan = this.$route.params.oldMan
-    this.applyInfo.volunteer = this.$route.params.volunteer
-    this.applyInfo.startTime = this.$route.params.startTime
-    this.applyInfo.endTime = this.$route.params.endTime
-    this.applyInfo.duration = this.$route.params.duration
-    //  this.applyInfo.content = this.$route.params.content;
-    this.applyInfo.remark = this.$route.params.remark
-    console.log('!!!!!!!volunteerid:' + this.$route.params.volunteerId)
-    console.log('!!!!!!!contentid:' + this.$route.params.content)
-    console.log('!!!!!!!serviceid:' + this.$route.params.serviceId)
-    var params = new URLSearchParams()
 
-    params.append('ServiceContentID', this.$route.params.content)
-    axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getServiceType', params).then(
-      (res) => {
-        console.log(res.data.list)
-        this.applyInfo.content = res.data.list.rows[0].type
-      }
-    )
+    this.applyInfo.serviceID = this.$route.params.serviceId;
+    this.applyInfo.oldMan = this.$route.params.oldMan;
+    this.applyInfo.volunteer = this.$route.params.volunteer;
+    this.applyInfo.startTime = this.$route.params.startTime;
+    this.applyInfo.endTime = this.$route.params.endTime;
+    this.applyInfo.duration = this.$route.params.duration;
+    this.applyInfo.content = this.$route.params.content;
+    this.applyInfo.remark = this.$route.params.remark;
+    console.log("!!!!!!!volunteerid:"+this.$route.params.volunteerId)
+    console.log("!!!!!!!contentid:"+this.$route.params.content)
+    console.log("!!!!!!!serviceid:"+this.$route.params.serviceId)
+    // var params1 = new URLSearchParams()
+
+    // params1.append('ServiceContentID', this.$route.params.content)
+    // axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getServiceType', params1).then(
+    //     (res) => {
+    //           console.log(res.data.list)
+    //           this.applyInfo.content = res.data.list.rows[0].type;
+    //     }
+    //   )
 
     var params2 = new URLSearchParams()
     params2.append('ServiceID', this.$route.params.serviceId)
@@ -175,20 +181,24 @@ export default {
     )
   },
   methods: {
-    submitCheck: function() {
-      // console.log(this.checkRate.oldManRate)
-      var params = new URLSearchParams()
-      params.append('UserID', global.global_userID)
-      params.append('ServiceID', this.$route.params.serviceId)
-      params.append('Score1', this.checkRate.contentRate)
-      params.append('Score2', this.checkRate.durationRate)
-      params.append('Score3', this.checkRate.attitudeRate)
-      params.append('Score4', this.checkRate.oldManRate)
 
-      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/checkApplication', params).then(
+    submitCheck: function () {
+        //console.log(this.checkRate.oldManRate)
+        var that = this
+        var params = new URLSearchParams()
+        params.append('UserID', global.global_userID)
+        params.append('ServiceID', this.$route.params.serviceId)
+        params.append('Score1', this.checkRate.contentRate)
+        params.append('Score2', this.checkRate.durationRate)
+        params.append('Score3', this.checkRate.attitudeRate)
+        params.append('Score4', this.checkRate.oldManRate)
+
+
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/checkApplication', params).then(
         () => {
-          this.$message('申请成功，等待审核')
-          this.$router.push({ name: 'checkedList', params: {}})
+         that.$message('提交成功，请耐心等待');
+         that.$router.push({ name: 'checkedList', params: {}})
+
         }
       )
     }

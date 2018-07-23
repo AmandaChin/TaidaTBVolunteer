@@ -47,7 +47,7 @@
 
                 <el-col :span="1">
                   <el-form-item label-width="100px" label="服务时长:" class="postInfo-container-item">
-                    <el-select clearable style="width: 100px" class="filter-item" v-model="Duration":placeholder="$t('小时')">
+                    <el-select clearable style="width: 100px" class="filter-item" v-model="Duration" :placeholder="$t('小时')">
                       <el-option v-for="item in importanceOptions_info" :key="item" :label="item" :value="item" >
                       </el-option>
                     </el-select>
@@ -202,6 +202,9 @@
       } else {
         this.postForm = Object.assign({}, defaultForm)
       }
+      var id = JSON.parse(localStorage.getItem('volunteerid'))
+      global.global_userID = id
+      console.log('全局：'+global.global_userID)
     },
     methods: {
       submit: function() {

@@ -31,7 +31,7 @@
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
     </div>
 
-    <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
+    <el-table :key='tableKey' :data="list.slice((pageNo-1)*pageSize,pageNo*pageSize)" v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
               style="width: 80%" @selection-change="handleSelectionChange" >
       <el-table-column width="200px" align="center" label="服务日期">
         <template slot-scope="scope">
@@ -43,7 +43,7 @@
           <span class="link-type" @click="handleShowDialog(scope.row)">{{scope.row.Content}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="110px" align="center" label="发布作者">
+      <el-table-column width="120px" align="center" label="发布人">
         <template slot-scope="scope">
           <span>{{scope.row.Name}}</span>
         </template>
@@ -67,112 +67,10 @@
       </el-pagination>
     </div>
     <!--分页-->
-    <!--<div class="pagination-container">-->
-    <!--<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"-->
-    <!--:page-sizes="[10,20,30,50]" :page-size="listQuery.limit" :current-page="listQuery.page" layout="total, sizes, prev, pager, next, jumper" :total="total">-->
-    <!--</el-pagination>-->
-    <!--</div>-->
-    <el-dialog title="服务详情" :visible.sync="dialogFormVisible">
-      <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="服务日期" prop="DemandStartTime">
-          <span>{{temp.DemandStartTime|formatDatex}}</span>
-        </el-form-item>
+    <div class="pagination-container" style = "margin-left:450px">
+      <el-pagination background @current-change="handleIndexChange"
+                      :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
 
-        <el-form-item label="服务对象" prop="Name">
-          <span>{{ temp.Name }}</span>
-        </el-form-item>
-
-        <el-form-item label="服务内容" prop="Content">
-          <span>{{ temp.Content }}</span>
-        </el-form-item>
-
-        <el-form-item label="具体事宜" prop="Remark">
-          <span>{{ temp.Remark }}</span>
-        </el-form-item>
-
-        <el-form-item label="服务时长" prop="Duration">
-          <span>{{ temp.Duration }}</span>
-        </el-form-item>
-
-        <el-form-item label="联系方式" prop="Phone">
-          <span>{{ temp.Phone }}</span>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="applyService(temp)">申请</el-button>
-      </div>
-    </el-dialog>
-  </div>
-</template>
-
-
-<!--suppress ALL -->
-<template>
-  <div class="app-container calendar-list-container">
-    <div class="filter-container">
-      <!-- <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="服务内容"
-      v-model="listQuery.content">
-      </el-input> -->
-
-      <el-select clearable style="width: 130px" class="filter-item" v-model="listQuery.content" placeholder="内容类型">
-        <el-option v-for="item in servecontent_info" :key="item.ID" :label="item.type" :value="item.ID" >
-        </el-option>
-      </el-select>
-      <el-date-picker clearable style="width: 200px;"
-                      v-model="listQuery.startTime"
-                      :picker-options="pickerBeginDateAfter"
-                      class="filter-item"
-                      type="date" value-format="yyyy-MM-dd HH:mm:ss"
-                      placeholder="选择服务开始日期"></el-date-picker>
-
-      <el-select clearable style="width: 120px" class="filter-item"
-                 v-model="listQuery.duration" placeholder="服务时长">
-        <el-option v-for="item in durationOptions" :key="item" :label="item" :value="item">
-        </el-option>
-      </el-select>
-      <el-select clearable class="filter-item" style="width: 130px"
-                 v-model="listQuery.type"  @change="TypeChangeHandler">
-        <el-option v-for="item in  placeOptions" :key="item.key" :label="item.display_name" :value="item.key" >
-        </el-option>
-      </el-select>
-
-      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
-    </div>
-
-    <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
-              style="width: 80%" @selection-change="handleSelectionChange" >
-      <el-table-column width="200px" align="center" label="服务日期">
-        <template slot-scope="scope">
-          <span>{{scope.row.DemandStartTime|formatDatex}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="150px" label="服务内容">
-        <template slot-scope="scope">
-          <span class="link-type" @click="handleShowDialog(scope.row)">{{scope.row.Content}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="110px" align="center" label="发布作者">
-        <template slot-scope="scope">
-          <span>{{scope.row.Name}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="80px" align="center" label="服务时长">
-        <template slot-scope="scope">
-          <span>{{scope.row.Duration}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" label="申请" width="100" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button type="primary" size="mini"@click="handleShowDialog(scope.row)">申请</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30,50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
     <!--分页-->
@@ -192,11 +90,11 @@
         </el-form-item>
 
         <el-form-item label="服务内容" prop="Content">
-          <span>{{ temp.Content }}</span>
+          <span>{{temp.Content}}</span>
         </el-form-item>
 
         <el-form-item label="具体事宜" prop="Remark">
-          <span>{{ temp.Remark }}</span>
+          <span v-html="temp.Remark"></span>
         </el-form-item>
 
         <el-form-item label="服务时长" prop="Duration">
@@ -253,14 +151,14 @@
         },
         servecontent_info: [],
         tableKey: 0,
-        list: null,
+        list: [],
         total: null,
         listLoading: true,
         listQuery: {
           page: 1,
           limit: 20,
           duration: undefined,
-          content: '',
+          content: undefined,
           type: 4,
           startTime: undefined
         },
@@ -285,7 +183,10 @@
           type: [{ required: true, message: 'type is required', trigger: 'change' }],
           timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
           title: [{ required: true, message: 'title is required', trigger: 'blur' }]
-        }
+        },
+        pageNo:1,
+        pageSize:10,
+        totalDataNumber:0
       }
     },
     filters: {
@@ -300,41 +201,18 @@
         var date = new Date(time)
         return formatDatex(date, 'yyyy-MM-dd hh:mm:ss')
       }
-    },
-    created() {
-      this.showServerType()
-      this.getList()
-    },
-    methods: {
 
-      // getList() {
-      //   this.listLoading = true
-      //   fetchList(this.listQuery).then(response => {
-      //     this.list = response.data.items
-      //     this.total = response.data.total
-      //
-      //     // Just to simulate the time of the request
-      //     setTimeout(() => {
-      //       this.listLoading = false
-      //     }, 1.5 * 1000)
-      //   })
-      // },
-      formatDateTime(inputTime) {
-        var date = new Date(inputTime)
-        var y = date.getFullYear()
-        var m = date.getMonth() + 1
-        m = m < 10 ? ('0' + m) : m
-        var d = date.getDate()
-        d = d < 10 ? ('0' + d) : d
-        var h = date.getHours()
-        h = h < 10 ? ('0' + h) : h
-        var minute = date.getMinutes()
-        var second = date.getSeconds()
-        minute = minute < 10 ? ('0' + minute) : minute
-        second = second < 10 ? ('0' + second) : second
-        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
-      },
-      showServerType(){
+  },
+  created() {
+    this.showServerType()
+    this.getList()
+    var id = JSON.parse(localStorage.getItem('volunteerid'))
+    global.global_userID = id
+    console.log('全局：'+global.global_userID)
+  },
+  methods: {
+    showServerType(){
+
         //得到全部服务类型
         axios.get('http://' + port.info.host + ':' + port.info.port + '/api/itemOperation',
           {
@@ -362,19 +240,31 @@
         //   // }, 1.5 * 1000)
         // })
         this.listLoading = true
-        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',
-          {
-            UserID: global.global_userID
-          }).then(
-          // axios.get('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand').then(
+
+        // axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',
+        //   {
+        //     UserID: global.global_userID
+        //   }).then(
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',{UserID: global.global_userID}).then(
+
           (res)=>{
-            this.list=res.data.list.rows;
+            if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.list=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.list=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
             console.log(res);
             this.listLoading = false
           }
         ).catch((err)=>{
           console.log(err);
         })
+
       },
       //处理search函数
       handleFilter() {
@@ -384,6 +274,7 @@
         this.listLoading=true
         var duration
         var startTime
+        var content
         if (this.listQuery.duration==undefined)
         {
           console.log("undefined duration")
@@ -404,8 +295,44 @@
           console.log(" startTime")
           startTime=this.listQuery.startTime
         }
+        if (this.listQuery.content==undefined)
+        {
+          console.log("undefined content")
+          content = 0
+        }else{
+          console.log(" duration")
+          content =this.listQuery.content
+        }
         if(duration==0){
-          console.log("enter no duration")
+
+          if(content ==0){
+          console.log("enter no duration and no content")
+          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByConditionNoDurationNoContent',
+            { UserID : global.global_userID,
+              DemandStartTime: startTime,
+              type: this.listQuery.type
+            }).then(
+            (res)=>{
+              if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.list=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.list=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
+              
+              
+              console.log(res);
+              this.listLoading = false
+            }
+          ).catch((err)=>{
+            console.log(err);
+          })
+          }else{
+            console.log("enter no duration but content")
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByConditionNoDuration',
             { UserID : global.global_userID,
               Content: this.listQuery.content,
@@ -413,15 +340,53 @@
               type: this.listQuery.type
             }).then(
             (res)=>{
-              this.list=res.data.list.rows;
+              if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.list=res.data.list.rows;
+                 this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.list=res.data.list;
+                  this.totalDataNumber = res.data.list.length;
+              }
+             
               console.log(res);
               this.listLoading = false
             }
           ).catch((err)=>{
             console.log(err);
           })
+          }
+          
         }else{
-          console.log("enter")
+          if(content ==0){
+          console.log("enter duration and no content")
+          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByConditionNoContent',
+            { UserID : global.global_userID,
+              Duration: duration,
+              DemandStartTime: startTime,
+              type: this.listQuery.type
+            }).then(
+            (res)=>{
+              if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.list=res.data.list.rows;
+                 this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.list=res.data.list;
+                  this.totalDataNumber = res.data.list.length;
+              }
+              console.log(res);
+              this.listLoading = false
+            }
+          ).catch((err)=>{
+            console.log(err);
+          })
+          }else{
+          console.log("enter duration and content")
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByCondition',
             { UserID : global.global_userID,
               Content: this.listQuery.content,
@@ -430,13 +395,25 @@
               type: this.listQuery.type
             }).then(
             (res)=>{
-              this.list=res.data.list.rows;
-              console.log(res);
+              //console.log("testdurationsearch"+res.data.list)
+              if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.list=res.data.list.rows;
+                 this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.list=res.data.list;
+                  this.totalDataNumber = res.data.list.length;
+              }
+              //console.log(res);
               this.listLoading = false
             }
           ).catch((err)=>{
             console.log(err);
           })
+          }
+         
         }
         console.log(duration)
         console.log(startTime)
@@ -445,34 +422,59 @@
       //志愿者申请
       applyService(row) {
         var num;
+        let that = this;
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicateInSearch',
           { UserID : global.global_userID,
             ServiceID: row.ServiceID,
           }).then(
           function(res){
-            num=res.data.num;
-            console.log('申请返回值：'+num)
+            //num=res.data.num;
+            //console.log('申请返回值：'+res.data.num)
+            if(res.data.num === 1){
+               // console.log("testnumsuccess!!"+res.data.num)
+                that.$notify({
+                    title: '成功',
+                    message: '申请成功',
+                    type: 'success',
+                    duration: 2000
+                })
+                setTimeout(() => {
+                  axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',{UserID: global.global_userID}).then(
+                    (res)=>{
+                        that.list=res.data.list.rows;
+                        this.totalDataNumber = res.data.list.count;
+                        console.log("刷新页面后"+res);
+                          }
+                  ).catch((err)=>{
+                      console.log(err);
+                  })
+
+                }, 2000)
+                 
+              }else{
+               // console.log("testnumfail!!"+res.data.num)
+                that.$notify({
+                    title: '失败',
+                    message: '申请失败,请重新申请',
+                    type: 'error',
+                    duration: 2000
+                })
+              }
           }
         )
+         
         this.dialogFormVisible = false
-        this.$notify({
-          title: '成功',
-          message: '申请成功',
-          type: 'success',
-          duration: 2000
-        })
+        
+        
       },
       handleShowDialog(row){
         this.temp = Object.assign({}, row) // copy obj
         this.dialogFormVisible = true
       },
-      handleSizeChange(val) {
-        this.listQuery.limit = val
-        this.getList()
-      },
       handleCurrentChange(val) {
         this.listQuery.page = val
-        this.getList()
+        var pageSize = this.pageSize
+        this.getAndDraw(parseInt(pageNo),parseInt(pageSize))
       },
       TypeChangeHandler(value){
         this.listQuery.type=value
@@ -486,6 +488,7 @@
           }
         }))
       }
+
     }
   }
 </script>

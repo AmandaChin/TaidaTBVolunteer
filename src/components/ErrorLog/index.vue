@@ -1,6 +1,6 @@
 <template>
   <div v-if="errorLogs.length>0">
-    <el-badge :is-dot="true" style="line-height: 30px;" @click.native="dialogTableVisible=true">
+    <!-- <el-badge :is-dot="true" style="line-height: 30px;" @click.native="dialogTableVisible=false">
       <el-button size="small" type="danger" class="bug-btn">
         <svg t="1492682037685" class="bug-svg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1863"
           xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128">
@@ -8,7 +8,7 @@
             p-id="1864"></path>
         </svg>
       </el-button>
-    </el-badge>
+    </el-badge> -->
 
     <el-dialog title="Error Log" :visible.sync="dialogTableVisible" width="80%">
       <el-table :data="errorLogs" border>

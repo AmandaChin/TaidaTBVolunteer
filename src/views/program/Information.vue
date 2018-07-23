@@ -22,7 +22,7 @@
           <el-col :span="21">
             <div class="postInfo-container">
               <el-row>
-                <el-col :span="6">
+                <el-col :span="5">
                   <el-form-item label-width="90px" label="服务内容:" class="postInfo-container-item">
                     <el-select clearable style="width: 130px" class="filter-item" v-model="postForm.service_content" placeholder="服务类型">
                       <el-option v-for="item in servecontent_info" :key="item.ID" :label="item.type" :value="item.ID" >
@@ -41,7 +41,7 @@
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
-                 <el-col :span="4">
+                 <el-col :span="6">
                   <el-form-item style="margin-bottom: 10px;" label-width="130px" label=" 服务时段:" class="postInfo-container-item">
                     <el-time-select
                       placeholder="起始时间"
@@ -225,6 +225,9 @@
       } else {
         this.postForm = Object.assign({}, defaultForm)
       }
+      var id = JSON.parse(localStorage.getItem('volunteerid'))
+      global.global_userID = id
+      console.log('全局：'+global.global_userID)
     },
     methods: {
       formatDateTime(inputTime) {
@@ -267,10 +270,14 @@
           var finalbegin = this.formatDateTime(StartTimestamp.getTime())
           var finalend = this.formatDateTime(EndTimestamp)
           console.log('tttttttttt' + String(this.postForm.start_time))
-          console.log('DemandStartTime:' + finalbegin)
-          console.log('DemandEndTime:' + finalend)
-          console.log('CreateTime:' + now)
-          params.append('CreateTime', now)
+
+          console.log('timerrefa:' + testtime)
+          var test1 = testtime.getTime() + (this.postForm.duration) * 60 * 60 * 1000
+          console.log('timerrefa:' + testtime.getTime())
+          var finalbegin = this.formatDateTime(testtime.getTime())
+          var finalend = this.formatDateTime(test1)
+          console.log('timerrefa:' + test1)
+
           params.append('UserId', global.global_userID)
           params.append('Content', this.postForm.service_content)
           // params.append('DemandStartTime', this.postForm.start_time)
@@ -290,6 +297,9 @@
             (res) => {
               this.$message('发布成功')
               console.log(res)
+              setTimeout(() => {
+              this.$router.push({ name: 'UploadedDemand', params: {}})
+              },500)
             }
           ).catch((err) => {
             this.$message('发布失败，请重试或联系管理员！')

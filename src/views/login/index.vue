@@ -101,6 +101,8 @@ export default {
       // axios.post('http://localhost:3000/api/getUserIDbyAccount', params_ID).then(
         (res) => {
           global.global_userID = res.data.UserID
+          this.$store.dispatch('StoreID',res.data.UserID)
+          localStorage.setItem('volunteerid', JSON.stringify(res.data.UserID));
           console.log(res)
         }
       ).catch((err) => {

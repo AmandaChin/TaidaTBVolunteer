@@ -1,13 +1,14 @@
 <template>
+<div class="app-container calendar-list-container">
   <el-table
-    :data="demands"
+    :data="demands.slice((pageNo-1)*pageSize,pageNo*pageSize)"
     style="width: 100%;margin-left: 20px"
-
+    v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
     :row-class-name="tableRowClassName">
     <el-table-column
       label="发布时间">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.CreateTime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.CreateTime|formatDates}}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -74,7 +75,15 @@
         </el-dialog>
       </template>
     </el-table-column>
+ 
   </el-table>
+<!--分页-->
+    <div class="pagination-container" style = "margin-left:450px" >
+      <el-pagination background @current-change="handleIndexChange"
+                      :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
+      </el-pagination>
+    </div>
+    </div>
 </template>
 
 <style scoped>
@@ -92,6 +101,7 @@
   import axios from 'axios'
   import { formatDate } from '@/methods/methods.js'
   import { formatDatex } from '@/methods/date.js'
+  import { formatDates } from '@/methods/dateLater.js'
   import port from '../../utils/manage'
   import global from '../../utils/global_userID'
   export default {
@@ -103,7 +113,12 @@
       formatDatex(time) {
         var date = new Date(time)
         return formatDatex(date, 'yyyy-MM-dd hh:mm:ss')
+      },
+      formatDates(time) {
+        var date = new Date(time)
+        return formatDates(date, 'yyyy-MM-dd hh:mm:ss')
       }
+
     },
     data() {
       return {
@@ -117,16 +132,35 @@
           IDNumber: '',
           Email: '',
           Phone: ''
-        }
+        },
+        pageNo:1,
+        pageSize:10,
+        totalDataNumber:0
       }
+    },
+    created() {
+      var id = JSON.parse(localStorage.getItem('volunteerid'))
+      global.global_userID = id
+      console.log('全局：'+global.global_userID)
     },
     mounted: function(UserId) {
       var params = new URLSearchParams()
       params.append('UserID', global.global_userID)
+       this.listLoading = true
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByUserID', params).then(
         (res) => {
-          this.demands = res.data.list
+          if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.demands=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.demands=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
           console.log(res)
+           this.listLoading = false
         }
       ).catch((err) => {
         console.log(err)
@@ -144,6 +178,11 @@
         ).catch((err) => {
           console.log(err)
         })
+      },
+      handleCurrentChange(val) {
+        this.listQuery.page = val
+        var pageSize = this.pageSize
+        this.getAndDraw(parseInt(pageNo),parseInt(pageSize))
       },
       tableRowClassName({ row, rowIndex }) {
         if (rowIndex === 0) {
