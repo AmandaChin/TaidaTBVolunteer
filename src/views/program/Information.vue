@@ -269,14 +269,6 @@
           var EndTimestamp = StartTimestamp.getTime() + this.postForm.duration * 60 * 60 * 1000
           var finalbegin = this.formatDateTime(StartTimestamp.getTime())
           var finalend = this.formatDateTime(EndTimestamp)
-          console.log('tttttttttt' + String(this.postForm.start_time))
-
-          console.log('timerrefa:' + testtime)
-          var test1 = testtime.getTime() + (this.postForm.duration) * 60 * 60 * 1000
-          console.log('timerrefa:' + testtime.getTime())
-          var finalbegin = this.formatDateTime(testtime.getTime())
-          var finalend = this.formatDateTime(test1)
-          console.log('timerrefa:' + test1)
 
           params.append('UserId', global.global_userID)
           params.append('Content', this.postForm.service_content)

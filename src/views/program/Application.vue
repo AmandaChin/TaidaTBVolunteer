@@ -64,6 +64,53 @@
             </div>
           </el-col>
         </el-row>
+        
+        <el-row>
+          <el-col :span="6">
+            <el-form-item style="margin-bottom: 20px;" label-width="120px" label=" 实际服务日期:" class="postInfo-container-item">
+              <el-form-item style="margin-bottom: 20px;margin-left: 20px" prop="title">
+                <el-date-picker v-model="postForm.serve_date" type="date"
+                                    format="yyyy-MM-dd " value-format="yyyy-MM-dd"
+                                    :picker-options="pickerBeginDateAfter" placeholder="请选择实际服务日期">
+                    </el-date-picker>
+              </el-form-item>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="5">
+            <el-form-item style="margin-bottom: 20px;" label-width="120px" label=" 实际服务时段:" class="postInfo-container-item">
+              <el-form-item style="margin-bottom: 20px;margin-left: 20px" prop="title">
+              <el-time-select
+                placeholder="起始时间"
+                v-model="postForm.starttime"
+                :picker-options="{
+                  start: '08:30',
+                  step: '00:15',
+                  end: '18:30'
+                }">
+                </el-time-select>
+                
+              </el-form-item>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="6">
+            <el-form-item style="margin-bottom: 20px;" label-width="20px" label="—" class="postInfo-container-item">
+              <el-form-item style="margin-bottom: 20px; margin-left: 25px" prop="title">
+                <el-time-select
+                  placeholder="结束时间"
+                  v-model="postForm.endtime"
+                  :picker-options="{
+                    start: '08:30',
+                    step: '00:15',
+                    end: '18:30',
+                    minTime: postForm.starttime
+                  }">
+                </el-time-select>
+              </el-form-item>
+            </el-form-item>
+          </el-col>
+        </el-row>
 
 
         <el-form-item style="margin-left: 20px;margin-bottom: 10px; font-size: 25px;" label-width="45px" label="详情:">
@@ -73,68 +120,46 @@
           <tinymce :height=400 ref="editor" v-model="postForm.content"></tinymce>
         </div>
 
-        <el-row>
+        <el-row style="margin-left:20px">
           <el-col>
-            <div class="filter-container">
+            <div class="filter-container" >
               <el-row>
                 <el-col :span="13">
-                  <el-form-item style="margin-bottom: 5px;" label-width="90px" label="上传合照:">
+                  <el-form-item style="margin-bottom: 5px;"  label="上传图片材料:">
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="1">
+                <!-- <el-col :span="1">
                   <el-form-item style="margin-bottom: 5px;" label-width="90px" label="上传证明:">
                   </el-form-item>
-                </el-col>
+                </el-col> -->
               </el-row>
             </div>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row style="margin-left:20px">
           <el-col>
             <div class="filter-container">
               <el-row>
-                <el-col :span="13">
-                  <div class="upload-container" style="width: 1100px">
+                  <div class="upload-container" >
                     <el-upload   class="image-uploader" 
-                              v-show="dialogImageUrl1.length==0"
-                              drag :multiple="false" :show-file-list="false" 
-                              :action="postUrl"
-                              :on-success="handleImageScucess1">
+                        v-show="dialogImageUrl1.length<4"
+                        drag :multiple="false" :show-file-list="false" 
+                        :action="postUrl"
+                        :on-success="handleImageScucess1">
                       <i class="el-icon-upload"></i>
                       <div class="el-upload__text">将其他相关文件拖到此处，或<em>点击上传</em></div>
-                    </el-upload>
-                    <div class="image-preview" v-show="dialogImageUrl1.length>1">
-                    <div class="image-preview-wrapper" >
-                      <img :src="dialogImageUrl1">
-                      <div class="image-preview-action">
-                        <i @click="rmImage1" class="el-icon-delete"></i>
+                      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过4张</div>
+                    </el-upload> 
+                    <div class="image-preview" v-for="img in dialogImageUrl1" v-show="dialogImageUrl1.length>0">
+                      <div class="image-preview-wrapper"  >
+                          <img :src="img" >
+                          <div class="image-preview-action">
+                            <i @click="rmImage1(img)" class="el-icon-delete"></i>
+                          </div>
                       </div>
                     </div>
-                    </div>
                   </div>
-                </el-col>
-
-                <el-col :span="1">
-                  <div class="upload-container" style="width: 1100px">
-                    <el-upload class="image-uploader" 
-                    v-show="dialogImageUrl2.length==0"
-                    drag :multiple="false" :show-file-list="false" 
-                    :action="postUrl"
-                    :on-success="handleImageScucess2">
-                      <i class="el-icon-upload"></i>
-                      <div class="el-upload__text">将志愿服务证明拖到此处，或<em>点击上传</em></div>
-                    </el-upload>
-                    <div class="image-preview" v-show="dialogImageUrl2.length>1">
-                      <div class="image-preview-wrapper" >
-                        <img :src="dialogImageUrl2">
-                      <div class="image-preview-action">
-                      <i @click="rmImage2" class="el-icon-delete"></i>
-                    </div>
-                  </div>
-                  </div>
-                  </div>
-                </el-col>
               </el-row>
             </div>
           </el-col>
@@ -163,22 +188,15 @@
   import port from '../../utils/manage'
   import global from '../../utils/global_userID'
   const defaultForm = {
+    serve_date:'', //实际开始日
+    starttime:'',//实际开始时间
+    endtime:'',//实际结束时间
     status: 'draft',
     title: '', // 文章题目
     content: '', // 文章内容
-    start_time: '',
-    end_time: '',
-    service_content: '',
-    duration: '',
     content_short: '', // 文章摘要
     source_uri: '', // 文章外链
     image_uri: '', // 上传图片
-    pdf_uri: '', // 上传证明
-    source_number: '', // 文章外部作者
-    display_time: undefined, // 前台展示时间
-    id: undefined,
-    platforms: ['a-platform'],
-    comment_disabled: false
   }
   export default {
     filters: {
@@ -216,8 +234,15 @@
         }
       }
       return {
+        pickerBeginDateAfter: {
+          disabledDate(time) {
+            var timeSpace = time.getTime() > (Date.now() - 24 * 60 * 60 * 1000)
+            return timeSpace
+          }
+        },
+        realdate: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
         postUrl:'',
-        dialogImageUrl1:'',
+        dialogImageUrl1:[],
         dialogImageUrl2:'',
         postForm: Object.assign({}, defaultForm),
         fetchSuccess: true,
@@ -263,38 +288,78 @@
           this.postUrl = 'http://' + port.info.host + ':' + port.info.port + '/api/uploadFile'
       },
       //上传图片未用组件Upload4/5， 原因是点击组件中的确认上传会产生多余跳转， 待解决
-      rmImage1() {
-        this.dialogImageUrl1 = ''
+      rmImage1(img) {
+        console.log(img)
+        this.dialogImageUrl1.pop(img)
+        console.log(this.dialogImageUrl1)
       },
       handleImageScucess1(response) {
-        console.log('picture1!')
-        console.log(response)
-        this.dialogImageUrl1 = response.list.url
+        this.dialogImageUrl1.push(response.list.url)
+      },
+      // 上传错误
+      uploadError1 (response, file, fileList) {
+         this.$message('上传失败，请重试！')
       },
       rmImage2() {
         this.dialogImageUrl2 = ''
       },
       handleImageScucess2(response) {
-        console.log('picture2!')
-        console.log(response)
         this.dialogImageUrl2 = response.list.url
       },
+      //处理时间
+      formatDateTime(inputTime) {
+        var date = new Date(inputTime)
+        var y = date.getFullYear()
+        var m = date.getMonth() + 1
+        m = m < 10 ? ('0' + m) : m
+        var d = date.getDate()
+        d = d < 10 ? ('0' + d) : d
+        var h = date.getHours()
+        h = h < 10 ? ('0' + h) : h
+        var minute = date.getMinutes()
+        var second = date.getSeconds()
+        minute = minute < 10 ? ('0' + minute) : minute
+        second = second < 10 ? ('0' + second) : second
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
+      },
+      handleNullImg(){
+        if(this.dialogImageUrl1.length<4){
+          var len = this.dialogImageUrl1.length
+          for(var i=0; i<4-len; i++){
+            this.dialogImageUrl1.push('')
+          }
+        }
+      },
       submit: function() {
+        if (this.postForm.content.length == 0) {
+          this.$message('请填写服务详情！')
+          return
+        } else if (this.postForm.serve_date.length  == 0) {
+          this.$message('请填写真实服务时间！')
+          return
+        } else if (this.postForm.starttime.length  == 0) {
+          this.$message('请填写服务开始时间！')
+          return
+        } else if (this.postForm.endtime.length  == 0) {
+          this.$message('请填写服务结束时间！')
+          return
+        } else{
+          this.handleNullImg()
+        var StartTimestamp = new Date(String(this.postForm.serve_date) + ' ' + this.postForm.starttime)
+        var EndTimestamp = new Date(String(this.postForm.serve_date) + ' ' + this.postForm.endtime)
+        var finalbegin = this.formatDateTime(StartTimestamp.getTime())
+        var finalend = this.formatDateTime(EndTimestamp.getTime())
         var params = new URLSearchParams()
         params.append('UserID', global.global_userID)
         params.append('ServiceID', this.ServiceId)
-        params.append('Material1', this.dialogImageUrl1)
-        params.append('Material2', this.dialogImageUrl2)
-        params.append('Material3', '')
-        params.append('RealStartTime', '2018-01-05 00:09:20')
-        params.append('RealEndTime', '2018-01-05 00:09:20')
-        if (this.postForm.content.length == 0) {
-          // if it is empty we should make the message as it cannot be submitted
-          this.$message('详情部分禁止为空')
-          return
-        } else {
-          params.append('Remark', this.postForm.content)
-          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicate', params).then(
+        params.append('Material1', this.dialogImageUrl1[0])
+        params.append('Material2', this.dialogImageUrl1[1])
+        params.append('Material3', this.dialogImageUrl1[2])
+        params.append('Material4', this.dialogImageUrl1[3])
+        params.append('RealStartTime', finalbegin)
+        params.append('RealEndTime', finalend)
+        params.append('Remark', this.postForm.content)
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicate', params).then(
             (res) => {
               this.$message('申请成功，等待审核')
               console.log(res)
@@ -313,52 +378,9 @@
           this.fetchSuccess = false
           console.log(err)
         })
-      },
-      submitForm() {
-        this.postForm.display_time = parseInt(this.display_time / 1000)
-        console.log(this.postForm)
-        this.$refs.postForm.validate(valid => {
-          if (valid) {
-            this.loading = true
-            this.$notify({
-              title: '成功',
-              message: '发布文章成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.postForm.status = 'published'
-            this.loading = false
-          } else {
-            console.log('error submit!!')
-            return false
-          }
-        })
-      },
-      draftForm() {
-        if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
-          this.$message({
-            message: '请填写必要的标题和内容',
-            type: 'warning'
-          })
-          return
-        }
-        this.$message({
-          message: '保存成功',
-          type: 'success',
-          showClose: true,
-          duration: 100
-        })
-        this.postForm.status = 'draft'
-      },
-      getRemoteUserList(query) {
-        userSearch(query).then(response => {
-          if (!response.data.items) return
-          console.log(response)
-          this.userLIstOptions = response.data.items.map(v => ({
-            key: v.name
-          }))
-        })
       }
+      
+      
     }
   }
 </script>
@@ -409,7 +431,7 @@
     position: relative;
     @include clearfix;
     .image-uploader {
-      width: 35%;
+      width: 20%;
       float: left;
     }
     .image-preview {
