@@ -361,14 +361,19 @@
         params.append('Remark', this.postForm.content)
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicate', params).then(
             (res) => {
-              this.$message('申请成功，等待审核')
               console.log(res)
+              if(res==-1){
+                this.$message('抱歉，审核者不足四人无法申请！')
+              }else{
+                this.$message('申请成功，等待审核')
+                this.$router.push({ name: 'HistoryService', params: {}})
+              }
             }
           ).catch((err) => {
             console.log(err)
           })
 
-          this.$router.push({ name: 'HistoryService', params: {}})
+          
         }
       },
       fetchData() {
