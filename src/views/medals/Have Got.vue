@@ -1,7 +1,7 @@
 <template>
 <div class="havegotmedalinfo">
   <div>
-    <h1 style="color:darkgray;font-size:25px;margin-left:20px">帐户剩余勋章币:  {{useraccount}}</h1>
+    <h1 style="color:darkgray;font-size:25px;margin-left:20px">帐户剩余勋章币:  {{(this.useraccount).toFixed(2)}}</h1>
     </div> 
   <el-table
     :data="gettingmedals.slice((pageNo-1)*pageSize,pageNo*pageSize)"
@@ -155,7 +155,7 @@
       }).then(
         (res)=>{
           console.log(res.data)
-          this.useraccount = res.data.useraccount
+          this.useraccount = parseInt(res.data.list)
         }
       )
     },

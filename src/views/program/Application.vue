@@ -361,8 +361,8 @@
         params.append('Remark', this.postForm.content)
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicate', params).then(
             (res) => {
-              console.log(res)
-              if(res==-1){
+              console.log(res.data.num)
+              if(parseInt(res.data.num)==-1){
                 this.$message('抱歉，审核者不足四人无法申请！')
               }else{
                 this.$message('申请成功，等待审核')

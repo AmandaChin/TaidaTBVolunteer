@@ -1,7 +1,7 @@
 <template>
 <div class="applyingmedalinfo">
   <div>
-    <h1 style="color:darkgray;font-size:25px;margin-left:20px">帐户剩余勋章币:  {{useraccount}}</h1>
+    <h1 style="color:darkgray;font-size:25px;margin-left:20px">帐户剩余勋章币:  {{(this.useraccount).toFixed(2)}}</h1>
     </div>
   <el-table
     :data="applyingmedals.slice((pageNo-1)*pageSize,pageNo*pageSize)"
@@ -156,8 +156,8 @@
         UserId: global.global_userID
       }).then(
         (res)=>{
-          console.log(res.data)
-          this.useraccount = res.data.useraccount
+          console.log(res.data.list)
+          this.useraccount = parseInt(res.data.list)
         }
       )
       
