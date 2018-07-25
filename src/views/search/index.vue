@@ -61,24 +61,11 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30,50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
-    </div>
-    <!--分页-->
     <div class="pagination-container" style = "margin-left:450px">
       <el-pagination background @current-change="handleIndexChange"
                       :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
-
       </el-pagination>
     </div>
-    <!--分页-->
-    <!--<div class="pagination-container">-->
-    <!--<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"-->
-    <!--:page-sizes="[10,20,30,50]" :page-size="listQuery.limit" :current-page="listQuery.page" layout="total, sizes, prev, pager, next, jumper" :total="total">-->
-    <!--</el-pagination>-->
-    <!--</div>-->
     <el-dialog title="服务详情" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
         <el-form-item label="服务日期" prop="DemandStartTime">
@@ -323,8 +310,8 @@
                  this.list=res.data.list;
                  this.totalDataNumber = res.data.list.length;
               }
-              
-              
+
+
               console.log(res);
               this.listLoading = false
             }
@@ -350,7 +337,7 @@
                  this.list=res.data.list;
                   this.totalDataNumber = res.data.list.length;
               }
-             
+
               console.log(res);
               this.listLoading = false
             }
@@ -358,7 +345,7 @@
             console.log(err);
           })
           }
-          
+
         }else{
           if(content ==0){
           console.log("enter duration and no content")
@@ -413,7 +400,7 @@
             console.log(err);
           })
           }
-         
+
         }
         console.log(duration)
         console.log(startTime)
@@ -450,7 +437,7 @@
                   })
 
                 }, 2000)
-                 
+
               }else{
                // console.log("testnumfail!!"+res.data.num)
                 that.$notify({
@@ -462,10 +449,10 @@
               }
           }
         )
-         
+
         this.dialogFormVisible = false
-        
-        
+
+
       },
       handleShowDialog(row){
         this.temp = Object.assign({}, row) // copy obj
