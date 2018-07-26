@@ -1,7 +1,7 @@
 <template>
 <div class="applyingmedalinfo">
   <div>
-    <h1 style="color:darkgray;font-size:25px;margin-left:20px">帐户剩余勋章币:  {{useraccount}}</h1>
+    <h1 style="color:darkgray;font-size:25px;margin-left:20px">帐户剩余勋章币:  {{(this.useraccount).toFixed(2)}}</h1>
     </div>
   <el-table
     :data="applyingmedals.slice((pageNo-1)*pageSize,pageNo*pageSize)"
@@ -18,7 +18,7 @@
     <el-table-column
       label="交易数目">
       <template scope="scope">
-        <span style="font-size: 18px;margin-left:10px">{{"*" + scope.row.medalnum}}</span>
+        <span style="font-size: 18px;margin-left:10px">{{"*" + (scope.row.medalnum).toFixed(2)}}</span>
       </template>
     </el-table-column>
     
@@ -27,7 +27,7 @@
       prop="applyingtime"
       >
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.getmedaltime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.getmedaltime|formatDatex}}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -82,10 +82,15 @@
   import clip from '@/utils/clipboard'
   import port from '../../utils/manage'
   import { formatDate } from '@/methods/methods.js'
+  import { formatDatex } from '@/methods/date.js'
   import global from '../../utils/global_userID'
 
   export default {
     filters: {
+      formatDatex(time) {
+        var date = new Date(time)
+        return formatDatex(date, 'yyyy-MM-dd hh:mm:ss')
+      },
       formatDate(time) {
         var date = new Date(time)
         return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
@@ -151,8 +156,8 @@
         UserId: global.global_userID
       }).then(
         (res)=>{
-          console.log(res.data)
-          this.useraccount = res.data.useraccount
+          console.log(res.data.list)
+          this.useraccount = parseInt(res.data.list)
         }
       )
       

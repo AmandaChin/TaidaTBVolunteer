@@ -39,9 +39,9 @@
       </template>
     </el-table-column>
     <el-table-column
-      label="响应者信息">
+      label="更多操作">
       <template scope="scope">
-        <span v-if="scope.row.Status == 0" style="color: darkgray" type="text">暂无响应</span>
+        <el-button v-if="scope.row.Status == 0" style="font-weight: bold; color:dodgerblue" type="text" @click="handleShowDialog(scope.row.ServiceID)">删除需求</el-button>
         <el-button v-if="scope.row.Status!=0" style="font-weight: bold; color:dodgerblue" type="text" @click="volunteerInfo(scope.row.ServiceID)">响应者信息</el-button>
         <el-dialog title="服务详情" :visible.sync="dialogFormVisible">
           <el-form :rules="rules" ref="dataForm" :model="volunteer" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
@@ -83,6 +83,17 @@
                       :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
       </el-pagination>
     </div>
+<!--点击删除需求之后的表单-->
+     <el-dialog title="删除需求" :visible.sync="dialogFormVisible2" width="25%">
+          <el-form :model="temp" label-position="left"  style="margin-left:50px">
+          </el-form>
+          <span style="fontSize:15px" type="text" align ="center">确定删除此条未被响应的需求吗？</span>
+          <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="DeleteDemand(serviceId)">删除</el-button>
+          <el-button @click="dialogFormVisible2 = false">取消</el-button>
+ 
+          </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -124,6 +135,7 @@
       return {
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
         dialogFormVisible: false,
+        dialogFormVisible2: false,
         demands: [],
         volunteer: {
           UserName: '',
@@ -133,6 +145,7 @@
           Email: '',
           Phone: ''
         },
+        serviceId:0,
         pageNo:1,
         pageSize:10,
         totalDataNumber:0
@@ -151,11 +164,9 @@
         (res) => {
           if(res.data.list.rows)
               {
-                console.log("有rows！！！")
                 this.demands=res.data.list.rows;
                 this.totalDataNumber = res.data.list.count;
               }else{
-                 console.log("没有rows！！！")
                  this.demands=res.data.list;
                  this.totalDataNumber = res.data.list.length;
               }
@@ -178,6 +189,69 @@
         ).catch((err) => {
           console.log(err)
         })
+      },
+      DeleteDemand(serviceId){
+       let that = this;
+       this.dialogFormVisible2 = false;
+
+       var params = new URLSearchParams()
+       params.append('serviceId',serviceId)
+       console.log("serviceId!!!!!"+serviceId)
+       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/deleteDemand', params).then(
+            function(res){
+              console.log(res)
+              console.log("进来啦！")
+                if(res.data.num === 1){
+                  console.log("进来啦2号！")
+               // console.log("testnumsuccess!!"+res.data.num)
+                that.$notify({
+                    title: '成功',
+                    message: '已删除需求',
+                    type: 'success',
+                    duration: 2000
+                })
+                setTimeout(() => {
+                      var params = new URLSearchParams()
+                      params.append('UserID', global.global_userID)
+                      that.listLoading = true
+                      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByUserID', params).then(
+                        (res) => {
+                          if(res.data.list.rows)
+                              {
+                                that.demands=res.data.list.rows;
+                                that.totalDataNumber = res.data.list.count;
+                              }else{
+                                that.demands=res.data.list;
+                                that.totalDataNumber = res.data.list.length;
+                              }
+                          console.log(res)
+                          that.listLoading = false
+                        }
+                      ).catch((err) => {
+                        console.log(err)
+                      })
+
+                }, 1000)
+                 
+              }else{
+               // console.log("testnumfail!!"+res.data.num)
+                that.$notify({
+                    title: '失败',
+                    message: '删除失败,请重新删除',
+                    type: 'error',
+                    duration: 2000
+                })
+              }
+            
+       })
+
+
+        
+      },
+      handleShowDialog(row){
+      console.log("这里是传值："+ row)
+      this.serviceId = row
+      this.dialogFormVisible2 = true
       },
       handleCurrentChange(val) {
         this.listQuery.page = val

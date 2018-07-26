@@ -40,15 +40,19 @@
                 <div style="padding: 5px;">
                 <span>申请材料1: </span>
                 </div>
-                <div>
-                <span><img  :src="Material1" style="width: 155px;height: 175px"></span>
+                <div v-for="imgs in Material" >
+                  <div v-show="imgs!=''">
+                    <img  :src="imgs" style="width: 155px;height: 175px">
+                  </div>
                 </div>
-                <div style="padding: 5px;">
-                <span>申请材料2: </span>
+                <!-- <span><img  :src="Material1" style="width: 155px;height: 175px"></span> -->
+               
+                <!--<div style="padding: 5px;">
+                 <span>申请材料2: </span>
                 </div>
                 <div>
                 <span><img  :src="Material2" style="width: 155px;height: 175px"></span>
-                </div>
+                </div> -->
 
             </el-card>
           </el-col>
@@ -127,8 +131,7 @@ export default {
         attitudeRate: null,
         oldManRate: null
       },
-      Material1: undefined,
-      Material2: undefined
+      Material:[]
     }
   },
   created() {
@@ -156,9 +159,6 @@ export default {
     this.applyInfo.duration = this.$route.params.duration;
     this.applyInfo.content = this.$route.params.content;
     this.applyInfo.remark = this.$route.params.remark;
-    console.log("!!!!!!!volunteerid:"+this.$route.params.volunteerId)
-    console.log("!!!!!!!contentid:"+this.$route.params.content)
-    console.log("!!!!!!!serviceid:"+this.$route.params.serviceId)
     // var params1 = new URLSearchParams()
 
     // params1.append('ServiceContentID', this.$route.params.content)
@@ -174,9 +174,12 @@ export default {
     params2.append('UserID', this.$route.params.volunteerId)
     axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getMaterial', params2).then(
       (res) => {
-        console.log(res.data.list.rows[0].Material1)
-        this.Material1 = res.data.list.rows[0].Material1
-        this.Material2 = res.data.list.rows[0].Material2
+        console.log('####')
+        console.log(res.data.list.rows[0].Material3)
+        this.Material.push(res.data.list.rows[0].Material1)
+        this.Material.push(res.data.list.rows[0].Material2)
+        this.Material.push(res.data.list.rows[0].Material3)
+        this.Material.push(res.data.list.rows[0].Material4)
       }
     )
   },

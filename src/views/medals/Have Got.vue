@@ -1,8 +1,8 @@
 <template>
 <div class="havegotmedalinfo">
   <div>
-    <h1 style="color:darkgray;font-size:25px;margin-left:20px">帐户剩余勋章币:  {{useraccount}}</h1>
-    </div>
+    <h1 style="color:darkgray;font-size:25px;margin-left:20px">帐户剩余勋章币:  {{(this.useraccount).toFixed(2)}}</h1>
+    </div> 
   <el-table
     :data="gettingmedals.slice((pageNo-1)*pageSize,pageNo*pageSize)"
     style="width: 100%;margin-left: 20px"
@@ -17,14 +17,14 @@
     <el-table-column
       label="交易数目">
       <template scope="scope">
-        <span style="font-size: 18px;margin-left:10px">{{"*" + scope.row.medalnum}}</span>
+        <span style="font-size: 18px;margin-left:10px">{{"*" + (scope.row.medalnum).toFixed(2)}}</span>
       </template>
     </el-table-column>
     <el-table-column
       label="获得时间"
       prop="applyingtime">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.getmedaltime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.getmedaltime|formatDatex}}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -79,10 +79,15 @@
   import axios from 'axios'
   import port from '../../utils/manage'
   import { formatDate } from '@/methods/methods.js'
+  import { formatDatex } from '@/methods/date.js'
   import global from '../../utils/global_userID'
 
   export default {
     filters: {
+      formatDatex(time) {
+        var date = new Date(time)
+        return formatDatex(date, 'yyyy-MM-dd hh:mm:ss')
+      },
       formatDate(time) {
         var date = new Date(time)
         return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
@@ -103,7 +108,7 @@
         pageNo:1,
         pageSize:10,
         totalDataNumber:0,
-        useraccount:0
+        useraccount:0,
       }
     },
     created() {
@@ -150,7 +155,7 @@
       }).then(
         (res)=>{
           console.log(res.data)
-          this.useraccount = res.data.useraccount
+          this.useraccount = parseInt(res.data.list)
         }
       )
     },
