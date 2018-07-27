@@ -123,11 +123,15 @@ export default {
 
           theRefs.loginForm.validate(valid => {
             if (valid) {
-              theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
+              theStore.dispatch('LoginByUsername', theLoginForm).then(() => {                                                                            
+                
                 if (num === -1) {
                   console.log('用户名或密码错误')
                   Message('用户名或密码错误')
-                } else {
+                }else if(num === 0 || num === 1 || num === 2){
+                  Message('管理员不可以登录用户端哦')
+                }
+                else if(num === 3){
                   theRouter.push({ path: '/homepage' })
                   // theRouter.push({ name: 'register' })
                 }

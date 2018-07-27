@@ -259,6 +259,7 @@
         this.listQuery.page = 1
        // this.getList()
         this.listLoading=true
+        let that = this
         var duration
         var startTime
         var content
@@ -268,19 +269,19 @@
           duration=0
         }else{
           console.log(" duration")
-          duration=this.listQuery.duration
+          duration=that.listQuery.duration
         }
         if (this.listQuery.startTime==undefined)
         {
           console.log("undefined startTime" )
           //默认时间是今天
-          // startTime="1980-03-15 15:35:04"
-          var now=  this.formatDateTime(Date.now())
-          startTime= now
+          startTime="1980-03-15 15:35:04"
+          //var now=  that.formatDateTime(Date.now())
+         // startTime= now
           console.log("undefined startTime"+ startTime)
         }else{
           console.log(" startTime")
-          startTime=this.listQuery.startTime
+          startTime=that.listQuery.startTime
         }
         if (this.listQuery.content==undefined)
         {
@@ -288,7 +289,7 @@
           content = 0
         }else{
           console.log(" duration")
-          content =this.listQuery.content
+          content =that.listQuery.content
         }
         if(duration==0){
 
@@ -356,6 +357,7 @@
               type: this.listQuery.type
             }).then(
             (res)=>{
+              console.log(res.data)
               if(res.data.list.rows)
               {
                 console.log("有rows！！！")
