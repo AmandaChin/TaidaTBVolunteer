@@ -114,7 +114,6 @@
     created() {
       var id = JSON.parse(localStorage.getItem('volunteerid'))
       global.global_userID = id
-      console.log('全局：'+global.global_userID)
     },
     mounted: function(UserId) {
       var params = new URLSearchParams()
@@ -146,18 +145,24 @@
        */
 
       func: function(serviceId, content, startTime, endTime, duration) {
-        var params = new URLSearchParams()
-        params.append('ServiceID', serviceId)
-        console.log(serviceId)
-        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getOldManName', params).then(
-          (res) => {
-            this.name = res.data.Name
-            console.log(this.name)
-            this.$router.push({ name: 'application', query: { name: this.name, serviceId: serviceId, content: content, startTime: startTime, endTime: endTime, duration: duration }})
-          }
-        ).catch((err) => {
-          console.log(err)
-        })
+        console.log(endTime)
+        var nowtime=new Date().getTime()
+        if(nowtime>Date.parse(endTime)){
+          var params = new URLSearchParams()
+          params.append('ServiceID', serviceId)
+          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getOldManName', params).then(
+            (res) => {
+              this.name = res.data.Name
+              console.log(this.name)
+              this.$router.push({ name: 'application', query: { name: this.name, serviceId: serviceId, content: content, startTime: startTime, endTime: endTime, duration: duration }})
+            }
+          ).catch((err) => {
+            this.$message('申请失败，请重试或联系管理员！')
+            console.log(err)
+          })
+        }else{
+          this.$message('申请失败，未到需求结束时间！')
+        }
         /*
         Bus.$emit('createTime', '')
         Bus.$emit('content', 'hda')
