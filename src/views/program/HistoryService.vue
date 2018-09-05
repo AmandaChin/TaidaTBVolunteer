@@ -147,7 +147,8 @@
       func: function(serviceId, content, startTime, endTime, duration) {
         console.log(endTime)
         var nowtime=new Date().getTime()
-        if(nowtime>Date.parse(endTime)){
+        var nowEndTime = Date.parse(endTime) - 8*60*60*1000
+        if(nowtime>nowEndTime){
           var params = new URLSearchParams()
           params.append('ServiceID', serviceId)
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getOldManName', params).then(

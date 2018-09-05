@@ -84,9 +84,9 @@
                 placeholder="起始时间"
                 v-model="postForm.starttime"
                 :picker-options="{
-                  start: '08:30',
+                  start: '05:30',
                   step: '00:15',
-                  end: '18:30'
+                  end: '22:30'
                 }">
                 </el-time-select>
                 
@@ -101,9 +101,9 @@
                   placeholder="结束时间"
                   v-model="postForm.endtime"
                   :picker-options="{
-                    start: '08:30',
+                    start: '06:00',
                     step: '00:15',
-                    end: '18:30',
+                    end: '23:00',
                     minTime: postForm.starttime
                   }">
                 </el-time-select>
@@ -236,7 +236,7 @@
       return {
         pickerBeginDateAfter: {
           disabledDate(time) {
-            var timeSpace = time.getTime() > (Date.now() - 24 * 60 * 60 * 1000)
+            var timeSpace = time.getTime() > (Date.now())
             return timeSpace
           }
         },
@@ -344,11 +344,13 @@
           this.$message('请填写服务结束时间！')
           return
         } else{
+          
           this.handleNullImg()
         var StartTimestamp = new Date(String(this.postForm.serve_date) + ' ' + this.postForm.starttime)
         var EndTimestamp = new Date(String(this.postForm.serve_date) + ' ' + this.postForm.endtime)
         var finalbegin = this.formatDateTime(StartTimestamp.getTime())
         var finalend = this.formatDateTime(EndTimestamp.getTime())
+        var now = this.formatDateTime(new Date().getTime())
         var params = new URLSearchParams()
         params.append('UserID', global.global_userID)
         params.append('ServiceID', this.ServiceId)
@@ -359,6 +361,7 @@
         params.append('RealStartTime', finalbegin)
         params.append('RealEndTime', finalend)
         params.append('Remark', this.postForm.content)
+        params.append('ApplyTime', now)
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicate', params).then(
             (res) => {
               console.log(res.data.num)
