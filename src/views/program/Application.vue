@@ -71,7 +71,7 @@
             <el-form-item style="margin-bottom: 20px;" label-width="120px" label=" 实际服务日期:" class="postInfo-container-item">
               <el-form-item style="margin-bottom: 20px;margin-left: 20px" prop="title">
                 <el-date-picker     type="date" v-model="postForm.serve_date"
-                                    format="yyyy-MM-dd " value-format="yyyy-MM-dd"
+                                    format="yyyy-MM-dd" value-format="yyyy-MM-dd"
                                     :picker-options="pickerBeginDateAfter" placeholder="请选择实际服务日期">
                     </el-date-picker>
               </el-form-item>
@@ -81,12 +81,12 @@
             <el-form-item style="margin-bottom: 20px;" label-width="120px" label=" 实际服务时段:" class="postInfo-container-item">
               <el-form-item style="margin-bottom: 20px;margin-left: 20px" prop="title">
               <el-time-select
-                placeholder="起始时间"
+                placeholder="起始时间"  format="HH:mm:ss" value-format="HH:mm:ss" type="time"
                 v-model="postForm.starttime"
                 :picker-options="{
                   start: '08:30',
                   step: '00:15',
-                  end: '18:30'
+                  end: '20:30'
                 }">
                 </el-time-select>
 
@@ -98,12 +98,12 @@
             <el-form-item style="margin-bottom: 20px;" label-width="20px" label="—" class="postInfo-container-item">
               <el-form-item style="margin-bottom: 20px; margin-left: 25px" prop="title">
                 <el-time-select
-                  placeholder="结束时间"
+                  placeholder="结束时间" format="HH:mm:ss" value-format="HH:mm:ss" type="time"
                   v-model="postForm.endtime"
                   :picker-options="{
                     start: '08:30',
                     step: '00:15',
-                    end: '18:30',
+                    end: '20:30',
                     minTime: postForm.starttime
                   }">
                 </el-time-select>
@@ -190,7 +190,8 @@
   import axios from 'axios'
   import port from '../../utils/manage'
   import global from '../../utils/global_userID'
-  const defaultForm = {
+  import { getTime } from '../../utils'
+const defaultForm = {
     serve_date: '', // 实际开始日
     starttime: '', // 实际开始时间
     endtime: '', // 实际结束时间
@@ -286,8 +287,6 @@
       }
     },
     created() {
-      // 记录默认设置时间
-      // this.defaultTime = new Date(this.formatDateTime(this.StartTime))
       if (this.isEdit) {
         this.fetchData()
       } else {
@@ -307,6 +306,18 @@
       //   console.log('bbbbbbbb：' + this.postForm.starttime)
       //   console.log('ccccccc：' + this.postForm.endtime)
       // },
+      defaultTime() {
+        this.postForm.serve_date = this.StartTime
+        var s = new Date(this.StartTime)
+        var start = (s.getHours() - 8) + ':' + s.getMinutes() + ':' + s.getSeconds()
+        this.postForm.starttime = start
+        var d = new Date(this.EndTime)
+        var end = (d.getHours() - 8) + ':' + d.getMinutes() + ':' + d.getSeconds()
+        this.postForm.endtime = end
+        console.log('默认日期！！！！！' + this.StartTime)
+        console.log('默认开始时刻！！！！！' + start)
+        console.log('默认结束时刻！！！！！' + end)
+      },
       JumpHistoryService: function() {
         this.$router.push({ name: 'HistoryService' })
       },
