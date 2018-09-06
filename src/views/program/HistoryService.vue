@@ -49,6 +49,7 @@
         <el-button v-if="scope.row.Status==1" style="font-weight: bold; color:dodgerblue" type="text" @click="func(scope.row.ServiceID,scope.row.Content, scope.row.DemandStartTime,scope.row.DemandEndTime, scope.row.Duration)">申请勋章</el-button>
         <span v-if="scope.row.Status==2" style="font-weight: bold; color:darkgray" type="text">申请中</span>
         <span v-if="scope.row.Status==3" style="font-weight: bold; color:darkgray" type="text"></span>
+        <span v-if="scope.row.Status==4" style="font-weight: bold; color:darkgray" type="text">暂时不能申请</span>
       </template>
     </el-table-column>
   </el-table>
@@ -106,34 +107,33 @@
         applyDisable: false,
         name: '',
         CreateTime: undefined,
-        pageNo:1,
-        pageSize:10,
-        totalDataNumber:0
+        pageNo: 1,
+        pageSize: 10,
+        totalDataNumber: 0
       }
     },
     created() {
       var id = JSON.parse(localStorage.getItem('volunteerid'))
       global.global_userID = id
-      console.log('全局：'+global.global_userID)
+      console.log('全局：' + global.global_userID)
     },
     mounted: function(UserId) {
       var params = new URLSearchParams()
       params.append('UserID', global.global_userID)
-       this.listLoading = true
+      this.listLoading = true
       axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getServicedList', params).then(
         (res) => {
-          if(res.data.list.rows)
-              {
-                console.log("有rows！！！")
-                this.service=res.data.list.rows;
-                this.totalDataNumber = res.data.list.count;
-              }else{
-                 console.log("没有rows！！！")
-                 this.service=res.data.list;
-                 this.totalDataNumber = res.data.list.length;
-              }
+          if (res.data.list.rows) {
+            console.log('有rows！！！')
+            this.service = res.data.list.rows
+            this.totalDataNumber = res.data.list.count
+          } else {
+            console.log('没有rows！！！')
+            this.service = res.data.list
+            this.totalDataNumber = res.data.list.length
+          }
           console.log(res)
-           this.listLoading = false
+          this.listLoading = false
         }
       ).catch((err) => {
         console.log(err)
@@ -171,10 +171,10 @@
          * 这个地方还需要一个能调用申请勋章界面的参数
          */
       },
-       handleCurrentChange(val) {
+      handleCurrentChange(val) {
         this.listQuery.page = val
         var pageSize = this.pageSize
-        this.getAndDraw(parseInt(pageNo),parseInt(pageSize))
+        this.getAndDraw(parseInt(pageNo), parseInt(pageSize))
       },
       tableRowClassName(row, rowIndex) {
         if (rowIndex === 0) {
