@@ -27,7 +27,7 @@
       prop="applyingtime"
       >
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.getmedaltime|formatDatex}}</span>
+        <span style="color: darkgray">{{scope.row.getmedaltime|formatDate}}</span>
       </template>
     </el-table-column>
     <el-table-column
