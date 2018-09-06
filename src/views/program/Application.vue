@@ -84,9 +84,10 @@
                 placeholder="起始时间"  format="HH:mm:ss" value-format="HH:mm:ss" type="time"
                 v-model="postForm.starttime"
                 :picker-options="{
-                  start: '08:30',
+                  start: '05:30',
                   step: '00:15',
                   end: '20:30'
+
                 }">
                 </el-time-select>
 
@@ -101,9 +102,10 @@
                   placeholder="结束时间" format="HH:mm:ss" value-format="HH:mm:ss" type="time"
                   v-model="postForm.endtime"
                   :picker-options="{
-                    start: '08:30',
+                    start: '06:00',
                     step: '00:15',
                     end: '20:30',
+
                     minTime: postForm.starttime
                   }">
                 </el-time-select>
@@ -371,32 +373,35 @@ const defaultForm = {
         if (this.postForm.content.length == 0) {
           this.$message('请填写服务详情！')
           return
-        // } else if (this.postForm.serve_date.length == 0) {
-        //   this.$message('请填写真实服务时间！')
-        //   return
-        // } else if (this.postForm.starttime.length == 0) {
-        //   this.$message('请填写服务开始时间！')
-        //   return
-        // } else if (this.postForm.endtime.length == 0) {
-        //   this.$message('请填写服务结束时间！')
-        //   return
-        } else {
+        } else if (this.postForm.serve_date.length  == 0) {
+          this.$message('请填写真实服务时间！')
+          return
+        } else if (this.postForm.starttime.length  == 0) {
+          this.$message('请填写服务开始时间！')
+          return
+        } else if (this.postForm.endtime.length  == 0) {
+          this.$message('请填写服务结束时间！')
+          return
+        } else{
+          
           this.handleNullImg()
-          var StartTimestamp = new Date(String(this.postForm.serve_date) + ' ' + this.postForm.starttime)
-          var EndTimestamp = new Date(String(this.postForm.serve_date) + ' ' + this.postForm.endtime)
-          var finalbegin = this.formatDateTime(StartTimestamp.getTime())
-          var finalend = this.formatDateTime(EndTimestamp.getTime())
-          var params = new URLSearchParams()
-          params.append('UserID', global.global_userID)
-          params.append('ServiceID', this.ServiceId)
-          params.append('Material1', this.dialogImageUrl1[0])
-          params.append('Material2', this.dialogImageUrl1[1])
-          params.append('Material3', this.dialogImageUrl1[2])
-          params.append('Material4', this.dialogImageUrl1[3])
-          params.append('RealStartTime', finalbegin)
-          params.append('RealEndTime', finalend)
-          params.append('Remark', this.postForm.content)
-          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicate', params).then(
+        var StartTimestamp = new Date(String(this.postForm.serve_date) + ' ' + this.postForm.starttime)
+        var EndTimestamp = new Date(String(this.postForm.serve_date) + ' ' + this.postForm.endtime)
+        var finalbegin = this.formatDateTime(StartTimestamp.getTime())
+        var finalend = this.formatDateTime(EndTimestamp.getTime())
+        var now = this.formatDateTime(new Date().getTime())
+        var params = new URLSearchParams()
+        params.append('UserID', global.global_userID)
+        params.append('ServiceID', this.ServiceId)
+        params.append('Material1', this.dialogImageUrl1[0])
+        params.append('Material2', this.dialogImageUrl1[1])
+        params.append('Material3', this.dialogImageUrl1[2])
+        params.append('Material4', this.dialogImageUrl1[3])
+        params.append('RealStartTime', finalbegin)
+        params.append('RealEndTime', finalend)
+        params.append('Remark', this.postForm.content)
+        params.append('ApplyTime', now)
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicate', params).then(
             (res) => {
               console.log(res.data.num)
               if (parseInt(res.data.num) == -1) {

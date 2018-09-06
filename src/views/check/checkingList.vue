@@ -3,9 +3,9 @@
     <el-table  :data="checkingList.slice((pageNo-1)*pageSize,pageNo*pageSize)" v-loading="listLoading" element-loading-text="加载中" border fit highlight-current-row
       style="width: 100%;margin-left: 20px" >
 
-      <el-table-column  label="服务日期">
+      <el-table-column  label="申请审核时间">
         <template slot-scope="scope">
-          <span>{{scope.row.startTime|formatDatex}}</span>
+          <span>{{scope.row.ApplyTime|formatDatex}}</span>
         </template>
       </el-table-column>
 
@@ -15,19 +15,20 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="服务内容">
+      <el-table-column  label="被服务者">
         <template slot-scope="scope">
-          <span>{{scope.row.content}}</span>
-      </template>
+          <span>{{scope.row.oldManName}}</span>
+        </template>
       </el-table-column>
 
-
-      <el-table-column label="服务时段">
+      <el-table-column >
         <template slot-scope="scope">
-          <span>{{scope.row.startTime|getTime}}</span>
-          <span> - </span>
-          <span>{{scope.row.endTime|getTime}}</span>
-        </template>
+          <span>
+            已等待{{Math.floor((new Date().getTime() - Date.parse(scope.row.ApplyTime) + 8*3600*1000)/(24*3600*1000))}}天
+            {{Math.floor((( new Date().getTime() - Date.parse(scope.row.ApplyTime) +8*3600*1000)%(24*3600*1000))/(3600*1000))}}小时
+            {{Math.floor((((new Date().getTime() - Date.parse(scope.row.ApplyTime) + 8*3600*1000)%(24*3600*1000))%(3600*1000))/(60*1000))}}分钟
+          </span>
+      </template>
       </el-table-column>
 
       <el-table-column label="审核" class-name="small-padding fixed-width">
@@ -76,7 +77,6 @@ export default {
     this.getList()
     var id = JSON.parse(localStorage.getItem('volunteerid'))
     global.global_userID = id
-    console.log('全局：'+global.global_userID)
   },
   methods: {
     getList() {
@@ -96,11 +96,12 @@ export default {
                  this.checkingList=res.data.list;
                  this.totalDataNumber = res.data.list.length;
               }
-          console.log(res.data.list)
+          console.log(this.checkingList)
           this.listLoading = false
         }
       )
     },
+    
      handleCurrentChange(val) {
         this.listQuery.page = val
         var pageSize = this.pageSize
