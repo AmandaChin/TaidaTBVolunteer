@@ -47,12 +47,22 @@
       label="更多操作">
       <template scope="scope">
         <el-button v-if="scope.row.Status==1" style="font-weight: bold; color:dodgerblue" type="text" @click="func(scope.row.ServiceID,scope.row.Content, scope.row.DemandStartTime,scope.row.DemandEndTime, scope.row.Duration)">申请勋章</el-button>
-        <span v-if="scope.row.Status==2" style="font-weight: bold; color:darkgray" type="text">申请中</span>
+        <el-button v-if="scope.row.Status==2" style="font-weight: bold; color:dodgerblue" type="text" @click="checknum(scope.row.ServiceID)">查看已审核人数</el-button>
         <span v-if="scope.row.Status==3" style="font-weight: bold; color:darkgray" type="text"></span>
       </template>
     </el-table-column>
   </el-table>
-
+  <el-dialog
+        title="审核详情"
+        :visible.sync="dialogVisible"
+        width="30%"
+        @close = 'closeDialog'>
+        <el-form :model="temp">
+          <el-form-item label="当前已审核人数：">
+            <span>{{ checkpersonnum }}</span>
+          </el-form-item>
+          </el-form>
+    </el-dialog>
   <!--分页-->
     <div class="pagination-container" style = "margin-left:450px" >
       <el-pagination background @current-change="handleIndexChange"
@@ -94,6 +104,8 @@
     data() {
       return {
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
+        dialogVisible: false,
+        checkpersonnum:0,
         dialogTableVisible: false,
         UserName: undefined,
         Content: undefined,
@@ -186,6 +198,25 @@
       },
       getChainDetail(text, event) {
         clip(text, event)
+      },
+
+      checknum(serviceId){
+        console.log(serviceId)
+        this.dialogVisible = true
+        let that = this
+       //传值serviceID和UserId给后台，后台调用函数查询链上合约中数据
+        var params = new URLSearchParams()
+        params.append('ServiceID', serviceId)
+        params.append('UserID', global.global_userID)
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getCheckNum', params).then(
+          (res) => {
+            that.checkpersonnum = res.data.num
+            console.log(that.checkpersonnum)
+          }
+        ).catch((err) => {
+          console.log(err)
+        })
+
       },
       showAlert() {
         this.$alert('这是一段内容', '交易记录', {
