@@ -92,7 +92,28 @@ export default {
       }
     },
     touristLogin(){
-      this.$router.push({ name: 'firstpage', params: {}})
+
+      const theRefs = this.$refs
+      const theStore = this.$store
+      const theRouter = this.$router
+      const theLoginForm = this.loginForm
+
+      theRefs.loginForm.validate(valid => {
+        if (valid) {
+          theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
+            theRouter.push({ name: 'firstpage' })
+          }).catch(() => {
+            this.$error('提交格式错误')
+          })
+        } else {
+          console.log('error submit!!')
+          this.$error('提交格式错误')
+          return false
+        }
+      })
+
+
+     //this.$router.push({ name: 'firstpage', params: {}})
     },
     handleLogin: function() {
       var num = -1
