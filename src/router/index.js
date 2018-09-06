@@ -167,7 +167,11 @@ export const asyncRouterMap = [
       meta: {title:'通知',icon:'message'}
     }]
   },
-
+  {
+    path: '/firstpage',
+    name: 'firstpage',
+    component:_import('firstpage/tourist')
+  },
   {
     path: '/volunteers',
     component: volunteers,

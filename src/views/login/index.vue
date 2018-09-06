@@ -22,7 +22,9 @@
         </span>
       </el-form-item>
 
-      <el-button type="primary" style="width:100%;margin-bottom:20px;" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
+      <el-button type="primary" style="width:100%;margin-bottom:20px;" :loading="loading" @click="touristLogin">游客登录</el-button>
+      
+      <el-button type="primary" style="width:100%;margin-bottom:20px;margin-left:0" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
 
       <el-button type="primary" style="width:100%;margin-bottom:30px;margin-left:0" @click="register">还没账号？快去注册</el-button>
 
@@ -88,6 +90,9 @@ export default {
       } else {
         this.passwordType = 'password'
       }
+    },
+    touristLogin(){
+      this.$router.push({ name: 'firstpage', params: {}})
     },
     handleLogin: function() {
       var num = -1
