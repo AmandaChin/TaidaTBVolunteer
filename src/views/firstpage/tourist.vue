@@ -56,13 +56,13 @@ export default {
     }
   },
   methods: {
-      submit: function() {
-        //this.$router.push({ path: '/login'})
-        // console.log("click!!!")
-        this.$store.dispatch('LogOut').then(() => {
-          location.reload()// In order to re-instantiate the vue-router object to avoid bugs
-        })
-      },
+      // submit: function() {
+      //   //this.$router.push({ path: '/login'})
+      //   // console.log("click!!!")
+      //   this.$store.dispatch('LogOut').then(() => {
+      //     location.reload()// In order to re-instantiate the vue-router object to avoid bugs
+      //   })
+      // },
       regist: function(){
         this.$router.push({ name: 'register'})
       }
