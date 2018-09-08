@@ -28,8 +28,6 @@
                       <el-option v-for="item in servecontent_info" :key="item.ID" :label="item.type" :value="item.ID" >
                       </el-option>
                     </el-select>
-                    <!-- <el-input placeholder="10字以内" style='min-width:100px;' v-model="postForm.service_content" required :maxlength="10">
-                    </el-input> -->
                   </el-form-item>
                 </el-col>
 
@@ -98,6 +96,7 @@
     status: 'draft',
     title: '', // 文章题目
     content_short: '', // 文章摘要
+    content: undefined,
     source_uri: '', // 文章外链
     image_uri: '', // 上传图片
     start_time: '',
@@ -231,7 +230,10 @@
         } else if (this.postForm.content === undefined) {
           this.$message('详情内容禁止为空')
           return
-        } else if (this.postForm.duration.length === 0) {
+        } else if (this.pickedtime === '') {
+          this.$message('服务时段禁止为空')
+          return
+        } else if (this.postForm.duration === undefined) {
           this.$message('服务时长禁止为空')
           return
         } else {
@@ -248,7 +250,7 @@
           console.log('修改时传进来的UserId值    ' + global.global_userID)
           console.log('修改时传进来的Duration值    ' + this.postForm.duration)
           console.log('修改时传进来的Content值    ' + this.postForm.service_content)
-          console.log('修改时传进来的Remark值    ' + this.postForm.content)
+          console.log('修改时传进来的详情值    ' + this.postForm.content)
           console.log('修改时传进来的DemandStartTime值    ' + finalbegin)
           console.log('修改时传进来的DemandEndTime值    ' + finalend)
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement', params).then(
