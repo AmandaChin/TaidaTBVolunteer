@@ -2,10 +2,11 @@
   <div class="application-container">
     <el-form class="form-container" :model="postForm" :rules="rules" ref="postForm">
       <sticky :className="'sub-navbar '+postForm.status">
+        <el-button v-loading="loading" style="margin-left: 10px;" type="cancel" @click="JumpHistoryService">取消申请
+        </el-button>
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submit()">立即申请
         </el-button>
       </sticky>
-     
       <div class="createPost-main-container">
         <el-row>
           <el-col :span="21">
@@ -64,32 +65,32 @@
             </div>
           </el-col>
         </el-row>
-        
+
         <el-row>
           <el-col :span="6">
             <el-form-item style="margin-bottom: 20px;" label-width="120px" label=" 实际服务日期:" class="postInfo-container-item">
               <el-form-item style="margin-bottom: 20px;margin-left: 20px" prop="title">
-                <el-date-picker v-model="postForm.serve_date" type="date"
-                                    format="yyyy-MM-dd " value-format="yyyy-MM-dd"
+                <el-date-picker     type="date" v-model="postForm.serve_date"
+                                    format="yyyy-MM-dd" value-format="yyyy-MM-dd"
                                     :picker-options="pickerBeginDateAfter" placeholder="请选择实际服务日期">
                     </el-date-picker>
               </el-form-item>
             </el-form-item>
           </el-col>
-
           <el-col :span="5">
             <el-form-item style="margin-bottom: 20px;" label-width="120px" label=" 实际服务时段:" class="postInfo-container-item">
               <el-form-item style="margin-bottom: 20px;margin-left: 20px" prop="title">
               <el-time-select
-                placeholder="起始时间"
+                placeholder="起始时间"  format="HH:mm:ss" value-format="HH:mm:ss" type="time"
                 v-model="postForm.starttime"
                 :picker-options="{
-                  start: '08:30',
+                  start: '05:30',
                   step: '00:15',
-                  end: '18:30'
+                  end: '20:30'
+
                 }">
                 </el-time-select>
-                
+
               </el-form-item>
             </el-form-item>
           </el-col>
@@ -98,18 +99,22 @@
             <el-form-item style="margin-bottom: 20px;" label-width="20px" label="—" class="postInfo-container-item">
               <el-form-item style="margin-bottom: 20px; margin-left: 25px" prop="title">
                 <el-time-select
-                  placeholder="结束时间"
+                  placeholder="结束时间" format="HH:mm:ss" value-format="HH:mm:ss" type="time"
                   v-model="postForm.endtime"
                   :picker-options="{
-                    start: '08:30',
+                    start: '06:00',
                     step: '00:15',
-                    end: '18:30',
+                    end: '20:30',
+
                     minTime: postForm.starttime
                   }">
                 </el-time-select>
               </el-form-item>
             </el-form-item>
           </el-col>
+
+          <el-button v-loading="loading" style="margin-left: 10px;" type="cancel" @click="defaultTime">与申请时间一致请点击此处
+          </el-button>
         </el-row>
 
 
@@ -142,15 +147,15 @@
             <div class="filter-container">
               <el-row>
                   <div class="upload-container" >
-                    <el-upload   class="image-uploader" 
+                    <el-upload   class="image-uploader"
                         v-show="dialogImageUrl1.length<4"
-                        drag :multiple="false" :show-file-list="false" 
+                        drag :multiple="false" :show-file-list="false"
                         :action="postUrl"
                         :on-success="handleImageScucess1">
                       <i class="el-icon-upload"></i>
                       <div class="el-upload__text">将其他相关文件拖到此处，或<em>点击上传</em></div>
                       <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过4张</div>
-                    </el-upload> 
+                    </el-upload>
                     <div class="image-preview" v-for="img in dialogImageUrl1" v-show="dialogImageUrl1.length>0">
                       <div class="image-preview-wrapper"  >
                           <img :src="img" >
@@ -166,7 +171,7 @@
         </el-row>
 
       </div>
-       
+
       <!-- <el-button v-loading="loading" style="margin-left: 600px;" type="success" @click="submit()">立即申请
           </el-button> -->
     </el-form>
@@ -187,30 +192,31 @@
   import axios from 'axios'
   import port from '../../utils/manage'
   import global from '../../utils/global_userID'
-  const defaultForm = {
-    serve_date:'', //实际开始日
-    starttime:'',//实际开始时间
-    endtime:'',//实际结束时间
+  import { getTime } from '../../utils'
+const defaultForm = {
+    serve_date: '', // 实际开始日
+    starttime: '', // 实际开始时间
+    endtime: '', // 实际结束时间
     status: 'draft',
     title: '', // 文章题目
     content: '', // 文章内容
     content_short: '', // 文章摘要
     source_uri: '', // 文章外链
-    image_uri: '', // 上传图片
+    image_uri: '' // 上传图片
   }
   export default {
     filters: {
-    formatDatex(time) {
-      var date = new Date(time)
-      return formatDatex(date, 'yyyy-MM-dd')
-    },
-    getTime(time) {
-      var date = new Date(time)
-      return formatDatex(date, 'hh:mm:ss')
-    }
+      formatDatex(time) {
+        var date = new Date(time)
+        return formatDatex(date, 'yyyy-MM-dd')
+      },
+      getTime(time) {
+        var date = new Date(time)
+        return formatDatex(date, 'hh:mm:ss')
+      }
     },
     name: 'articleDetail',
-    components: { Tinymce, Upload4, Upload5 , Sticky, complexTable },
+    components: { Tinymce, Upload4, Upload5, Sticky, complexTable },
     props: {
       isEdit: {
         type: Boolean,
@@ -236,14 +242,23 @@
       return {
         pickerBeginDateAfter: {
           disabledDate(time) {
-            var timeSpace = time.getTime() > (Date.now() - 24 * 60 * 60 * 1000)
+            var timeSpace = time.getTime() > (Date.now())
             return timeSpace
           }
+          // shortcuts: [{
+          //   text: '默认值',
+          //   onClick(picker) {
+          //     const date = new Date()
+          //     date.setTime(this.StartTime.getTime())
+          //     console.log('aaaaaaaa    ' + this.date)
+          //     picker.$emit('pick', date)
+          //   }
+          // }]
         },
         realdate: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-        postUrl:'',
-        dialogImageUrl1:[],
-        dialogImageUrl2:'',
+        postUrl: '',
+        dialogImageUrl1: [],
+        dialogImageUrl2: '',
         postForm: Object.assign({}, defaultForm),
         fetchSuccess: true,
         loading: false,
@@ -254,6 +269,7 @@
         Duration: '',
         ServiceId: '',
         userLIstOptions: [],
+
         rules: {
           source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
         }
@@ -281,13 +297,36 @@
       this.imgPostUrl()
       var id = JSON.parse(localStorage.getItem('volunteerid'))
       global.global_userID = id
-      console.log('全局：'+global.global_userID)
+      console.log('全局：' + global.global_userID)
     },
     methods: {
-      imgPostUrl(){
-          this.postUrl = 'http://' + port.info.host + ':' + port.info.port + '/api/uploadFile'
+      // defaultTime() {
+      //   this.postForm.serve_date = this.formatDatex(this.StartTime)
+      //   this.postForm.starttime = this.formatDateTime(this.starttime)
+      //   this.postForm.endtime = this.formatDateTime(this.endtime)
+      //   console.log('aaaaaaaaa：' + this.postForm.serve_date)
+      //   console.log('bbbbbbbb：' + this.postForm.starttime)
+      //   console.log('ccccccc：' + this.postForm.endtime)
+      // },
+      defaultTime() {
+        this.postForm.serve_date = this.StartTime
+        var s = new Date(this.StartTime)
+        var start = (s.getHours() - 8) + ':' + s.getMinutes() + ':' + s.getSeconds()
+        this.postForm.starttime = start
+        var d = new Date(this.EndTime)
+        var end = (d.getHours() - 8) + ':' + d.getMinutes() + ':' + d.getSeconds()
+        this.postForm.endtime = end
+        console.log('默认日期！！！！！' + this.StartTime)
+        console.log('默认开始时刻！！！！！' + start)
+        console.log('默认结束时刻！！！！！' + end)
       },
-      //上传图片未用组件Upload4/5， 原因是点击组件中的确认上传会产生多余跳转， 待解决
+      JumpHistoryService: function() {
+        this.$router.push({ name: 'HistoryService' })
+      },
+      imgPostUrl() {
+        this.postUrl = 'http://' + port.info.host + ':' + port.info.port + '/api/uploadFile'
+      },
+      // 上传图片未用组件Upload4/5， 原因是点击组件中的确认上传会产生多余跳转， 待解决
       rmImage1(img) {
         console.log(img)
         this.dialogImageUrl1.pop(img)
@@ -297,8 +336,8 @@
         this.dialogImageUrl1.push(response.list.url)
       },
       // 上传错误
-      uploadError1 (response, file, fileList) {
-         this.$message('上传失败，请重试！')
+      uploadError1(response, file, fileList) {
+        this.$message('上传失败，请重试！')
       },
       rmImage2() {
         this.dialogImageUrl2 = ''
@@ -306,7 +345,7 @@
       handleImageScucess2(response) {
         this.dialogImageUrl2 = response.list.url
       },
-      //处理时间
+      // 处理时间
       formatDateTime(inputTime) {
         var date = new Date(inputTime)
         var y = date.getFullYear()
@@ -322,10 +361,10 @@
         second = second < 10 ? ('0' + second) : second
         return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
       },
-      handleNullImg(){
-        if(this.dialogImageUrl1.length<4){
+      handleNullImg() {
+        if (this.dialogImageUrl1.length < 4) {
           var len = this.dialogImageUrl1.length
-          for(var i=0; i<4-len; i++){
+          for (var i = 0; i < 4 - len; i++) {
             this.dialogImageUrl1.push('')
           }
         }
@@ -344,11 +383,13 @@
           this.$message('请填写服务结束时间！')
           return
         } else{
+          
           this.handleNullImg()
         var StartTimestamp = new Date(String(this.postForm.serve_date) + ' ' + this.postForm.starttime)
         var EndTimestamp = new Date(String(this.postForm.serve_date) + ' ' + this.postForm.endtime)
         var finalbegin = this.formatDateTime(StartTimestamp.getTime())
         var finalend = this.formatDateTime(EndTimestamp.getTime())
+        var now = this.formatDateTime(new Date().getTime())
         var params = new URLSearchParams()
         params.append('UserID', global.global_userID)
         params.append('ServiceID', this.ServiceId)
@@ -359,12 +400,13 @@
         params.append('RealStartTime', finalbegin)
         params.append('RealEndTime', finalend)
         params.append('Remark', this.postForm.content)
+        params.append('ApplyTime', now)
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/applicate', params).then(
             (res) => {
               console.log(res.data.num)
-              if(parseInt(res.data.num)==-1){
+              if (parseInt(res.data.num) == -1) {
                 this.$message('抱歉，审核者不足四人无法申请！')
-              }else{
+              } else {
                 this.$message('申请成功，等待审核')
                 this.$router.push({ name: 'HistoryService', params: {}})
               }
@@ -372,8 +414,6 @@
           ).catch((err) => {
             console.log(err)
           })
-
-          
         }
       },
       fetchData() {
@@ -384,8 +424,7 @@
           console.log(err)
         })
       }
-      
-      
+
     }
   }
 </script>

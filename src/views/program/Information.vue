@@ -41,7 +41,7 @@
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
-                 <el-col :span="6">
+                <el-col :span="6">
                   <el-form-item style="margin-bottom: 10px;" label-width="130px" label=" 服务时段:" class="postInfo-container-item">
                     <el-time-select
                       placeholder="起始时间"
@@ -55,10 +55,10 @@
                   </el-form-item>
                 </el-col>
                 <!--<el-col :span="5">-->
-                  <!--<el-form-item style="margin-bottom: 10px;" label-width="100px" label="—" class="postInfo-container-item">-->
-                    <!--<el-date-picker v-model="postForm.end_time" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">-->
-                    <!--</el-date-picker>-->
-                  <!--</el-form-item>-->
+                <!--<el-form-item style="margin-bottom: 10px;" label-width="100px" label="—" class="postInfo-container-item">-->
+                <!--<el-date-picker v-model="postForm.end_time" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">-->
+                <!--</el-date-picker>-->
+                <!--</el-form-item>-->
                 <!--</el-col>-->
 
                 <!-- <el-col :span="5">
@@ -112,7 +112,6 @@
   import axios from 'axios'
   import global from '../../utils/global_userID'
   import port from '../../utils/manage'
-
   const defaultForm = {
     status: 'draft',
     title: '', // 文章题目
@@ -129,7 +128,6 @@
     platforms: ['a-platform'],
     comment_disabled: false
   }
-
   export default {
     // filters: {
     //   formatDate(time) {
@@ -254,9 +252,9 @@
         } else if (this.postForm.start_time === '') {
           this.$message('起始时间禁止为空')
           return
-        // } else if (this.postForm.end_time === '') {
-        //   this.$message('终止时间禁止为空')
-        //   return
+          // } else if (this.postForm.end_time === '') {
+          //   this.$message('终止时间禁止为空')
+          //   return
         } else if (this.postForm.content === undefined) {
           this.$message('详情内容禁止为空')
           return
@@ -264,12 +262,10 @@
           this.$message('服务时长禁止为空')
           return
         } else {
-          var now = this.formatDateTime(Date.now())
           var StartTimestamp = new Date(String(this.postForm.start_time) + ' ' + this.pickedtime)
           var EndTimestamp = StartTimestamp.getTime() + this.postForm.duration * 60 * 60 * 1000
           var finalbegin = this.formatDateTime(StartTimestamp.getTime())
           var finalend = this.formatDateTime(EndTimestamp)
-
           params.append('UserId', global.global_userID)
           params.append('Content', this.postForm.service_content)
           // params.append('DemandStartTime', this.postForm.start_time)
@@ -278,6 +274,12 @@
           params.append('DemandEndTime', finalend)
           params.append('Duration', this.postForm.duration)
           params.append('Remark', this.postForm.content)
+          console.log('修改时传进来的UserId值    ' + global.global_userID)
+          console.log('修改时传进来的Duration值    ' + this.postForm.duration)
+          console.log('修改时传进来的Content值    ' + this.postForm.service_content)
+          console.log('修改时传进来的Remark值    ' + this.postForm.content)
+          console.log('修改时传进来的DemandStartTime值    ' + finalbegin)
+          console.log('修改时传进来的DemandEndTime值    ' + finalend)
           // 'http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement'
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement', params).then(
             (res) => {
@@ -290,7 +292,7 @@
               this.$message('发布成功')
               console.log(res)
               setTimeout(() => {
-              this.$router.push({ name: 'UploadedDemand', params: {}})
+                this.$router.push({ name: 'UploadedDemand', params: {}})
               },500)
             }
           ).catch((err) => {
@@ -299,7 +301,6 @@
           })
         }
       },
-
       showServerType() {
         // 得到全部服务类型
         axios.get('http://' + port.info.host + ':' + port.info.port + '/api/itemOperation',
@@ -413,4 +414,3 @@
     }
   }
 </style>
-

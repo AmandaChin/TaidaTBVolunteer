@@ -48,7 +48,7 @@ export const constantRouterMap = [
     component: _import('login/index'),
     name:'login'
   }
-  
+
 ]
 
 export default new Router({
@@ -153,7 +153,7 @@ export const asyncRouterMap = [
       path: 'index',
       name: 'personal',
       component:_import('personal/index'),
-      meta: {title:'个人信息',icon:'personal'}
+      meta: { title: '个人信息',icon:'personal'}
     }]
   },
 
@@ -192,8 +192,14 @@ export const asyncRouterMap = [
   {
     path: '/Oldman',
     component: oldman,
-    name :'oldman'
+    name: 'oldman'
   },
+
+  // {
+  //   path: '/editDemand',
+  //   component: editDemand,
+  //   name: 'editDemand'
+  // },
 
   {
     path: '/Information',
