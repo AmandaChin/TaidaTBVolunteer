@@ -60,7 +60,6 @@
               <el-form-item label="志愿者性别" prop="Gender">
                 <span>{{ volunteer.Gender }}</span>
               </el-form-item>
-              cd
               <el-form-item label="志愿者姓名" prop="Name">
                 <span>{{ volunteer.Name }}</span>
               </el-form-item>
