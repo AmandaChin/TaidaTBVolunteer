@@ -1,12 +1,5 @@
 <template>
 <div class="homepage-container">
-    <!--<el-form>
-        <el-form-item label="搜索">
-            <el-col :span="9">
-          <el-input style="width: 100%;" v-model="searchContent" placeholder="搜索与您时间匹配的服务需求"></el-input>
-          </el-col>
-          </el-form-item>
-    </el-form>-->
   <slide-show :slides="slides" :inv="slideSpeed"></slide-show>
  <panel-group @handleSetLineChartData="handleSetLineChartData"></panel-group>
 </div>

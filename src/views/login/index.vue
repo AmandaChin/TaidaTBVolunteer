@@ -22,11 +22,11 @@
         </span>
       </el-form-item>
 
-      <el-button type="primary" style="width:100%;margin-bottom:20px;" :loading="loading" @click="touristLogin">游客登录</el-button>
-      
       <el-button type="primary" style="width:100%;margin-bottom:20px;margin-left:0" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
 
       <el-button type="primary" style="width:100%;margin-bottom:30px;margin-left:0" @click="register">还没账号？快去注册</el-button>
+
+      <el-button type="primary" style="width:100%;margin-bottom:20px;" :loading="loading" @click="touristLogin">游客登录</el-button>
 
     </el-form>
 
@@ -149,8 +149,8 @@ export default {
 
           theRefs.loginForm.validate(valid => {
             if (valid) {
-              theStore.dispatch('LoginByUsername', theLoginForm).then(() => {                                                                            
-                
+              theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
+
                 if (num === -1) {
                   console.log('用户名或密码错误')
                   Message('用户名或密码错误')
