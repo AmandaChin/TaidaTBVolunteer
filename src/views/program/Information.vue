@@ -23,7 +23,7 @@
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="5">
-                  <el-form-item label-width="90px" label="服务内容:" class="postInfo-container-item">
+                  <el-form-item label-width="70%" label="服务内容:" class="postInfo-container-item">
                     <el-select clearable style="width: 130px" class="filter-item" v-model="postForm.service_content" placeholder="服务类型">
                       <el-option v-for="item in servecontent_info" :key="item.ID" :label="item.type" :value="item.ID" >
                       </el-option>
@@ -34,7 +34,7 @@
                 </el-col>
 
                 <el-col :span="8">
-                  <el-form-item style="margin-bottom: 10px;" label-width="130px" label=" 开始日期和时刻:" class="postInfo-container-item">
+                  <el-form-item style="margin-bottom: 10px;" label-width="90%" label=" 开始日期和时刻:" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.start_time" type="date"
                                     format="yyyy-MM-dd " value-format="yyyy-MM-dd"
                                     :picker-options="pickerBeginDateAfter" placeholder="选择开始的时间">
@@ -42,7 +42,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                  <el-form-item style="margin-bottom: 10px;" label-width="130px" label=" 服务时段:" class="postInfo-container-item">
+                  <el-form-item style="margin-bottom: 10px;" label-width="70%" label=" 服务时段:" class="postInfo-container-item">
                     <el-time-select
                       placeholder="起始时间"
                       v-model="pickedtime"
@@ -54,19 +54,6 @@
 
                   </el-form-item>
                 </el-col>
-                <!--<el-col :span="5">-->
-                <!--<el-form-item style="margin-bottom: 10px;" label-width="100px" label="—" class="postInfo-container-item">-->
-                <!--<el-date-picker v-model="postForm.end_time" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">-->
-                <!--</el-date-picker>-->
-                <!--</el-form-item>-->
-                <!--</el-col>-->
-
-                <!-- <el-col :span="5">
-                  <el-form-item style="margin-bottom: 10px;" label-width="100px" label="—" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.end_time" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
-                    </el-date-picker>
-                  </el-form-item>
-                </el-col> -->
 
                 <el-col :span="4">
                   <el-form-item label-width="225px" label="服务时长:" class="postInfo-container-item">
@@ -78,21 +65,17 @@
                 </el-col>
               </el-row>
             </div>
-
           </el-col>
         </el-row>
 
 
         <el-form-item style="margin-bottom: 10px;" label-width="45px" label="详情:">
         </el-form-item>
-
         <div class="editor-container">
           <tinymce :height=400 ref="editor" v-model="postForm.content"></tinymce>
         </div>
-
       </div>
     </el-form>
-
   </div>
 </template>
 
@@ -107,7 +90,6 @@
   import { validateURL } from '@/utils/validate'
   import { fetchArticle } from '@/api/article'
   import { userSearch } from '@/api/remoteSearch'
-  import { formatDate } from '@/methods/date.js'
   import complexTable from './../example/table/complexTable'
   import axios from 'axios'
   import global from '../../utils/global_userID'
@@ -129,12 +111,6 @@
     comment_disabled: false
   }
   export default {
-    // filters: {
-    //   formatDate(time) {
-    //     var date = new Date(time)
-    //     return formatDate(date, 'yyyy-MM-dd hh:mm')
-    //   }
-    // },
     name: 'articleDetail',
     components: { Tinymce, MDinput, Upload4, Upload3, Multiselect, Sticky, complexTable },
     props: {
@@ -252,9 +228,6 @@
         } else if (this.postForm.start_time === '') {
           this.$message('起始时间禁止为空')
           return
-          // } else if (this.postForm.end_time === '') {
-          //   this.$message('终止时间禁止为空')
-          //   return
         } else if (this.postForm.content === undefined) {
           this.$message('详情内容禁止为空')
           return
@@ -268,9 +241,7 @@
           var finalend = this.formatDateTime(EndTimestamp)
           params.append('UserId', global.global_userID)
           params.append('Content', this.postForm.service_content)
-          // params.append('DemandStartTime', this.postForm.start_time)
           params.append('DemandStartTime', finalbegin)
-          // params.append('DemandEndTime', this.postForm.end_time)
           params.append('DemandEndTime', finalend)
           params.append('Duration', this.postForm.duration)
           params.append('Remark', this.postForm.content)
@@ -280,7 +251,6 @@
           console.log('修改时传进来的Remark值    ' + this.postForm.content)
           console.log('修改时传进来的DemandStartTime值    ' + finalbegin)
           console.log('修改时传进来的DemandEndTime值    ' + finalend)
-          // 'http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement'
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement', params).then(
             (res) => {
               console.log(res)
