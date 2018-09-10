@@ -5,6 +5,11 @@
       <!-- <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="服务内容"
       v-model="listQuery.content">
       </el-input> -->
+      <el-alert
+        title="请确保您已与发布者联系之后再提交响应~"
+        type="warning"
+        @close="hello">
+      </el-alert>
 
       <el-select clearable style="width: 130px" class="filter-item" v-model="listQuery.content" placeholder="内容类型">
         <el-option v-for="item in servecontent_info" :key="item.ID" :label="item.type" :value="item.ID" >
@@ -61,11 +66,14 @@
         </template>
       </el-table-column>
     </el-table>
+
     <div class="pagination-container" style = "margin-left:450px">
       <el-pagination background @current-change="handleIndexChange"
                       :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
       </el-pagination>
     </div>
+
+
     <el-dialog title="服务详情" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
         <el-form-item label="服务日期" prop="DemandStartTime">
@@ -97,10 +105,16 @@
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="applyService(temp)">申请</el-button>
+        <el-button type="primary" @click="applyService(temp)">确定响应</el-button>
+          <!--<el-button type="primary" @click="handleShowDialog1(scope.row)">确定响应</el-button>-->
       </div>
     </el-dialog>
   </div>
+
+
+
+
+
 </template>
 
 
@@ -168,6 +182,7 @@
           Content: undefined
         },
         dialogFormVisible: false,
+        dialogFormVisible1: false,
         dialogStatus: '',
         rules: {
           type: [{ required: true, message: 'type is required', trigger: 'change' }],
@@ -201,6 +216,9 @@
     console.log('全局：'+global.global_userID)
   },
   methods: {
+    hello() {
+      alert('请一定确保已和对方取得联系再响应哦~');
+    },
     showServerType(){
 
         //得到全部服务类型
@@ -219,22 +237,7 @@
       },
       //得到初始的全部需求
       getList() {
-        // this.listLoading = true
-        // fetchList(this.listQuery).then(response => {
-        //   // this.list = response.data.items
-        //   this.total = response.data.total
-        //
-        //   // Just to simulate the time of the request
-        //   // setTimeout(() => {
-        //   //   this.listLoading = false
-        //   // }, 1.5 * 1000)
-        // })
         this.listLoading = true
-
-        // axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',
-        //   {
-        //     UserID: global.global_userID
-        //   }).then(
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllDemand',{UserID: global.global_userID}).then(
 
           (res)=>{
@@ -460,8 +463,13 @@
 
       },
       handleShowDialog(row){
+        alert('请一定确保已和对方取得联系再响应哦~');
         this.temp = Object.assign({}, row) // copy obj
         this.dialogFormVisible = true
+      },
+      handleShowDialog1(row){
+        this.temp = Object.assign({}, row) // copy obj
+        this.dialogFormVisible1 = true
       },
       handleCurrentChange(val) {
         this.listQuery.page = val
