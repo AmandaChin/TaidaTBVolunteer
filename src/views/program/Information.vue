@@ -45,7 +45,7 @@
                       placeholder="起始时间"
                       v-model="pickedtime"
                       :picker-options="{
-                     start: '05:30',
+                      start: '05:30',
                       step: '00:30',
                       end: '20:00'
                    }"></el-time-select>
@@ -200,7 +200,7 @@
       }
       var id = JSON.parse(localStorage.getItem('volunteerid'))
       global.global_userID = id
-      console.log('全局：'+global.global_userID)
+      console.log('全局：' + global.global_userID)
     },
     methods: {
       formatDateTime(inputTime) {
@@ -241,36 +241,42 @@
           var EndTimestamp = StartTimestamp.getTime() + this.postForm.duration * 60 * 60 * 1000
           var finalbegin = this.formatDateTime(StartTimestamp.getTime())
           var finalend = this.formatDateTime(EndTimestamp)
-          params.append('UserId', global.global_userID)
-          params.append('Content', this.postForm.service_content)
-          params.append('DemandStartTime', finalbegin)
-          params.append('DemandEndTime', finalend)
-          params.append('Duration', this.postForm.duration)
-          params.append('Remark', this.postForm.content)
-          console.log('修改时传进来的UserId值    ' + global.global_userID)
-          console.log('修改时传进来的Duration值    ' + this.postForm.duration)
-          console.log('修改时传进来的Content值    ' + this.postForm.service_content)
-          console.log('修改时传进来的详情值    ' + this.postForm.content)
-          console.log('修改时传进来的DemandStartTime值    ' + finalbegin)
-          console.log('修改时传进来的DemandEndTime值    ' + finalend)
-          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement', params).then(
-            (res) => {
-              console.log(res)
-            }
-          ).catch((err) => {
-            console.log(err)
-          }).then(
-            (res) => {
-              this.$message('发布成功')
-              console.log(res)
-              setTimeout(() => {
-                this.$router.push({ name: 'UploadedDemand', params: {}})
-              },500)
-            }
-          ).catch((err) => {
-            this.$message('发布失败，请重试或联系管理员！')
-            console.log(err)
-          })
+          var now1 = this.formatDateTime(Date.now())
+          if (now1 > finalbegin) {
+            this.$message('所选时间已过期，请重新选择~')
+            return
+          } else {
+            params.append('UserId', global.global_userID)
+            params.append('Content', this.postForm.service_content)
+            params.append('DemandStartTime', finalbegin)
+            params.append('DemandEndTime', finalend)
+            params.append('Duration', this.postForm.duration)
+            params.append('Remark', this.postForm.content)
+            console.log('修改时传进来的UserId值    ' + global.global_userID)
+            console.log('修改时传进来的Duration值    ' + this.postForm.duration)
+            console.log('修改时传进来的Content值    ' + this.postForm.service_content)
+            console.log('修改时传进来的详情值    ' + this.postForm.content)
+            console.log('修改时传进来的DemandStartTime值    ' + finalbegin)
+            console.log('修改时传进来的DemandEndTime值    ' + finalend)
+            axios.post('http://' + port.info.host + ':' + port.info.port + '/api/postNewRequirement', params).then(
+              (res) => {
+                console.log(res)
+              }
+            ).catch((err) => {
+              console.log(err)
+            }).then(
+              (res) => {
+                this.$message('发布成功')
+                console.log(res)
+                setTimeout(() => {
+                  this.$router.push({ name: 'UploadedDemand', params: {}})
+                }, 500)
+              }
+            ).catch((err) => {
+              this.$message('发布失败，请重试或联系管理员！')
+              console.log(err)
+            })
+          }
         }
       },
       showServerType() {

@@ -36,6 +36,7 @@
         <template scope="scope">
           <span v-if="scope.row.Status ==0" style="color: darkgray" type="text">未被响应</span>
           <span v-if="scope.row.Status !=0" style="color: darkgray" type="text">已被响应</span>
+          <span v-if="scope.row.DemandStartTime > Date.now()" style="color: darkgray" type="text">lalalala</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -60,6 +61,7 @@
               <el-form-item label="志愿者性别" prop="Gender">
                 <span>{{ volunteer.Gender }}</span>
               </el-form-item>
+
               <el-form-item label="志愿者姓名" prop="Name">
                 <span>{{ volunteer.Name }}</span>
               </el-form-item>
@@ -104,6 +106,10 @@
           <span>{{temp.Content}}</span>
         </el-form-item>
 
+        <!--<el-form-item label="具体事宜" prop="Remark">-->
+          <!--<span>{{ temp.Remark }}</span>-->
+        <!--</el-form-item>-->
+
         <el-form-item label="具体事宜" prop="Remark">
           <span v-html="temp.Remark"></span>
         </el-form-item>
@@ -121,17 +127,7 @@
         <!-- <el-button type="primary" @click="applyService(temp)">申请</el-button> -->
       </div>
     </el-dialog>
-    <!--点击删除需求之后的表单-->
-    <!--<el-dialog title="删除需求" :visible.sync="dialogFormVisible2" width="25%">-->
-    <!--<el-form :model="temp" label-position="left"  style="margin-left:50px">-->
-    <!--</el-form>-->
-    <!--<span style="fontSize:15px" type="text" align ="center">确定删除此条未被响应的需求吗？</span>-->
-    <!--<div slot="footer" class="dialog-footer">-->
-    <!--<el-button type="primary" @click="DeleteDemand(serviceId)">删除</el-button>-->
-    <!--<el-button @click="dialogFormVisible2 = false">取消</el-button>-->
 
-    <!--</div>-->
-    <!--</el-dialog>-->
     <el-dialog title="删除需求" :visible.sync="dialogFormVisible2" width="25%">
       <el-form :model="temp" label-position="left"  style="margin-left:50px">
       </el-form>
@@ -139,9 +135,9 @@
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="DeleteDemand(serviceId)">删除</el-button>
         <el-button @click="dialogFormVisible2 = false">取消</el-button>
-
       </div>
     </el-dialog>
+
     <!--弹出的编辑界面-->
     <el-dialog title="编辑需求" :visible.sync="dialogFormVisible4">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
@@ -177,26 +173,7 @@
           <el-input style="margin-left:35px;" type="textarea" :autosize="{ minRows: 2, maxRows: 20}" placeholder="请输入服务详情" v-model="postForm.content">
           </el-input>
         </el-form-item>
-        <!--<el-form-item label="服务对象" prop="Name">-->
-        <!--<span>{{ temp.Name }}</span>-->
-        <!--</el-form-item>-->
-
-        <!--<el-form-item label="服务内容" prop="Content">-->
-        <!--<span>{{temp.Content}}</span>-->
-        <!--</el-form-item>-->
-
-        <!--<el-form-item label="具体事宜" prop="Remark">-->
-        <!--<span v-html="temp.Remark"></span>-->
-        <!--</el-form-item>-->
-
-        <!--<el-form-item label="服务时长" prop="Duration">-->
-        <!--<span>{{ temp.Duration }}</span>-->
-        <!--</el-form-item>-->
-
-        <!--<el-form-item label="联系方式" prop="Phone">-->
-        <!--<span>{{ temp.Phone }}</span>-->
-        <!--</el-form-item>-->
-      </el-form>
+       </el-form>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible4= false">取消</el-button>
