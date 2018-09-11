@@ -126,7 +126,9 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
+
         <el-button type="primary" @click="dialogFormVisible3= false">关闭</el-button>
+
       </div>
     </el-dialog>
 
@@ -141,36 +143,7 @@
     </el-dialog>
 
     <!--弹出的编辑界面-->
-    <el-dialog title="编辑需求            请输入您要更改为的新数据" :visible.sync="dialogFormVisible4">
-        <!--先显示一下他本身的这次需求-->
-      <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="服务日期" prop="DemandStartTime">
-          <span>{{temp.DemandStartTime|formatDatex}}</span>
-        </el-form-item>
-
-        <el-form-item label="服务对象" prop="Name">
-          <span>{{ temp.Name }}</span>
-        </el-form-item>
-
-        <el-form-item label="服务内容" prop="Content">
-          <span>{{temp.Content}}</span>
-        </el-form-item>
-
-        <el-form-item label="具体事宜" prop="Remark">
-          <span v-html="temp.Remark"></span>
-        </el-form-item>
-
-        <el-form-item label="服务时长" prop="Duration">
-          <span>{{ temp.Duration }}</span>
-        </el-form-item>
-
-        <el-form-item label="联系方式" prop="Phone">
-          <span>{{ temp.Phone }}</span>
-        </el-form-item>
-      </el-form>
-
-
-
+    <el-dialog title="编辑需求" :visible.sync="dialogFormVisible4">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
         <el-form-item label-width="80px" label="服务内容:" class="postInfo-container-item">
           <el-select clearable style="width: 130px" class="filter-item"  v-model="postForm.service_content" placeholder="服务类型">
@@ -201,7 +174,7 @@
           </el-select>
         </el-form-item>
         <el-form-item style="margin-bottom: 10px;" label-width="45px" label="详情:">
-          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 20}" placeholder="Please input" v-model="postForm.content">
+          <el-input style="margin-left:35px;" type="textarea" :autosize="{ minRows: 2, maxRows: 20}" placeholder="请输入服务详情" v-model="postForm.content">
           </el-input>
         </el-form-item>
        </el-form>
