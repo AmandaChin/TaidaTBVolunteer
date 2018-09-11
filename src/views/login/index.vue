@@ -91,7 +91,7 @@ export default {
         this.passwordType = 'password'
       }
     },
-    touristLogin(){
+    touristLogin() {
 
       const theRefs = this.$refs
       const theStore = this.$store
@@ -112,8 +112,6 @@ export default {
         }
       })
 
-
-     //this.$router.push({ name: 'firstpage', params: {}})
     },
     handleLogin: function() {
       var num = -1
