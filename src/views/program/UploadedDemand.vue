@@ -12,6 +12,13 @@
         </template>
       </el-table-column>
       <el-table-column
+      label="订单属性">
+      <template scope="scope">
+        <span v-if="scope.row.mutualtype ==0" style="color: darkgray" type="text">我发布的</span>
+        <span v-if="scope.row.mutualtype ==1" style="color: darkgray" type="text">我响应的</span>
+      </template>
+    </el-table-column>
+      <el-table-column
         label="服务内容">
         <template scope="scope">
           <span style="color: darkgray">{{scope.row.Content}}</span>
@@ -43,7 +50,7 @@
         <template scope="scope">
 
           <el-button  v-if="scope.row.Status ==0" type="primary" size="mini" @click="handleUpdate(scope.row.ServiceID)">编辑</el-button>
-          <el-button  v-if="scope.row.Status!=0"  type="primary" size="mini" @click="volunteerInfo(scope.row.ServiceID)">查看响应者信息</el-button>
+          <el-button  v-if="scope.row.Status!=0"  type="primary" size="mini" @click="volunteerInfo(scope.row.ServiceID)">查看志愿者信息</el-button>
           <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleShow(scope.row)">查看
           </el-button>
           <el-button v-if="scope.row.Status ==0" size="mini" type="danger" @click="handleShowDialog(scope.row.ServiceID)">删除
@@ -104,7 +111,11 @@
           <span>{{temp.Content}}</span>
         </el-form-item>
 
-        <el-form-item label="具体事宜" prop="Remark">
+        <el-form-item v-if="temp.mutualtype ==0" label="老人需求详情" prop="Remark">
+          <span v-html="temp.Remark"></span>
+        </el-form-item>
+
+        <el-form-item v-if="temp.mutualtype ==1" label="志愿者提供服务详情" prop="Remark">
           <span v-html="temp.Remark"></span>
         </el-form-item>
 

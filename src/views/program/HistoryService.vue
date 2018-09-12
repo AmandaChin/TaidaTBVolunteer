@@ -13,6 +13,14 @@
       </template>
     </el-table-column>
     <el-table-column
+      label="订单属性">
+      <template scope="scope">
+        <span v-if="scope.row.mutualtype ==0" style="color: darkgray" type="text">我响应的</span>
+        <span v-if="scope.row.mutualtype ==1" style="color: darkgray" type="text">我发布的</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column
       label="服务内容">
       <template scope="scope">
         <span style="color: darkgray">{{scope.row.Content}}</span>
