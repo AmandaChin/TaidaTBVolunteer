@@ -78,116 +78,114 @@ import cityInfo from '../../utils/cityInfo'
 import axios from 'axios'
 import port from '../../utils/manage'
 export default {
-  data(){
+  data() {
     var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'));
-        } else {
-          if (this.registerForm.checkPass !== '') {
-            this.$refs.registerForm.validateField('checkPass');
-          }
-          callback();
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.registerForm.checkPass !== '') {
+          this.$refs.registerForm.validateField('checkPass')
         }
-      };
+        callback()
+      }
+    }
 
-      var validatePass2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'));
-        } else if (value !== this.registerForm.pass) {
-          callback(new Error('两次输入密码不一致!'));
-        } else {
-          callback();
-        }
-      };
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.registerForm.pass) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
-      registerForm:{
-        account:'',
-        username:'',
-        pass:'',
+      registerForm: {
+        account: '',
+        username: '',
+        pass: '',
         phone: '',
         email: '',
         checkPass: '',
-        gender:'',
-        region:[],
-        IDNumber:''
+        gender: '',
+        region: [],
+        IDNumber: ''
       },
       cityInfo: cityInfo.info.cityInfo,
       rules: {
-        account:[
+        account: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 10 个字符', trigger: 'blur' }
         ],
-        username:[
+        username: [
           { required: true, message: '请输入真实姓名', trigger: 'blur' }
         ],
-        phone:[
-          {required:true, message:'请输入手机号', trigger:'blur'}
+        phone: [
+          { required: true, message: '请输入手机号', trigger: 'blur' }
         ],
-        email:[
-          {required:true,message:'请输入邮箱地址',trigger:'blur'},
+        email: [
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
           { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
         ],
-        pass:[
+        pass: [
           { validator: validatePass, trigger: 'blur' },
-          {required:true}
+          { required: true }
         ],
         checkPass: [
-            { validator: validatePass2, trigger: 'blur' },
-          {required:true}            
+          { validator: validatePass2, trigger: 'blur' },
+          { required: true }
         ],
         gender: [
-          {required:true, message:'请选择性别', trigger:'blur'},          
+          { required: true, message: '请选择性别', trigger: 'blur' }
         ],
         region: [
-          {required:true,message:'请选择地区',trigger: 'blur'}
+          { required: true, message: '请选择地区', trigger: 'blur' }
         ]
-      },
-     
-    }   
+      }
+
+    }
   },
-  methods:{
+  methods: {
 
     submitForm() {
+      const theRouter = this.$router
+      this.$refs.registerForm.validate((valid) => {
+        if (valid) {
+          var params = new URLSearchParams()
+          params.append('account', this.registerForm.account)
+          params.append('username', this.registerForm.username)
+          params.append('password', this.registerForm.pass)
+          params.append('phone', this.registerForm.phone)
+          params.append('email', this.registerForm.email)
+          params.append('gender', this.registerForm.gender)
+          params.append('province', this.registerForm.region[0])
+          params.append('city', this.registerForm.region[1])
+          params.append('district', this.registerForm.region[2])
+          params.append('IDNumber', this.registerForm.IDNumber)
 
-       const theRouter = this.$router
-        this.$refs.registerForm.validate((valid) => {
-          if (valid) {
-            var params = new URLSearchParams();
-            params.append('account', this.registerForm.account);            
-            params.append('username', this.registerForm.username);
-            params.append('password', this.registerForm.pass);
-            params.append('phone', this.registerForm.phone);
-            params.append('email', this.registerForm.email);
-            params.append('gender', this.registerForm.gender);
-            params.append('province', this.registerForm.region[0]);
-            params.append('city', this.registerForm.region[1]);
-            params.append('district', this.registerForm.region[2]);
-            params.append('IDNumber', this.registerForm.IDNumber);
-            
-            axios.post('http://' + port.info.host + ':' + port.info.port + '/api/UserRegister', params).then(
-              function(res){
-                console.log(res);
-                var num = res.data.num;
-                console.log("num=="+num);
-                if(num===1){
-                   console.log("registerJump=="+num);
-                    theRouter.push({ name: 'registerJump' });
-                }else{
-                    this.$message('用户名重复！');
-                }
+          axios.post('http://' + port.info.host + ':' + port.info.port + '/api/UserRegister', params).then(
+            function(res) {
+              console.log(res)
+              var num = res.data.num
+              console.log('num==' + num)
+              if (num === 1) {
+                console.log('registerJump==' + num)
+                theRouter.push({ name: 'registerJump' })
+              } else {
+                this.$message('用户名重复！')
               }
-            )
-            
-          } else {
-            console.log('error submit!!');
-            this.$message('请填写正确信息');        
-            return false;
-          }
-        });
-      },
+            }
+          )
+        } else {
+          console.log('error submit!!')
+          this.$message('请填写正确信息')
+          return false
+        }
+      })
+    },
     resetForm() {
-        this.$refs.registerForm.resetFields();
-      }
+      this.$refs.registerForm.resetFields()
+    }
   }
 }
 </script>
