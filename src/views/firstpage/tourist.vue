@@ -3,20 +3,15 @@
     <el-container>
     <el-header style="text-align: left; font-size: 25px">
       <span style="margin-left: 20%;">时 间 银 行 志 愿 服 务 系 统</span>
-      <!-- <el-button v-loading="loading" style="margin-left: 40%;" type="success" @click="submit()">登 录</el-button> -->
-      <el-button v-loading="loading" style="margin-left: 40%;" type="success" @click="regist()">立 即 注 册</el-button>
+       <!--<el-button v-loading="loading" style="margin-left: 40%;" type="success" @click="submit()">登 录</el-button>-->
+      <el-button v-loading="loading"  style="margin-left:200px" type="success" @click="regist()">立 即 注 册</el-button>
+      <el-button v-loading="loading"  style="margin-left:200px" type="cancel" @click="logout()"> 立 即 登 陆 </el-button>
     </el-header>
     </el-container>
-    <!--<el-form>
-        <el-form-item label="搜索">
-            <el-col :span="9">
-          <el-input style="width: 100%;" v-model="searchContent" placeholder="搜索与您时间匹配的服务需求"></el-input>
-          </el-col>
-          </el-form-item>
-    </el-form>-->
+
   <slide-show :slides="slides" :inv="slideSpeed"></slide-show>
   <panel-group @handleSetLineChartData="handleSetLineChartData"></panel-group>
- 
+
 </div>
 
 </template>
@@ -56,16 +51,14 @@ export default {
     }
   },
   methods: {
-      // submit: function() {
-      //   //this.$router.push({ path: '/login'})
-      //   // console.log("click!!!")
-      //   this.$store.dispatch('LogOut').then(() => {
-      //     location.reload()// In order to re-instantiate the vue-router object to avoid bugs
-      //   })
-      // },
-      regist: function(){
-        this.$router.push({ name: 'register'})
-      }
+    logout() {
+      this.$store.dispatch('LogOut').then(() => {
+        location.reload()// In order to re-instantiate the vue-router object to avoid bugs
+      })
+    },
+    regist: function() {
+      this.$router.push({ name: 'register' })
+    }
   }}
 </script>
 
@@ -78,7 +71,7 @@ export default {
 
 .el-header {
     background-color: #000000;
-    color: rgb(36, 151, 32);
+    color: rgb(55, 150, 32);
     line-height: 60px;
   }
 </style>

@@ -2,9 +2,6 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <!-- <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="服务内容"
-      v-model="listQuery.content">
-      </el-input> -->
       <el-alert
         title="请确保您已与发布者联系之后再提交响应~"
         type="warning"
@@ -73,8 +70,8 @@
       </el-pagination>
     </div>
 
+    <el-dialog title="系统提示" :visible.sync="dialogFormVisible">
 
-    <el-dialog title="服务详情" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
         <el-form-item label="服务日期" prop="DemandStartTime">
           <span>{{temp.DemandStartTime|formatDatex}}</span>
@@ -95,18 +92,13 @@
         <el-form-item label="服务时长" prop="Duration">
           <span>{{ temp.Duration }}</span>
         </el-form-item>
-
-        <el-form-item label="联系方式" prop="Phone">
-          <span>{{ temp.Phone }}</span>
-        </el-form-item>
       </el-form>
 
-       <span  style="margin-left:30%;font-size: large;color:red" > 请确保您已与发布者联系之后再提交响应~   </span>
+       <span  style="margin-left:30%;font-size: large;color:deepskyblue" > 您需要先注册才能响应~ </span>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="applyService(temp)">确定响应</el-button>
-          <!--<el-button type="primary" @click="handleShowDialog1(scope.row)">确定响应</el-button>-->
+        <el-button type="primary" @click="regist()">立即注册</el-button>
       </div>
     </el-dialog>
   </div>
@@ -459,9 +451,10 @@
         )
 
         this.dialogFormVisible = false
-
-
       },
+      regist: function() {
+      this.$router.push({ name: 'register' })
+    },
       handleShowDialog(row){
         alert('请一定确保已和对方取得联系再响应哦~');
         this.temp = Object.assign({}, row) // copy obj

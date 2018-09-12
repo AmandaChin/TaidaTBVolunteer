@@ -2,54 +2,34 @@
   <el-row class="panel-group" :gutter="40">
 
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="JumpSearch">
+      <div class="card-panel" @click="JumpSearch1">
         <div class="card-panel-icon-wrapper icon-message">
           <svg-icon icon-class="search_color" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">搜索功能</div>
-          <div class="card-description">做一个心地善良的人</div>
+          <div class="card-panel-text">搜索需求</div>
+          <div class="card-description">浏览需要志愿服务的需求</div>
         </div>
       </div>
     </el-col>
 
 
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="JumpApplyingMedals">
-        <div class="card-panel-icon-wrapper icon-shoppingCard">
-          <svg-icon icon-class="xunzhang" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">勋章信息</div>
-          <div class="card-description">做一个心地善良的人</div>
-        </div>
-      </div>
+      <div class="card-panel" ></div>
     </el-col>
 
   <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="JumpApplication">
+      <div class="card-panel" @click="JumpSearch2">
         <div class="card-panel-icon-wrapper icon-money">
           <svg-icon icon-class="heart" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">发布需求</div>
-          <div class="card-description">做一个心地善良的人</div>
+          <div class="card-panel-text">搜索服务</div>
+          <div class="card-description">浏览可以提供志愿服务的项目</div>
         </div>
       </div>
     </el-col>
 
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class='card-panel' @click="JumpNoticeList">
-        <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="message" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">查看通知</div>
-          <div class="card-description">做一个心地善良的人</div>
-        </div>
-      </div>
-    </el-col>
-    
   </el-row>
 </template>
 
@@ -58,17 +38,11 @@
 export default {
   methods: {
 
-    JumpApplication: function() {
-      //this.$router.push({ name: 'oldman' })
+    JumpSearch2: function() {
+      this.$router.push({ name: 'search1' })
     },
-    JumpApplyingMedals: function() {
-      //this.$router.push({ name: 'applying' })
-    },
-    JumpNoticeList: function() {
-      //this.$router.push({ name: 'notice' })
-    },
-    JumpSearch: function() {
-      //this.$router.push({ name: 'search' })
+    JumpSearch1: function() {
+      this.$router.push({ name: 'search1' })
     }
   }
 }
@@ -145,7 +119,7 @@ export default {
         font-size: 13px;
         margin-bottom: 12px;
       }
-      
+
     }
   }
 }

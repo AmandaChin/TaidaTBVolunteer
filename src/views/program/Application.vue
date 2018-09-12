@@ -68,8 +68,8 @@
 
         <el-row>
           <el-col :span="6">
-            <el-form-item style="margin-bottom: 20px;" label-width="120px" label=" 实际服务日期:" class="postInfo-container-item">
-              <el-form-item style="margin-bottom: 20px;margin-left: 20px" prop="title">
+            <el-form-item style="margin-bottom: 20px;" label-width="25%" label=" 实际服务日期:" class="postInfo-container-item">
+              <el-form-item style="margin-bottom: 20px;margin-left: auto" prop="title">
                 <el-date-picker     type="date" v-model="postForm.serve_date"
                                     format="yyyy-MM-dd" value-format="yyyy-MM-dd"
                                     :picker-options="pickerBeginDateAfter" placeholder="请选择实际服务日期">
@@ -78,8 +78,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="5">
-            <el-form-item style="margin-bottom: 20px;" label-width="120px" label=" 实际服务时段:" class="postInfo-container-item">
-              <el-form-item style="margin-bottom: 20px;margin-left: 20px" prop="title">
+            <el-form-item style="margin-bottom: 20px;" label-width="28%" label=" 实际服务时段:" class="postInfo-container-item">
+              <el-form-item style="margin-bottom: 20px;margin-left: auto" prop="title">
               <el-time-select
                 placeholder="起始时间"  format="HH:mm:ss" value-format="HH:mm:ss" type="time"
                 v-model="postForm.starttime"
@@ -96,8 +96,8 @@
           </el-col>
 
           <el-col :span="6">
-            <el-form-item style="margin-bottom: 20px;" label-width="20px" label="—" class="postInfo-container-item">
-              <el-form-item style="margin-bottom: 20px; margin-left: 25px" prop="title">
+            <el-form-item style="margin-bottom: 20px;margin-left: 1%" label-width="5%" label="—" class="postInfo-container-item">
+              <el-form-item style="margin-bottom: 20px; margin-left: auto" prop="title">
                 <el-time-select
                   placeholder="结束时间" format="HH:mm:ss" value-format="HH:mm:ss" type="time"
                   v-model="postForm.endtime"
