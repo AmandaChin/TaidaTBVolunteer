@@ -49,7 +49,7 @@
         </div>
       </div>
     </el-col>
-    
+
   </el-row>
 </template>
 
@@ -145,7 +145,7 @@ export default {
         font-size: 13px;
         margin-bottom: 12px;
       }
-      
+
     }
   }
 }

@@ -38,26 +38,34 @@
           <span style="color: darkgray">{{scope.row.DemandEndTime|formatDatex}}</span>
         </template>
       </el-table-column>
+
+      <!--<el-table-column-->
+        <!--label="现在"-->
+        <!--prop="applyingtime">-->
+        <!--<template scope="scope">-->
+          <!--<span style="color: darkgray">{{Date.now()|formatDate}}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
+
       <el-table-column
         label="当前状态">
         <template scope="scope">
           <span v-if="scope.row.Status ==0" style="color: darkgray" type="text">未被响应</span>
+          <!--<span v-if="(scope.row.Status ==0)||((scope.row.DemandEndTime|formatDatex)<(Date.now()|formatDatex))" style="color: darkblue" type="text">未被响应</span>-->
+          <!--<span v-if="(scope.row.Status ==0)|| (String(scope.row.DemandEndTime|formatDatex)>String(Date.now()|formatDatex))" style="color: darkred" type="text">未被响应 已过期</span>-->
           <span v-if="scope.row.Status !=0" style="color: darkgray" type="text">已被响应</span>
         </template>
       </el-table-column>
       <el-table-column
         label="更多操作">
         <template scope="scope">
-
           <el-button  v-if="scope.row.Status ==0" type="primary" size="mini" @click="handleUpdate(scope.row.ServiceID)">编辑</el-button>
-          <el-button  v-if="scope.row.Status!=0"  type="primary" size="mini" @click="volunteerInfo(scope.row.ServiceID)">查看志愿者信息</el-button>
-          <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleShow(scope.row)">查看
+          <el-button  v-if="scope.row.Status!=0"  type="primary" size="mini" @click="volunteerInfo(scope.row.ServiceID)">查看响应者信息</el-button>
+          <el-button   size="mini" type="success" @click="handleShow(scope.row)">查看
           </el-button>
           <el-button v-if="scope.row.Status ==0" size="mini" type="danger" @click="handleShowDialog(scope.row.ServiceID)">删除
           </el-button>
 
-          <!--<el-button v-if="scope.row.Status == 0" style="font-weight: bold; color:dodgerblue" type="text" @click="handleShowDialog(scope.row.ServiceID)">删除需求</el-button>-->
-          <!--<el-button v-if="scope.row.Status!=0" style="font-weight: bold; color:dodgerblue" type="text" @click="volunteerInfo(scope.row.ServiceID)">响应者信息</el-button>-->
           <el-dialog title="服务详情" :visible.sync="dialogFormVisible">
             <el-form :rules="rules" ref="dataForm" :model="volunteer" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
               <el-form-item label="志愿者用户名" prop="UserName">
@@ -67,6 +75,7 @@
               <el-form-item label="志愿者性别" prop="Gender">
                 <span>{{ volunteer.Gender }}</span>
               </el-form-item>
+
               <el-form-item label="志愿者姓名" prop="Name">
                 <span>{{ volunteer.Name }}</span>
               </el-form-item>
@@ -128,21 +137,12 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible3= false">关闭</el-button>
-        <!-- <el-button type="primary" @click="applyService(temp)">申请</el-button> -->
+
+        <el-button type="primary" @click="dialogFormVisible3= false">关闭</el-button>
+
       </div>
     </el-dialog>
-    <!--点击删除需求之后的表单-->
-    <!--<el-dialog title="删除需求" :visible.sync="dialogFormVisible2" width="25%">-->
-    <!--<el-form :model="temp" label-position="left"  style="margin-left:50px">-->
-    <!--</el-form>-->
-    <!--<span style="fontSize:15px" type="text" align ="center">确定删除此条未被响应的需求吗？</span>-->
-    <!--<div slot="footer" class="dialog-footer">-->
-    <!--<el-button type="primary" @click="DeleteDemand(serviceId)">删除</el-button>-->
-    <!--<el-button @click="dialogFormVisible2 = false">取消</el-button>-->
 
-    <!--</div>-->
-    <!--</el-dialog>-->
     <el-dialog title="删除需求" :visible.sync="dialogFormVisible2" width="25%">
       <el-form :model="temp" label-position="left"  style="margin-left:50px">
       </el-form>
@@ -150,9 +150,9 @@
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="DeleteDemand(serviceId)">删除</el-button>
         <el-button @click="dialogFormVisible2 = false">取消</el-button>
-
       </div>
     </el-dialog>
+
     <!--弹出的编辑界面-->
     <el-dialog title="编辑需求" :visible.sync="dialogFormVisible4">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
@@ -188,30 +188,21 @@
           <el-input style="margin-left:35px;" type="textarea" :autosize="{ minRows: 2, maxRows: 20}" placeholder="请输入服务详情" v-model="postForm.content">
           </el-input>
         </el-form-item>
-        <!--<el-form-item label="服务对象" prop="Name">-->
-        <!--<span>{{ temp.Name }}</span>-->
-        <!--</el-form-item>-->
-
-        <!--<el-form-item label="服务内容" prop="Content">-->
-        <!--<span>{{temp.Content}}</span>-->
-        <!--</el-form-item>-->
-
-        <!--<el-form-item label="具体事宜" prop="Remark">-->
-        <!--<span v-html="temp.Remark"></span>-->
-        <!--</el-form-item>-->
-
-        <!--<el-form-item label="服务时长" prop="Duration">-->
-        <!--<span>{{ temp.Duration }}</span>-->
-        <!--</el-form-item>-->
-
-        <!--<el-form-item label="联系方式" prop="Phone">-->
-        <!--<span>{{ temp.Phone }}</span>-->
-        <!--</el-form-item>-->
-      </el-form>
+       </el-form>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible4= false">取消</el-button>
         <el-button type="primary" @click="editdemand(serviceId)">确定更改</el-button>
+      </div>
+    </el-dialog>
+
+
+    <el-dialog title="系统提示" :visible.sync="dialogFormVisible5">
+      <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
+          <span  style="margin-left:3%;font-size: larger;align-content: center;color: darkred" >您的服务已到期并没有人响应，请重新发布新的需求</span>
+      </el-form>
+      <div slot="footer"  class="dialog-footer">
+        <el-button @click="dialogFormVisible5= false">确定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -263,6 +254,7 @@
         dialogFormVisible2: false,
         dialogFormVisible3: false,
         dialogFormVisible4: false,
+        dialogFormVisible5: false,
         demands: [],
         servecontent_info: [],
         volunteer: {
@@ -343,6 +335,7 @@
         return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
       },
       editdemand(serviceId) {
+        // this.temp = Object.assign({}, row) // copy obj
         const that = this
         this.dialogFormVisible4 = false
         var params = new URLSearchParams()
@@ -380,10 +373,10 @@
           console.log('必须要显示呀  修改时iask传进来的DemandStartTime值    ' + finalbegin)
           console.log('必须要显示呀  修改时iask传进来的DemandEndTime值    ' + finalend)
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/editDemand', params).then(
-            function(res){
+            function(res) {
               console.log(res)
-              console.log("进来啦！")
-              if(res.data.num === 1){
+              console.log('进来啦！')
+              if (res.data.num === 1) {
                 console.log("进来啦2号！")
                 // console.log("testnumsuccess!!"+res.data.num)
                 that.$notify({
@@ -451,7 +444,15 @@
       },
       handleShow(row) {
         this.temp = Object.assign({}, row) // copy obj
-        this.dialogFormVisible3 = true
+        var now1 = this.formatDateTime(Date.now())
+        var end1 = this.formatDateTime(this.temp.DemandEndTime)
+        console.log('必须要显示呀  修改时传进来的值1    ' + now1)
+        console.log('必须要显示呀  修改时传进来的值2   ' + end1)
+        if (end1 < now1) {
+          this.dialogFormVisible5 = true
+        } else {
+          this.dialogFormVisible3 = true
+        }
       },
       volunteerInfo(ServiceId) {
         var params = new URLSearchParams()
