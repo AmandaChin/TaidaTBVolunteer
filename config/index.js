@@ -12,7 +12,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-       // target: '10.10.1.201:13000/api/',
+        //target: '10.11.107.122:3000/api/',
+        //target: '10.11.108.185:3000/api/',
+        //target: '10.10.1.201:13000/api/',
         //target:'http://127.0.0.1:3000/api/',
         target: 'http://localhost:3000/api/',
         changeOrigin: true,
@@ -24,8 +26,8 @@ module.exports = {
 
     // Various Dev Server settings
     // 页面加载有误
-     host: 'localhost',
-    // host: '0.0.0.0', // can be overwritten by process.env.HOST
+     //host: 'localhost',
+     host: '0.0.0.0', // can be overwritten by process.env.HOST
     port: 9527, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,

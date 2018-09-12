@@ -1,6 +1,10 @@
 <template>
+<div class="havegotmedalinfo">
+  <div>
+    <h1 style="color:darkgray;font-size:25px;margin-left:20px">帐户剩余勋章币:  {{(this.useraccount).toFixed(2)}}</h1>
+    </div> 
   <el-table
-    :data="gettingmedals"
+    :data="gettingmedals.slice((pageNo-1)*pageSize,pageNo*pageSize)"
     style="width: 100%;margin-left: 20px"
 
     :row-class-name="tableRowClassName">
@@ -13,7 +17,7 @@
     <el-table-column
       label="交易数目">
       <template scope="scope">
-        <span style="font-size: 18px;margin-left:10px">{{"*" + scope.row.medalnum}}</span>
+        <span style="font-size: 18px;margin-left:10px">{{"*" + (scope.row.medalnum).toFixed(2)}}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -50,6 +54,13 @@
       </template>
     </el-table-column>
   </el-table>
+  <!--分页-->
+    <div class="pagination-container" style = "margin-left:450px">
+      <el-pagination background @current-change="handleIndexChange"
+                      :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
+      </el-pagination>
+    </div>
+     </div>
 </template>
 
 <style scoped>
@@ -68,10 +79,15 @@
   import axios from 'axios'
   import port from '../../utils/manage'
   import { formatDate } from '@/methods/methods.js'
+  import { formatDatex } from '@/methods/date.js'
   import global from '../../utils/global_userID'
 
   export default {
     filters: {
+      formatDatex(time) {
+        var date = new Date(time)
+        return formatDatex(date, 'yyyy-MM-dd hh:mm:ss')
+      },
       formatDate(time) {
         var date = new Date(time)
         return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
@@ -88,11 +104,18 @@
         to:"加载中",
          },
         dialogVisible: false,
-        gettingmedals: []
+        gettingmedals: [],
+        pageNo:1,
+        pageSize:10,
+        totalDataNumber:0,
+        useraccount:0,
       }
     },
     created() {
-    this.getList()
+      this.getList()
+      var id = JSON.parse(localStorage.getItem('volunteerid'))
+      global.global_userID = id
+      console.log('全局：'+global.global_userID)
     },
     methods: {
       tableRowClassName({ row, rowIndex }) {
@@ -111,12 +134,38 @@
               
         (res) => {
           console.log(res.data.list)
-          this.gettingmedals = res.data.list.rows
+          if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.gettingmedals=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.gettingmedals=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
           this.listLoading = false
         }
       )
+          
+       //获取帐户余额   
+      axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getUserAccount',
+      {
+        UserId: global.global_userID
+      }).then(
+        (res)=>{
+          console.log(res.data)
+          this.useraccount = parseInt(res.data.list)
+        }
+      )
     },
-      
+     
+     handleCurrentChange(val) {
+        this.listQuery.page = val
+        var pageSize = this.pageSize
+        this.getAndDraw(parseInt(pageNo),parseInt(pageSize))
+      },
+  
      getChainDetail(transactionHASH){
 
           this.dialogVisible = true

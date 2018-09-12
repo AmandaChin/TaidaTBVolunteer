@@ -1,7 +1,7 @@
 <template>
 <div class="noticeContainer">
   <el-table
-    :data="noticeData"
+    :data="noticeData.slice((pageNo-1)*pageSize,pageNo*pageSize)"
     style="width: 100%">
 
     <el-table-column label="标题">
@@ -18,7 +18,7 @@
       </template>
     </el-table-column>
     <el-table-column
-      label="作者">
+      label="发布者">
       <template slot-scope="scope">
         <div slot="reference" class="name-wrapper">
             <el-tag size="medium">{{ scope.row.WriterName }}</el-tag>
@@ -42,7 +42,7 @@
   <el-dialog
         title="通知详情"
         :visible.sync="dialogVisible"
-        width="50%"
+        width="30%"
         @close = 'closeDialog'>
         <el-form :model="temp">
           <el-form-item label="标题">
@@ -55,10 +55,16 @@
             <span>{{ temp.ReleaseTime|formatDate }}</span>
           </el-form-item>
           <el-form-item label="内容">
-            <span>{{ temp.Content }}</span>
+            <span v-html="temp.Content"></span>
           </el-form-item>
           </el-form>
         </el-dialog>
+        <!--分页-->
+    <div class="pagination-container" style = "margin-left:450px" >
+      <el-pagination background @current-change="handleIndexChange"
+                      :page-size="pageSize" :current-page.sync="pageNo" layout="total, prev, pager, next" :total="totalDataNumber">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -81,15 +87,32 @@ import global from '../../utils/global_userID'
         Checked:undefined
       },
         dialogVisible: false,
-        noticeData: []
+        noticeData: [],
+        pageNo:1,
+        pageSize:10,
+        totalDataNumber:0
       }
+    },
+    created(){
+      var id = JSON.parse(localStorage.getItem('volunteerid'))
+      console.log('全局：'+id)
+      global.global_userID = id
     },
     mounted() {
       var params = new URLSearchParams()
       params.append('UserID', global.global_userID)
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/noticeOperation', params).then(
           (res)=>{
-            this.noticeData=res.data.list.rows;
+            if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.noticeData=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.noticeData=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
             console.log(res);
           }
         ).catch((err)=>{
@@ -109,7 +132,16 @@ import global from '../../utils/global_userID'
         params.append('UserID', global.global_userID)
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/noticeOperation', params).then(
           (res)=>{
-            this.noticeData=res.data.list.rows;
+           if(res.data.list.rows)
+              {
+                console.log("有rows！！！")
+                this.noticeData=res.data.list.rows;
+                this.totalDataNumber = res.data.list.count;
+              }else{
+                 console.log("没有rows！！！")
+                 this.noticeData=res.data.list;
+                 this.totalDataNumber = res.data.list.length;
+              }
             console.log(res);
           }
         ).catch((err)=>{
@@ -122,7 +154,11 @@ import global from '../../utils/global_userID'
       handleDelete(index, row) {
         console.log(index, row);
       },
-
+      handleCurrentChange(val) {
+        this.listQuery.page = val
+        var pageSize = this.pageSize
+        this.getAndDraw(parseInt(pageNo),parseInt(pageSize))
+      },
       handleShowDialog(row){
       this.temp = Object.assign({}, row) // copy obj
       this.dialogVisible = true

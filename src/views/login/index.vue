@@ -22,9 +22,11 @@
         </span>
       </el-form-item>
 
-      <el-button type="primary" style="width:100%;margin-bottom:20px;" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
+      <el-button type="primary" style="width:100%;margin-bottom:20px;margin-left:0" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
 
-      <el-button type="primary" style="width:100%;margin-bottom:30px;margin-left:0" @click="register">还没账号？快去注册</el-button>
+      <el-button type="primary" style="width:100%;margin-bottom:20px;margin-left:0" @click="register">还没账号？快去注册</el-button>
+
+      <el-button type="primary" style="width:100%;margin-bottom:20px;margin-left:0" @click="touristLogin">我是游客</el-button>
 
     </el-form>
 
@@ -89,6 +91,28 @@ export default {
         this.passwordType = 'password'
       }
     },
+    touristLogin() {
+
+      const theRefs = this.$refs
+      const theStore = this.$store
+      const theRouter = this.$router
+      const theLoginForm = this.loginForm
+
+      theRefs.loginForm.validate(valid => {
+        if (valid) {
+          theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
+            theRouter.push({ name: 'firstpage' })
+          }).catch(() => {
+            this.$error('提交格式错误')
+          })
+        } else {
+          console.log('error submit!!')
+          this.$error('提交格式错误')
+          return false
+        }
+      })
+
+    },
     handleLogin: function() {
       var num = -1
       var params = new URLSearchParams()
@@ -101,6 +125,8 @@ export default {
       // axios.post('http://localhost:3000/api/getUserIDbyAccount', params_ID).then(
         (res) => {
           global.global_userID = res.data.UserID
+          this.$store.dispatch('StoreID',res.data.UserID)
+          localStorage.setItem('volunteerid', JSON.stringify(res.data.UserID));
           console.log(res)
         }
       ).catch((err) => {
@@ -122,10 +148,14 @@ export default {
           theRefs.loginForm.validate(valid => {
             if (valid) {
               theStore.dispatch('LoginByUsername', theLoginForm).then(() => {
+
                 if (num === -1) {
                   console.log('用户名或密码错误')
                   Message('用户名或密码错误')
-                } else {
+                }else if(num === 0 || num === 1 || num === 2){
+                  Message('管理员不可以登录用户端哦')
+                }
+                else if(num === 3){
                   theRouter.push({ path: '/homepage' })
                   // theRouter.push({ name: 'register' })
                 }

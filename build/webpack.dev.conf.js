@@ -55,7 +55,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: true,
       favicon: resolve('favicon.ico'),
-      title: 'vue-element-admin',
+      title: '时间银行志愿服务系统',
       path: config.dev.assetsPublicPath + config.dev.assetsSubDirectory
     }),
   ]
