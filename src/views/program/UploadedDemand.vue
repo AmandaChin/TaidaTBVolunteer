@@ -7,7 +7,7 @@
     <el-table-column
       label="发布时间">
       <template scope="scope">
-        <span style="color: darkgray">{{scope.row.CreateTime|formatDate}}</span>
+        <span style="color: darkgray">{{scope.row.CreateTime|formatDates}}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -92,6 +92,7 @@
   import axios from 'axios'
   import { formatDate } from '@/methods/methods.js'
   import { formatDatex } from '@/methods/date.js'
+  import { formatDates } from '@/methods/dateLater.js'
   import port from '../../utils/manage'
   import global from '../../utils/global_userID'
   export default {
@@ -103,8 +104,13 @@
       formatDatex(time) {
         var date = new Date(time)
         return formatDatex(date, 'yyyy-MM-dd hh:mm:ss')
+      },
+      formatDates(time) {
+        var date = new Date(time)
+        return formatDates(date, 'yyyy-MM-dd hh:mm:ss')
       }
     },
+
     data() {
       return {
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
