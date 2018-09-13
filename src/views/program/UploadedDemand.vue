@@ -332,11 +332,7 @@
         params.append('serviceId', serviceId)
         params.append('Duration', this.postForm.duration)
         params.append('Content', this.postForm.service_content)
-        console.log('修改时iask传进来的serviceId值    ' + serviceId)
-        console.log('修改时iask传进来的UserId值    ' + global.global_userID)
-        console.log('修改时iask传进来的Duration值    ' + this.postForm.duration)
-        console.log('修改时iask传进来的Content值    ' + this.postForm.service_content)
-        console.log('修改时iask传进来的Remark值    ' + this.postForm.content)
+       g('修改时iask传进来的Remark值    ' + this.postForm.content)
         if (this.postForm.service_content === undefined) {
           this.$message('服务内容禁止为空')
           return
@@ -359,14 +355,10 @@
           // params.append('DemandEndTime', this.postForm.end_time)
           params.append('DemandEndTime', finalend)
           params.append('Remark', this.postForm.content)
-          console.log('必须要显示呀  修改时iask传进来的DemandStartTime值    ' + finalbegin)
-          console.log('必须要显示呀  修改时iask传进来的DemandEndTime值    ' + finalend)
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/editDemand', params).then(
             function(res) {
               console.log(res)
-              console.log('进来啦！')
               if (res.data.num === 1) {
-                console.log("进来啦2号！")
                 // console.log("testnumsuccess!!"+res.data.num)
                 that.$notify({
                   title: '成功',
@@ -427,7 +419,6 @@
       },
       handleUpdate(row) {
         // this.postForm.service_content = this.scope.row.Content
-        console.log('这里是传值：' + row)
         this.serviceId = row
         this.dialogFormVisible4 = true
       },
@@ -435,8 +426,6 @@
         this.temp = Object.assign({}, row) // copy obj
         var now1 = this.formatDateTime(Date.now())
         var end1 = this.formatDateTime(this.temp.DemandEndTime)
-        console.log('必须要显示呀  修改时传进来的值1    ' + now1)
-        console.log('必须要显示呀  修改时传进来的值2   ' + end1)
         if (end1 < now1) {
           this.dialogFormVisible5 = true
         } else {
@@ -465,9 +454,7 @@
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/deleteDemand', params).then(
           function(res){
             console.log(res)
-            console.log("进来啦！")
             if(res.data.num === 1){
-              console.log("进来啦2号！")
               // console.log("testnumsuccess!!"+res.data.num)
               that.$notify({
                 title: '成功',
@@ -511,7 +498,6 @@
 
       },
       handleShowDialog(row) {
-        console.log('这里是传值：' + row)
         this.serviceId = row
         this.dialogFormVisible2 = true
       },
