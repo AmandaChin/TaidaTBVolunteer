@@ -1,82 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <el-table
-    :data="demands"
-    style="width: 100%;margin-left: 20px"
-
-    :row-class-name="tableRowClassName">
-    <el-table-column
-      label="发布时间">
-      <template scope="scope">
-        <span style="color: darkgray">{{scope.row.CreateTime|formatDates}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="服务内容">
-      <template scope="scope">
-        <span style="color: darkgray">{{scope.row.Content}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="起始时间"
-      prop="applyingtime">
-      <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandStartTime|formatDatex}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="终止时间"
-      prop="applyingtime">
-      <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandEndTime|formatDatex}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="当前状态">
-      <template scope="scope">
-        <span v-if="scope.row.Status ==0" style="color: darkgray" type="text">未被响应</span>
-        <span v-if="scope.row.Status !=0" style="color: darkgray" type="text">已被响应</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="响应者信息">
-      <template scope="scope">
-        <span v-if="scope.row.Status == 0" style="color: darkgray" type="text">暂无响应</span>
-        <el-button v-if="scope.row.Status!=0" style="font-weight: bold; color:dodgerblue" type="text" @click="volunteerInfo(scope.row.ServiceID)">响应者信息</el-button>
-        <el-dialog title="服务详情" :visible.sync="dialogFormVisible">
-          <el-form :rules="rules" ref="dataForm" :model="volunteer" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
-            <el-form-item label="志愿者用户名" prop="UserName">
-              <span>{{volunteer.UserName}}</span>
-            </el-form-item>
-
-            <el-form-item label="志愿者性别" prop="Gender">
-              <span>{{ volunteer.Gender }}</span>
-            </el-form-item>
-
-            <el-form-item label="志愿者姓名" prop="Name">
-              <span>{{ volunteer.Name }}</span>
-            </el-form-item>
-
-            <el-form-item label="志愿者身份证号" prop="IDnumber">
-              <span>{{ volunteer.IDNumber }}</span>
-            </el-form-item>
-
-            <el-form-item label="邮箱地址" prop="Email">
-              <span>{{ volunteer.Email }}</span>
-            </el-form-item>
-
-            <el-form-item label="联系方式" prop="Phone">
-              <span>{{ volunteer.Phone }}</span>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">关闭</el-button>
-          </div>
-        </el-dialog>
-      </template>
-    </el-table-column>
-  </el-table>
-=======
   <div class="app-container calendar-list-container">
     <el-table
       :data="demands.slice((pageNo-1)*pageSize,pageNo*pageSize)"
@@ -284,7 +206,6 @@
       </div>
     </el-dialog>
   </div>
->>>>>>> 3eaf8cea70248fb73cf2334e229410ebbafcbe1d
 </template>
 
 <style scoped>
