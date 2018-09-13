@@ -42,7 +42,7 @@ export default {
       this.$router.push({ name: 'search1' })
     },
     JumpSearch1: function() {
-      this.$router.push({ name: 'search1' })
+      this.$router.push({ name: 'search2' })
     }
   }
 }
