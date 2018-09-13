@@ -1,82 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <el-table
-    :data="demands"
-    style="width: 100%;margin-left: 20px"
-
-    :row-class-name="tableRowClassName">
-    <el-table-column
-      label="发布时间">
-      <template scope="scope">
-        <span style="color: darkgray">{{scope.row.CreateTime|formatDates}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="服务内容">
-      <template scope="scope">
-        <span style="color: darkgray">{{scope.row.Content}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="起始时间"
-      prop="applyingtime">
-      <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandStartTime|formatDatex}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="终止时间"
-      prop="applyingtime">
-      <template scope="scope">
-        <span style="color: darkgray">{{scope.row.DemandEndTime|formatDatex}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="当前状态">
-      <template scope="scope">
-        <span v-if="scope.row.Status ==0" style="color: darkgray" type="text">未被响应</span>
-        <span v-if="scope.row.Status !=0" style="color: darkgray" type="text">已被响应</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="响应者信息">
-      <template scope="scope">
-        <span v-if="scope.row.Status == 0" style="color: darkgray" type="text">暂无响应</span>
-        <el-button v-if="scope.row.Status!=0" style="font-weight: bold; color:dodgerblue" type="text" @click="volunteerInfo(scope.row.ServiceID)">响应者信息</el-button>
-        <el-dialog title="服务详情" :visible.sync="dialogFormVisible">
-          <el-form :rules="rules" ref="dataForm" :model="volunteer" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
-            <el-form-item label="志愿者用户名" prop="UserName">
-              <span>{{volunteer.UserName}}</span>
-            </el-form-item>
-
-            <el-form-item label="志愿者性别" prop="Gender">
-              <span>{{ volunteer.Gender }}</span>
-            </el-form-item>
-
-            <el-form-item label="志愿者姓名" prop="Name">
-              <span>{{ volunteer.Name }}</span>
-            </el-form-item>
-
-            <el-form-item label="志愿者身份证号" prop="IDnumber">
-              <span>{{ volunteer.IDNumber }}</span>
-            </el-form-item>
-
-            <el-form-item label="邮箱地址" prop="Email">
-              <span>{{ volunteer.Email }}</span>
-            </el-form-item>
-
-            <el-form-item label="联系方式" prop="Phone">
-              <span>{{ volunteer.Phone }}</span>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">关闭</el-button>
-          </div>
-        </el-dialog>
-      </template>
-    </el-table-column>
-  </el-table>
-=======
   <div class="app-container calendar-list-container">
     <el-table
       :data="demands.slice((pageNo-1)*pageSize,pageNo*pageSize)"
@@ -89,6 +11,13 @@
           <span style="color: darkgray">{{scope.row.CreateTime|formatDates}}</span>
         </template>
       </el-table-column>
+      <el-table-column
+      label="订单属性">
+      <template scope="scope">
+        <span v-if="scope.row.mutualtype ==0" style="color: darkgray" type="text">我发布的</span>
+        <span v-if="scope.row.mutualtype ==1" style="color: darkgray" type="text">我响应的</span>
+      </template>
+    </el-table-column>
       <el-table-column
         label="服务内容">
         <template scope="scope">
@@ -191,7 +120,11 @@
           <span>{{temp.Content}}</span>
         </el-form-item>
 
-        <el-form-item label="具体事宜" prop="Remark">
+        <el-form-item v-if="temp.mutualtype ==0" label="老人需求详情" prop="Remark">
+          <span v-html="temp.Remark"></span>
+        </el-form-item>
+
+        <el-form-item v-if="temp.mutualtype ==1" label="志愿者提供服务详情" prop="Remark">
           <span v-html="temp.Remark"></span>
         </el-form-item>
 
@@ -273,7 +206,6 @@
       </div>
     </el-dialog>
   </div>
->>>>>>> 3eaf8cea70248fb73cf2334e229410ebbafcbe1d
 </template>
 
 <style scoped>
@@ -412,11 +344,7 @@
         params.append('serviceId', serviceId)
         params.append('Duration', this.postForm.duration)
         params.append('Content', this.postForm.service_content)
-        console.log('修改时iask传进来的serviceId值    ' + serviceId)
-        console.log('修改时iask传进来的UserId值    ' + global.global_userID)
-        console.log('修改时iask传进来的Duration值    ' + this.postForm.duration)
-        console.log('修改时iask传进来的Content值    ' + this.postForm.service_content)
-        console.log('修改时iask传进来的Remark值    ' + this.postForm.content)
+       g('修改时iask传进来的Remark值    ' + this.postForm.content)
         if (this.postForm.service_content === undefined) {
           this.$message('服务内容禁止为空')
           return
@@ -439,14 +367,10 @@
           // params.append('DemandEndTime', this.postForm.end_time)
           params.append('DemandEndTime', finalend)
           params.append('Remark', this.postForm.content)
-          console.log('必须要显示呀  修改时iask传进来的DemandStartTime值    ' + finalbegin)
-          console.log('必须要显示呀  修改时iask传进来的DemandEndTime值    ' + finalend)
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/editDemand', params).then(
             function(res) {
               console.log(res)
-              console.log('进来啦！')
               if (res.data.num === 1) {
-                console.log("进来啦2号！")
                 // console.log("testnumsuccess!!"+res.data.num)
                 that.$notify({
                   title: '成功',
@@ -507,7 +431,6 @@
       },
       handleUpdate(row) {
         // this.postForm.service_content = this.scope.row.Content
-        console.log('这里是传值：' + row)
         this.serviceId = row
         this.dialogFormVisible4 = true
       },
@@ -515,8 +438,6 @@
         this.temp = Object.assign({}, row) // copy obj
         var now1 = this.formatDateTime(Date.now())
         var end1 = this.formatDateTime(this.temp.DemandEndTime)
-        console.log('必须要显示呀  修改时传进来的值1    ' + now1)
-        console.log('必须要显示呀  修改时传进来的值2   ' + end1)
         if (end1 < now1) {
           this.dialogFormVisible5 = true
         } else {
@@ -545,9 +466,7 @@
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/deleteDemand', params).then(
           function(res){
             console.log(res)
-            console.log("进来啦！")
             if(res.data.num === 1){
-              console.log("进来啦2号！")
               // console.log("testnumsuccess!!"+res.data.num)
               that.$notify({
                 title: '成功',
@@ -591,7 +510,6 @@
 
       },
       handleShowDialog(row) {
-        console.log('这里是传值：' + row)
         this.serviceId = row
         this.dialogFormVisible2 = true
       },
