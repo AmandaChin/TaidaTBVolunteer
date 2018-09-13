@@ -11,6 +11,7 @@ import Layout from '../views/layout/Layout'
 import volunteers from '../views/volunteers/volunteers'
 import HistoryService from '../views/program/HistoryService'
 import oldman from '../views/program/oldman'
+import volunteerService from '../views/program/volunteerService'
 import UploadedDemand from '../views/program/UploadedDemand'
 import Information from '../views/program/Information'
 import ModifyDemand from '../views/program/ModifyDemand'
@@ -69,12 +70,24 @@ export const asyncRouterMap = [
   {
     path: '/search',
     component: Layout,
-    children: [{
-      path: 'index',
-      name: 'search',
-      component: _import('search/index'),
-      meta: { title: '搜索', icon: 'search' }
-    }]
+
+    name: 'searchall',
+    redirect: '/search/index',
+    meta: {title:'搜索',icon: 'search'},
+    children: [
+      {
+       path: 'index',
+       name: 'search',
+       component: _import('search/index'),
+       meta: { title: '老人被服务需求'}
+      },
+      {
+        path: 'volunteerProvide',
+        name: 'volunteerProvide',
+        component: _import('search/volunteerProvide'),
+        meta: { title: '志愿者可提供服务'}
+      }
+  ]
   },
 
   {
@@ -91,7 +104,13 @@ export const asyncRouterMap = [
         path: 'oldman',
         component: oldman,
         name: 'oldman',
-        meta: { title: '发布需求' }
+        meta: { title: '发布被服务需求' }
+      },
+      {
+        path: 'volunteerService',
+        component: volunteerService,
+        name: 'volunteerService',
+        meta: { title: '发布可提供服务' }
       },
       {
         path: 'UploadedDemand',
