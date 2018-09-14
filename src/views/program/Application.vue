@@ -133,11 +133,6 @@
                   <el-form-item style="margin-bottom: 5px;"  label="上传图片材料:">
                   </el-form-item>
                 </el-col>
-
-                <!-- <el-col :span="1">
-                  <el-form-item style="margin-bottom: 5px;" label-width="90px" label="上传证明:">
-                  </el-form-item>
-                </el-col> -->
               </el-row>
             </div>
           </el-col>
@@ -169,11 +164,7 @@
             </div>
           </el-col>
         </el-row>
-
       </div>
-
-      <!-- <el-button v-loading="loading" style="margin-left: 600px;" type="success" @click="submit()">立即申请
-          </el-button> -->
     </el-form>
 
   </div>
@@ -245,15 +236,6 @@ const defaultForm = {
             var timeSpace = time.getTime() > (Date.now())
             return timeSpace
           }
-          // shortcuts: [{
-          //   text: '默认值',
-          //   onClick(picker) {
-          //     const date = new Date()
-          //     date.setTime(this.StartTime.getTime())
-          //     console.log('aaaaaaaa    ' + this.date)
-          //     picker.$emit('pick', date)
-          //   }
-          // }]
         },
         realdate: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
         postUrl: '',
@@ -300,25 +282,13 @@ const defaultForm = {
       console.log('全局：' + global.global_userID)
     },
     methods: {
-      // defaultTime() {
-      //   this.postForm.serve_date = this.formatDatex(this.StartTime)
-      //   this.postForm.starttime = this.formatDateTime(this.starttime)
-      //   this.postForm.endtime = this.formatDateTime(this.endtime)
-      //   console.log('aaaaaaaaa：' + this.postForm.serve_date)
-      //   console.log('bbbbbbbb：' + this.postForm.starttime)
-      //   console.log('ccccccc：' + this.postForm.endtime)
-      // },
       defaultTime() {
         this.postForm.serve_date = this.StartTime
-        var s = new Date(this.StartTime)
-        var start = (s.getHours() - 8) + ':' + s.getMinutes() + ':' + s.getSeconds()
-        this.postForm.starttime = start
-        var d = new Date(this.EndTime)
-        var end = (d.getHours() - 8) + ':' + d.getMinutes() + ':' + d.getSeconds()
-        this.postForm.endtime = end
+        this.postForm.starttime = String(this.StartTime).substring(11,19)
+        this.postForm.endtime = String(this.EndTime).substring(11,19)
         console.log('默认日期！！！！！' + this.StartTime)
-        console.log('默认开始时刻！！！！！' + start)
-        console.log('默认结束时刻！！！！！' + end)
+        console.log('默认开始时刻！！！！！' + this.StartTime)
+        console.log('默认结束时刻！！！！！' + this.EndTime)
       },
       JumpHistoryService: function() {
         this.$router.push({ name: 'HistoryService' })
@@ -383,7 +353,7 @@ const defaultForm = {
           this.$message('请填写服务结束时间！')
           return
         } else{
-          
+
           this.handleNullImg()
         var StartTimestamp = new Date(String(this.postForm.serve_date) + ' ' + this.postForm.starttime)
         var EndTimestamp = new Date(String(this.postForm.serve_date) + ' ' + this.postForm.endtime)

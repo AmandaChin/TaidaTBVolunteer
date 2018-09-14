@@ -49,7 +49,6 @@
                       step: '00:30',
                       end: '20:00'
                    }"></el-time-select>
-
                   </el-form-item>
                 </el-col>
 
