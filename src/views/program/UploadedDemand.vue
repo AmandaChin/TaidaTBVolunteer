@@ -54,7 +54,8 @@
         <template scope="scope">
           <el-button  v-if="scope.row.Status ==0" type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button  v-if="scope.row.Status!=0"  type="primary" size="mini" @click="volunteerInfo(scope.row.ServiceID)">查看响应者信息</el-button>
-          <el-button   size="mini" type="success" @click="handleShow(scope.row)">查看
+          <el-button  v-if="scope.row.Status ==0" size="mini" type="success" @click="handleShow1(scope.row)">查看</el-button>
+            <el-button v-if="scope.row.Status !=0"  size="mini" type="success" @click="handleShow2(scope.row)">查看
           </el-button>
           <el-button v-if="scope.row.Status ==0" size="mini" type="danger" @click="handleShowDialog(scope.row.ServiceID)">删除
           </el-button>
@@ -366,7 +367,7 @@
               console.log(res)
               console.log('进来啦！')
               if (res.data.num === 1) {
-                console.log("进来啦2号！")
+                console.log('进来啦2号！')
                 // console.log("testnumsuccess!!"+res.data.num)
                 that.$notify({
                   title: '成功',
@@ -380,13 +381,12 @@
                   that.listLoading = true
                   axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByUserID', params).then(
                     (res) => {
-                      if(res.data.list.rows)
-                      {
-                        that.demands=res.data.list.rows;
-                        that.totalDataNumber = res.data.list.count;
-                      }else{
-                        that.demands=res.data.list;
-                        that.totalDataNumber = res.data.list.length;
+                      if (res.data.list.rows) {
+                        that.demands = res.data.list.rows
+                        that.totalDataNumber = res.data.list.count
+                      } else {
+                        that.demands = res.data.list
+                        that.totalDataNumber = res.data.list.length
                       }
                       console.log(res)
                       that.listLoading = false
@@ -395,7 +395,7 @@
                     console.log(err)
                   })
                 }, 1000)
-              }else{
+              } else {
                 // console.log("testnumfail!!"+res.data.num)
                 that.$notify({
                   title: '失败',
@@ -425,15 +425,15 @@
       },
       handleUpdate(row) {
         this.postForm.service_content = row.Content
-        this.postForm.start_time = String(row.DemandStartTime).substring(0,11)
-        this.pickedtime = String(row.DemandStartTime).substring(11,16)
+        this.postForm.start_time = String(row.DemandStartTime).substring(0, 11)
+        this.pickedtime = String(row.DemandStartTime).substring(11, 16)
         this.postForm.duration = row.Duration
         this.postForm.content = row.Remark
         console.log('这里是传值：' + row)
         this.serviceId = row
         this.dialogFormVisible4 = true
       },
-      handleShow(row) {
+      handleShow1(row) {
         this.temp = Object.assign({}, row) // copy obj
         var now1 = this.formatDateTime(Date.now())
         var end1 = this.formatDateTime(this.temp.DemandEndTime)
@@ -444,6 +444,10 @@
         } else {
           this.dialogFormVisible3 = true
         }
+      },
+      handleShow2(row) {
+        this.temp = Object.assign({}, row) // copy obj
+        this.dialogFormVisible3 = true
       },
       volunteerInfo(ServiceId) {
         var params = new URLSearchParams()
@@ -457,18 +461,18 @@
           console.log(err)
         })
       },
-      DeleteDemand(serviceId){
-        let that = this;
-        this.dialogFormVisible2 = false;
+      DeleteDemand(serviceId) {
+        const that = this
+        this.dialogFormVisible2 = false
         var params = new URLSearchParams()
-        params.append('serviceId',serviceId)
-        console.log("serviceId!!!!!"+serviceId)
+        params.append('serviceId', serviceId)
+        console.log('serviceId!!!!!' + serviceId)
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/deleteDemand', params).then(
-          function(res){
+          function(res) {
             console.log(res)
-            console.log("进来啦！")
-            if(res.data.num === 1){
-              console.log("进来啦2号！")
+            console.log('进来啦！')
+            if (res.data.num === 1) {
+              console.log('进来啦2号！')
               // console.log("testnumsuccess!!"+res.data.num)
               that.$notify({
                 title: '成功',
@@ -482,13 +486,12 @@
                 that.listLoading = true
                 axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByUserID', params).then(
                   (res) => {
-                    if(res.data.list.rows)
-                    {
-                      that.demands=res.data.list.rows;
-                      that.totalDataNumber = res.data.list.count;
-                    }else{
-                      that.demands=res.data.list;
-                      that.totalDataNumber = res.data.list.length;
+                    if (res.data.list.rows) {
+                      that.demands = res.data.list.rows
+                      that.totalDataNumber = res.data.list.count
+                    } else {
+                      that.demands = res.data.list
+                      that.totalDataNumber = res.data.list.length
                     }
                     console.log(res)
                     that.listLoading = false
@@ -497,7 +500,7 @@
                   console.log(err)
                 })
               }, 1000)
-            }else{
+            } else {
               // console.log("testnumfail!!"+res.data.num)
               that.$notify({
                 title: '失败',
