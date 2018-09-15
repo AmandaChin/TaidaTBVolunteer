@@ -197,10 +197,10 @@
   },
   created() {
     this.showServerType()
-    this.getList()
     var id = JSON.parse(localStorage.getItem('volunteerid'))
     global.global_userID = id
     console.log('全局：'+global.global_userID)
+    this.getList()
   },
   methods: {
     showServerType(){
@@ -222,18 +222,33 @@
       //得到初始的全部需求
       getList() {
         this.listLoading = true
-        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllVolunteerService',{UserID: global.global_userID}).then(
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getAllVolunteerService',{UserID: JSON.parse(localStorage.getItem('volunteerid'))}).then(
 
           (res)=>{
+            var reallist = []
+            var num = 0
             if(res.data.list.rows)
               {
                 console.log("有rows！！！")
-                this.list=res.data.list.rows;
+                //this.list=res.data.list.rows;
                 this.totalDataNumber = res.data.list.count;
+                reallist =res.data.list.rows;
+                num = res.data.list.count;
               }else{
                  console.log("没有rows！！！")
-                 this.list=res.data.list;
+                 //this.list=res.data.list;
                  this.totalDataNumber = res.data.list.length;
+                 reallist =res.data.list;
+                 num = res.data.list.length;
+              }
+               var now = new Date().getTime()
+              for(var i=0;i<num;i++){
+                var time = reallist[i].DemandStartTime
+                if(new Date(String(time)).getTime()-now>0){
+                  this.list.push(reallist[i])
+                }else{
+                  this.totalDataNumber -- 
+                }
               }
             console.log(res);
             this.listLoading = false

@@ -50,9 +50,9 @@
       <el-table-column
         label="当前状态">
         <template scope="scope">
-          <span v-if="scope.row.Status ==0" style="color: darkgray" type="text">未被响应</span>
+          <span v-if="scope.row.Status ==0&&(new Date(String(scope.row.DemandEndTime)).getTime()<new Date().getTime())" style="color: darkgray" type="text">未被响应</span>
           <!--<span v-if="(scope.row.Status ==0)||((scope.row.DemandEndTime|formatDatex)<(Date.now()|formatDatex))" style="color: darkblue" type="text">未被响应</span>-->
-          <!--<span v-if="(scope.row.Status ==0)|| (String(scope.row.DemandEndTime|formatDatex)>String(Date.now()|formatDatex))" style="color: darkred" type="text">未被响应 已过期</span>-->
+          <span v-if="(scope.row.Status ==0)&&(new Date(String(scope.row.DemandEndTime)).getTime()>new Date().getTime())" style="color: darkred" type="text">已过期</span>
           <span v-if="scope.row.Status !=0" style="color: darkgray" type="text">已被响应</span>
         </template>
       </el-table-column>
