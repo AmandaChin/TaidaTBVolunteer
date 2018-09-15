@@ -55,7 +55,7 @@
       label="更多操作">
       <template scope="scope">
         <el-button v-if="scope.row.Status==1" style="font-weight: bold; color:dodgerblue" type="text" @click="func(scope.row.ServiceID,scope.row.Content, scope.row.DemandStartTime,scope.row.DemandEndTime, scope.row.Duration)">申请勋章</el-button>
-        <el-button v-if="scope.row.Status==2" style="font-weight: bold; color:dodgerblue" type="text" @click="checknum(scope.row.ServiceID)">查看已审核人数</el-button>
+        <el-button v-if="scope.row.Status==2" style="font-weight: bold; color:dodgerblue" type="text" @click="checknum(scope.row.ServiceID)">查看审核情况</el-button>
         <span v-if="scope.row.Status==3" style="font-weight: bold; color:darkgray" type="text"></span>
         <span v-if="scope.row.Status==4" style="font-weight: bold; color:darkgray" type="text">暂时不能申请</span>
       </template>
@@ -67,8 +67,17 @@
         width="30%"
         @close = 'closeDialog'>
         <el-form :model="temp">
+          <el-form-item label="共需审核人数：">
+            <span> 4 </span>
+          </el-form-item>
           <el-form-item label="当前已审核人数：">
             <span>{{ checkpersonnum }}</span>
+          </el-form-item>
+          <el-form-item label="当前未审核人数：">
+            <span>{{ 4-checkpersonnum }}</span>
+          </el-form-item>
+          <el-form-item label="当前获得勋章数量：">
+            <span>{{ checkmedalnum }}</span>
           </el-form-item>
           </el-form>
     </el-dialog>
@@ -115,6 +124,7 @@
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
         dialogVisible: false,
         checkpersonnum:0,
+        checkmedalnum:0,
         dialogTableVisible: false,
         UserName: undefined,
         Content: undefined,
@@ -227,6 +237,14 @@
           (res) => {
             that.checkpersonnum = res.data.num
             console.log(that.checkpersonnum)
+          }
+        ).catch((err) => {
+          console.log(err)
+        })
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getCheckMedal', params).then(
+          (res2) =>{
+            that.checkmedalnum = res2.data.num
+            console.log(that.checkmedalnum)
           }
         ).catch((err) => {
           console.log(err)

@@ -23,7 +23,7 @@
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="5">
-                  <el-form-item label-width="90px" label="提供服务内容:" class="postInfo-container-item">
+                  <el-form-item label-width="130px" label="提供服务内容:" class="postInfo-container-item">
                     <el-select clearable style="width: 130px" class="filter-item" v-model="postForm.service_content" placeholder="提供服务类型">
                       <el-option v-for="item in servecontent_info" :key="item.ID" :label="item.type" :value="item.ID" >
                       </el-option>
@@ -292,7 +292,7 @@
               this.$message('发布成功')
               console.log(res)
               setTimeout(() => {
-                this.$router.push({ name: 'HistoryService', params: {}})
+                this.$router.push({ name: 'volunteerProvide', params: {}})
               },500)
             }
           ).catch((err) => {
