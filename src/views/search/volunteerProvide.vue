@@ -5,7 +5,11 @@
       <!-- <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="服务内容"
       v-model="listQuery.content">
       </el-input> -->
-
+      <el-alert
+        title="请确保您已与发布者联系之后再提交响应~"
+        type="warning"
+        @close="hello">
+      </el-alert>
       <el-select clearable style="width: 130px" class="filter-item" v-model="listQuery.content" placeholder="内容类型">
         <el-option v-for="item in servecontent_info" :key="item.ID" :label="item.type" :value="item.ID" >
         </el-option>
@@ -92,9 +96,10 @@
           <span>{{ temp.Phone }}</span>
         </el-form-item>
       </el-form>
+       <span  style="margin-left:30%;font-size: large;color:red" > 请确保您已与发布者联系之后再提交响应~   </span>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="applyService(temp)">响应</el-button>
+        <el-button type="primary" @click="applyService(temp)">确定响应</el-button>
       </div>
     </el-dialog>
   </div>
@@ -402,7 +407,7 @@
             VolunteerID: row.UserID,
             VolunteerServiceID: row.VolunteerServiceID,
             Content: row.ContentID,
-            DemandStartTime: row.DemandEndTime,
+            DemandStartTime: row.DemandStartTime,
             DemandEndTime: row.DemandEndTime,
             Duration: row.Duration,
             Remark: row.Remark

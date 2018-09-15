@@ -12,6 +12,13 @@
         </template>
       </el-table-column>
       <el-table-column
+       label="订单属性">
+      <template scope="scope">
+        <span v-if="scope.row.mutualtype ==0" style="color: darkgray" type="text">我发布的</span>
+        <span v-if="scope.row.mutualtype ==1" style="color: darkgray" type="text">我响应的</span>
+      </template>
+    </el-table-column>
+      <el-table-column
         label="服务内容">
         <template scope="scope">
           <span style="color: darkgray">{{scope.row.Content}}</span>
@@ -114,7 +121,11 @@
           <span>{{temp.Content}}</span>
         </el-form-item>
 
-        <el-form-item label="具体事宜" prop="Remark">
+         <el-form-item v-if="temp.mutualtype ==0" label="老人需求详情" prop="Remark">
+          <span v-html="temp.Remark"></span>
+        </el-form-item>
+
+        <el-form-item v-if="temp.mutualtype ==1" label="志愿者提供服务详情" prop="Remark">
           <span v-html="temp.Remark"></span>
         </el-form-item>
 
