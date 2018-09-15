@@ -12,7 +12,7 @@
         </template>
       </el-table-column>
       <el-table-column
-      label="订单属性">
+       label="订单属性">
       <template scope="scope">
         <span v-if="scope.row.mutualtype ==0" style="color: darkgray" type="text">我发布的</span>
         <span v-if="scope.row.mutualtype ==1" style="color: darkgray" type="text">我响应的</span>
@@ -40,11 +40,11 @@
       </el-table-column>
 
       <!--<el-table-column-->
-        <!--label="现在"-->
-        <!--prop="applyingtime">-->
-        <!--<template scope="scope">-->
-          <!--<span style="color: darkgray">{{Date.now()|formatDate}}</span>-->
-        <!--</template>-->
+      <!--label="现在"-->
+      <!--prop="applyingtime">-->
+      <!--<template scope="scope">-->
+      <!--<span style="color: darkgray">{{Date.now()|formatDate}}</span>-->
+      <!--</template>-->
       <!--</el-table-column>-->
 
       <el-table-column
@@ -59,9 +59,10 @@
       <el-table-column
         label="更多操作">
         <template scope="scope">
-          <el-button  v-if="scope.row.Status ==0" type="primary" size="mini" @click="handleUpdate(scope.row.ServiceID)">编辑</el-button>
+          <el-button  v-if="scope.row.Status ==0" type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button  v-if="scope.row.Status!=0"  type="primary" size="mini" @click="volunteerInfo(scope.row.ServiceID)">查看响应者信息</el-button>
-          <el-button   size="mini" type="success" @click="handleShow(scope.row)">查看
+          <el-button  v-if="scope.row.Status ==0" size="mini" type="success" @click="handleShow1(scope.row)">查看</el-button>
+            <el-button v-if="scope.row.Status !=0"  size="mini" type="success" @click="handleShow2(scope.row)">查看
           </el-button>
           <el-button v-if="scope.row.Status ==0" size="mini" type="danger" @click="handleShowDialog(scope.row.ServiceID)">删除
           </el-button>
@@ -120,7 +121,7 @@
           <span>{{temp.Content}}</span>
         </el-form-item>
 
-        <el-form-item v-if="temp.mutualtype ==0" label="老人需求详情" prop="Remark">
+         <el-form-item v-if="temp.mutualtype ==0" label="老人需求详情" prop="Remark">
           <span v-html="temp.Remark"></span>
         </el-form-item>
 
@@ -185,10 +186,10 @@
           </el-select>
         </el-form-item>
         <el-form-item style="margin-bottom: 10px;" label-width="45px" label="详情:">
-          <el-input style="margin-left:35px;" type="textarea" :autosize="{ minRows: 2, maxRows: 20}" placeholder="请输入服务详情" v-model="postForm.content">
+          <el-input style="margin-left:35px;" type="textarea" :autosize="{ minRows: 2, maxRows: 20}" placeholder="请输入服务详情"  v-model="postForm.content" >
           </el-input>
         </el-form-item>
-       </el-form>
+      </el-form>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible4= false">取消</el-button>
@@ -199,7 +200,7 @@
 
     <el-dialog title="系统提示" :visible.sync="dialogFormVisible5">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
-          <span  style="margin-left:3%;font-size: larger;align-content: center;color: darkred" >您的服务已到期并没有人响应，请重新发布新的需求</span>
+        <span  style="margin-left:3%;font-size: larger;align-content: center;color: darkred" >您的服务已到期并没有人响应，请重新发布新的需求</span>
       </el-form>
       <div slot="footer"  class="dialog-footer">
         <el-button @click="dialogFormVisible5= false">确定</el-button>
@@ -377,7 +378,7 @@
               console.log(res)
               console.log('进来啦！')
               if (res.data.num === 1) {
-                console.log("进来啦2号！")
+                console.log('进来啦2号！')
                 // console.log("testnumsuccess!!"+res.data.num)
                 that.$notify({
                   title: '成功',
@@ -391,13 +392,12 @@
                   that.listLoading = true
                   axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByUserID', params).then(
                     (res) => {
-                      if(res.data.list.rows)
-                      {
-                        that.demands=res.data.list.rows;
-                        that.totalDataNumber = res.data.list.count;
-                      }else{
-                        that.demands=res.data.list;
-                        that.totalDataNumber = res.data.list.length;
+                      if (res.data.list.rows) {
+                        that.demands = res.data.list.rows
+                        that.totalDataNumber = res.data.list.count
+                      } else {
+                        that.demands = res.data.list
+                        that.totalDataNumber = res.data.list.length
                       }
                       console.log(res)
                       that.listLoading = false
@@ -406,8 +406,7 @@
                     console.log(err)
                   })
                 }, 1000)
-
-              }else{
+              } else {
                 // console.log("testnumfail!!"+res.data.num)
                 that.$notify({
                   title: '失败',
@@ -416,7 +415,6 @@
                   duration: 2000
                 })
               }
-
             }
           )
         }
@@ -437,12 +435,16 @@
         })
       },
       handleUpdate(row) {
-        // this.postForm.service_content = this.scope.row.Content
+        this.postForm.service_content = row.Content
+        this.postForm.start_time = String(row.DemandStartTime).substring(0, 11)
+        this.pickedtime = String(row.DemandStartTime).substring(11, 16)
+        this.postForm.duration = row.Duration
+        this.postForm.content = row.Remark
         console.log('这里是传值：' + row)
         this.serviceId = row
         this.dialogFormVisible4 = true
       },
-      handleShow(row) {
+      handleShow1(row) {
         this.temp = Object.assign({}, row) // copy obj
         var now1 = this.formatDateTime(Date.now())
         var end1 = this.formatDateTime(this.temp.DemandEndTime)
@@ -453,6 +455,10 @@
         } else {
           this.dialogFormVisible3 = true
         }
+      },
+      handleShow2(row) {
+        this.temp = Object.assign({}, row) // copy obj
+        this.dialogFormVisible3 = true
       },
       volunteerInfo(ServiceId) {
         var params = new URLSearchParams()
@@ -466,19 +472,18 @@
           console.log(err)
         })
       },
-
-      DeleteDemand(serviceId){
-        let that = this;
-        this.dialogFormVisible2 = false;
+      DeleteDemand(serviceId) {
+        const that = this
+        this.dialogFormVisible2 = false
         var params = new URLSearchParams()
-        params.append('serviceId',serviceId)
-        console.log("serviceId!!!!!"+serviceId)
+        params.append('serviceId', serviceId)
+        console.log('serviceId!!!!!' + serviceId)
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/deleteDemand', params).then(
-          function(res){
+          function(res) {
             console.log(res)
-            console.log("进来啦！")
-            if(res.data.num === 1){
-              console.log("进来啦2号！")
+            console.log('进来啦！')
+            if (res.data.num === 1) {
+              console.log('进来啦2号！')
               // console.log("testnumsuccess!!"+res.data.num)
               that.$notify({
                 title: '成功',
@@ -492,13 +497,12 @@
                 that.listLoading = true
                 axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getDemandByUserID', params).then(
                   (res) => {
-                    if(res.data.list.rows)
-                    {
-                      that.demands=res.data.list.rows;
-                      that.totalDataNumber = res.data.list.count;
-                    }else{
-                      that.demands=res.data.list;
-                      that.totalDataNumber = res.data.list.length;
+                    if (res.data.list.rows) {
+                      that.demands = res.data.list.rows
+                      that.totalDataNumber = res.data.list.count
+                    } else {
+                      that.demands = res.data.list
+                      that.totalDataNumber = res.data.list.length
                     }
                     console.log(res)
                     that.listLoading = false
@@ -507,8 +511,7 @@
                   console.log(err)
                 })
               }, 1000)
-
-            }else{
+            } else {
               // console.log("testnumfail!!"+res.data.num)
               that.$notify({
                 title: '失败',
@@ -517,9 +520,7 @@
                 duration: 2000
               })
             }
-
           })
-
       },
       handleShowDialog(row) {
         console.log('这里是传值：' + row)
@@ -550,4 +551,3 @@
     }
   }
 </script>
-

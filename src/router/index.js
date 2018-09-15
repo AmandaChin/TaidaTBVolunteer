@@ -191,12 +191,11 @@ export const asyncRouterMap = [
     name: 'search1',
     component: _import('firstpage/search1')
   },
-  // 已经写好了志愿者发布时的接口
-  // {
-  //   path: '/search2',
-  //   name: 'search2',
-  //   component: _import('firstpage/search2')
-  // },
+  {
+    path: '/search2',
+    name: 'search2',
+    component: _import('firstpage/search2')
+  },
   {
     path: '/firstpage',
     name: 'firstpage',

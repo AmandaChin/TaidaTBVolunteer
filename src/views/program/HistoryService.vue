@@ -60,7 +60,137 @@
         <span v-if="scope.row.Status==4" style="font-weight: bold; color:darkgray" type="text">暂时不能申请</span>
       </template>
     </el-table-column>
+
+    <el-table-column
+      label="查看更多详情">
+      <template scope="scope">
+        <el-button v-if="scope.row.mutualtype ==0" style="font-weight: bold; color:dodgerblue" type="text" @click="check1(scope.row)">查看我响应的服务</el-button>
+        <el-button v-if="scope.row.mutualtype ==1" style="font-weight: bold; color:dodgerblue" type="text" @click="check2(scope.row)">查看我发布的服务</el-button>
+      </template>
+    </el-table-column>
+
   </el-table>
+  <!--查看更多详情时弹出的表格-->
+  <el-dialog title="我响应的服务详情" :visible.sync="dialogFormVisible1">
+    <el-form :rules="rules" ref="dataForm" :model="volunteer" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
+      <el-form-item label="志愿者用户名" prop="UserName">
+        <span>{{volunteer.UserName}}</span>
+      </el-form-item>
+
+      <el-form-item label="志愿者性别" prop="Gender">
+        <span>{{ volunteer.Gender }}</span>
+      </el-form-item>
+
+      <el-form-item label="志愿者姓名" prop="Name">
+        <span>{{ volunteer.Name }}</span>
+      </el-form-item>
+
+      <el-form-item label="志愿者身份证号" prop="IDnumber">
+        <span>{{ volunteer.IDNumber }}</span>
+      </el-form-item>
+
+      <el-form-item label="邮箱地址" prop="Email">
+        <span>{{ volunteer.Email }}</span>
+      </el-form-item>
+
+      <el-form-item label="联系方式" prop="Phone">
+        <span>{{ volunteer.Phone }}</span>
+      </el-form-item>
+    </el-form>
+    <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
+      <el-form-item label="服务日期" prop="DemandStartTime">
+        <span>{{temp.DemandStartTime|formatDatex}}</span>
+      </el-form-item>
+
+      <el-form-item label="服务对象" prop="Name">
+        <span>{{ temp.Name }}</span>
+      </el-form-item>
+
+      <el-form-item label="服务内容" prop="Content">
+        <span>{{temp.Content}}</span>
+      </el-form-item>
+
+      <el-form-item v-if="temp.mutualtype ==0" label="老人需求详情" prop="Remark">
+        <span v-html="temp.Remark"></span>
+      </el-form-item>
+
+      <el-form-item v-if="temp.mutualtype ==1" label="志愿者提供服务详情" prop="Remark">
+        <span v-html="temp.Remark"></span>
+      </el-form-item>
+
+      <el-form-item label="服务时长" prop="Duration">
+        <span>{{ temp.Duration }}</span>
+      </el-form-item>
+
+      <el-form-item label="联系方式" prop="Phone">
+        <span>{{ temp.Phone }}</span>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="dialogFormVisible1= false">关闭</el-button>
+    </div>
+  </el-dialog>
+
+  <el-dialog title="我发布的服务详情" :visible.sync="dialogFormVisible2">
+    <el-form :rules="rules" ref="dataForm" :model="volunteer" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
+      <el-form-item label="志愿者用户名" prop="UserName">
+        <span>{{volunteer.UserName}}</span>
+      </el-form-item>
+
+      <el-form-item label="志愿者性别" prop="Gender">
+        <span>{{ volunteer.Gender }}</span>
+      </el-form-item>
+
+      <el-form-item label="志愿者姓名" prop="Name">
+        <span>{{ volunteer.Name }}</span>
+      </el-form-item>
+
+      <el-form-item label="志愿者身份证号" prop="IDnumber">
+        <span>{{ volunteer.IDNumber }}</span>
+      </el-form-item>
+
+      <el-form-item label="邮箱地址" prop="Email">
+        <span>{{ volunteer.Email }}</span>
+      </el-form-item>
+
+      <el-form-item label="联系方式" prop="Phone">
+        <span>{{ volunteer.Phone }}</span>
+      </el-form-item>
+    </el-form>
+    <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
+      <el-form-item label="服务日期" prop="DemandStartTime">
+        <span>{{temp.DemandStartTime|formatDatex}}</span>
+      </el-form-item>
+
+      <el-form-item label="服务对象" prop="Name">
+        <span>{{ temp.Name }}</span>
+      </el-form-item>
+
+      <el-form-item label="服务内容" prop="Content">
+        <span>{{temp.Content}}</span>
+      </el-form-item>
+
+      <el-form-item v-if="temp.mutualtype ==0" label="老人需求详情" prop="Remark">
+        <span v-html="temp.Remark"></span>
+      </el-form-item>
+
+      <el-form-item v-if="temp.mutualtype ==1" label="志愿者提供服务详情" prop="Remark">
+        <span v-html="temp.Remark"></span>
+      </el-form-item>
+
+      <el-form-item label="服务时长" prop="Duration">
+        <span>{{ temp.Duration }}</span>
+      </el-form-item>
+
+      <el-form-item label="联系方式" prop="Phone">
+        <span>{{ temp.Phone }}</span>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="dialogFormVisible2= false">关闭</el-button>
+    </div>
+  </el-dialog>
+
   <el-dialog
         title="审核详情"
         :visible.sync="dialogVisible"
@@ -121,6 +251,8 @@
     },
     data() {
       return {
+        dialogFormVisible1: false,
+        dialogFormVisible2: false,
         inputData: 'https://github.com/PanJiaChen/vue-element-admin',
         dialogVisible: false,
         checkpersonnum:0,
@@ -139,7 +271,29 @@
         CreateTime: undefined,
         pageNo: 1,
         pageSize: 10,
-        totalDataNumber: 0
+        totalDataNumber: 0,
+        temp: {
+          ServiceID: undefined,
+          UserID: undefined,
+          Remark: undefined,
+          Province: undefined,
+          City: undefined,
+          District: undefined,
+          Phone: undefined,
+          Name: undefined,
+          Duration: undefined,
+          DemandStartTime: undefined,
+          Content: undefined
+        },
+        volunteer: {
+          UserName: '',
+          Gender: '',
+          Name: '',
+          IDNumber: '',
+          Email: '',
+          Phone: ''
+        },
+        serviceId: 0
       }
     },
     created() {
@@ -174,12 +328,37 @@
        * 现在可以直接申请勋章了 但是应该传递给申请勋章页面一些信息 在这一步
        * 读取当前service 对应的数据 自动填写到后边
        */
-
+      check1(row) {
+        this.temp = Object.assign({}, row) // copy obj
+        var params = new URLSearchParams()
+        params.append('ServiceID', this.temp.ServiceID)
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getUserByService', params).then(
+          (res) => {
+            this.volunteer = res.data.list
+            this.dialogFormVisible1 = true
+          }
+        ).catch((err) => {
+          console.log(err)
+        })
+      },
+      check2(row) {
+        this.temp = Object.assign({}, row) // copy obj
+        var params = new URLSearchParams()
+        params.append('ServiceID', this.temp.ServiceID)
+        axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getUserByService', params).then(
+          (res) => {
+            this.volunteer = res.data.list
+            this.dialogFormVisible2 = true
+          }
+        ).catch((err) => {
+          console.log(err)
+        })
+      },
       func: function(serviceId, content, startTime, endTime, duration) {
         console.log(endTime)
-        var nowtime=new Date().getTime()
-        var nowEndTime = Date.parse(endTime) - 8*60*60*1000
-        if(nowtime>nowEndTime){
+        var nowtime = new Date().getTime()
+        var nowEndTime = Date.parse(endTime) - 8 * 60 * 60 * 1000
+        if (nowtime > nowEndTime) {
           var params = new URLSearchParams()
           params.append('ServiceID', serviceId)
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getOldManName', params).then(
@@ -192,7 +371,7 @@
             this.$message('申请失败，请重试或联系管理员！')
             console.log(err)
           })
-        }else{
+        } else {
           this.$message('申请失败，未到需求结束时间！')
         }
         /*
@@ -225,11 +404,11 @@
         clip(text, event)
       },
 
-      checknum(serviceId){
+      checknum(serviceId) {
         console.log(serviceId)
         this.dialogVisible = true
-        let that = this
-       //传值serviceID和UserId给后台，后台调用函数查询链上合约中数据
+        const that = this
+        // 传值serviceID和UserId给后台，后台调用函数查询链上合约中数据
         var params = new URLSearchParams()
         params.append('ServiceID', serviceId)
         params.append('UserID', global.global_userID)
@@ -249,6 +428,7 @@
         ).catch((err) => {
           console.log(err)
         })
+
 
       },
       showAlert() {
