@@ -421,7 +421,7 @@
           console.log(err)
         })
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/getCheckMedal', params).then(
-          (res2) => {
+          (res2) =>{
             that.checkmedalnum = res2.data.num
             console.log(that.checkmedalnum)
           }
