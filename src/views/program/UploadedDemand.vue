@@ -38,21 +38,12 @@
           <span style="color: darkgray">{{scope.row.DemandEndTime|formatDatex}}</span>
         </template>
       </el-table-column>
-
-      <!--<el-table-column-->
-      <!--label="现在"-->
-      <!--prop="applyingtime">-->
-      <!--<template scope="scope">-->
-      <!--<span style="color: darkgray">{{Date.now()|formatDate}}</span>-->
-      <!--</template>-->
-      <!--</el-table-column>-->
-
       <el-table-column
         label="当前状态">
         <template scope="scope">
-          <span v-if="scope.row.Status ==0&&(new Date(String(scope.row.DemandEndTime)).getTime()<new Date().getTime())" style="color: darkgray" type="text">未被响应</span>
-          <!--<span v-if="(scope.row.Status ==0)||((scope.row.DemandEndTime|formatDatex)<(Date.now()|formatDatex))" style="color: darkblue" type="text">未被响应</span>-->
-          <span v-if="(scope.row.Status ==0)&&(new Date(String(scope.row.DemandEndTime)).getTime()>new Date().getTime())" style="color: darkred" type="text">已过期</span>
+
+          <span v-if="scope.row.Status ==0&&(new Date(String(scope.row.DemandEndTime)).getTime()>new Date().getTime())" style="color: darkgray" type="text">未被响应</span>
+          <span v-if="(scope.row.Status ==0)&&(new Date(String(scope.row.DemandEndTime)).getTime()<new Date().getTime())" style="color: darkred" type="text">已过期</span>
           <span v-if="scope.row.Status !=0" style="color: darkgray" type="text">已被响应</span>
         </template>
       </el-table-column>
@@ -197,7 +188,7 @@
       </div>
     </el-dialog>
 
-
+    
     <el-dialog title="系统提示" :visible.sync="dialogFormVisible5">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" width="50%" style='width: 400px; margin-left:50px;'>
         <span  style="margin-left:3%;font-size: larger;align-content: center;color: darkred" >您的服务已到期并没有人响应，请重新发布新的需求</span>
@@ -336,7 +327,6 @@
         return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
       },
       editdemand(serviceId) {
-        // this.temp = Object.assign({}, row) // copy obj
         const that = this
         this.dialogFormVisible4 = false
         var params = new URLSearchParams()
@@ -344,11 +334,11 @@
         params.append('serviceId', serviceId)
         params.append('Duration', this.postForm.duration)
         params.append('Content', this.postForm.service_content)
-        console.log('修改时iask传进来的serviceId值    ' + serviceId)
-        console.log('修改时iask传进来的UserId值    ' + global.global_userID)
-        console.log('修改时iask传进来的Duration值    ' + this.postForm.duration)
-        console.log('修改时iask传进来的Content值    ' + this.postForm.service_content)
-        console.log('修改时iask传进来的Remark值    ' + this.postForm.content)
+        console.log('修改时传进来的serviceId值    ' + serviceId)
+        // console.log('修改时传进来的UserId值    ' + global.global_userID)
+        // console.log('修改时传进来的Duration值    ' + this.postForm.duration)
+        // console.log('修改时传进来的Content值    ' + this.postForm.service_content)
+        // console.log('修改时传进来的Remark值    ' + this.postForm.content)
         if (this.postForm.service_content === undefined) {
           this.$message('服务内容禁止为空')
           return
@@ -366,20 +356,15 @@
           var EndTimestamp = StartTimestamp.getTime() + this.postForm.duration * 60 * 60 * 1000
           var finalbegin = this.formatDateTime(StartTimestamp.getTime())
           var finalend = this.formatDateTime(EndTimestamp)
-          // params.append('DemandStartTime', this.postForm.start_time)
           params.append('DemandStartTime', finalbegin)
-          // params.append('DemandEndTime', this.postForm.end_time)
           params.append('DemandEndTime', finalend)
           params.append('Remark', this.postForm.content)
-          console.log('必须要显示呀  修改时iask传进来的DemandStartTime值    ' + finalbegin)
-          console.log('必须要显示呀  修改时iask传进来的DemandEndTime值    ' + finalend)
           axios.post('http://' + port.info.host + ':' + port.info.port + '/api/editDemand', params).then(
             function(res) {
               console.log(res)
-              console.log('进来啦！')
+              // console.log('进来啦！')
               if (res.data.num === 1) {
-                console.log('进来啦2号！')
-                // console.log("testnumsuccess!!"+res.data.num)
+                // console.log('进来啦2号！')
                 that.$notify({
                   title: '成功',
                   message: '已成功更改需求',
@@ -407,7 +392,6 @@
                   })
                 }, 1000)
               } else {
-                // console.log("testnumfail!!"+res.data.num)
                 that.$notify({
                   title: '失败',
                   message: '编辑需求失败，请重新编辑',
@@ -448,8 +432,6 @@
         this.temp = Object.assign({}, row) // copy obj
         var now1 = this.formatDateTime(Date.now())
         var end1 = this.formatDateTime(this.temp.DemandEndTime)
-        console.log('必须要显示呀  修改时传进来的值1    ' + now1)
-        console.log('必须要显示呀  修改时传进来的值2   ' + end1)
         if (end1 < now1) {
           this.dialogFormVisible5 = true
         } else {
@@ -481,10 +463,9 @@
         axios.post('http://' + port.info.host + ':' + port.info.port + '/api/deleteDemand', params).then(
           function(res) {
             console.log(res)
-            console.log('进来啦！')
+            // console.log('进来啦！')
             if (res.data.num === 1) {
-              console.log('进来啦2号！')
-              // console.log("testnumsuccess!!"+res.data.num)
+              // console.log('进来啦2号！')
               that.$notify({
                 title: '成功',
                 message: '已删除需求',
@@ -512,7 +493,6 @@
                 })
               }, 1000)
             } else {
-              // console.log("testnumfail!!"+res.data.num)
               that.$notify({
                 title: '失败',
                 message: '删除失败,请重新删除',

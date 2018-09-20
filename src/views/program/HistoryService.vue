@@ -428,8 +428,6 @@
         ).catch((err) => {
           console.log(err)
         })
-
-
       },
       showAlert() {
         this.$alert('这是一段内容', '交易记录', {
